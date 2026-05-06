@@ -1,4 +1,5 @@
 import { Section } from "@/components/layout/Section"
+import { AnimatedReveal } from "@/components/shared/AnimatedReveal"
 import { SectionTitle } from "@/components/shared/SectionTitle"
 import { Badge } from "@/components/ui/Badge"
 import { experiences } from "@/lib/content"
@@ -8,14 +9,17 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
 
   return (
     <Section id="experience">
-      <SectionTitle
-        eyebrow="Experience"
-        title="A timeline of product UI, frontend systems, and editorial web work."
-      />
+      <AnimatedReveal>
+        <SectionTitle
+          eyebrow="Experience"
+          title="Three years of frontend work across product UI, internal tools, and web systems."
+        />
+      </AnimatedReveal>
       <div className="border-t border-border">
         {items.map((item) => (
-          <article
+          <AnimatedReveal
             key={`${item.company}-${item.period}`}
+            delay={0.04}
             className="grid gap-5 border-b border-border py-7 md:grid-cols-[180px_1fr]"
           >
             <div>
@@ -36,7 +40,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
                 ))}
               </div>
             </div>
-          </article>
+          </AnimatedReveal>
         ))}
       </div>
     </Section>

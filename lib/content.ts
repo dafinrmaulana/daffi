@@ -135,12 +135,12 @@ export const posts: Post[] = [
 export const experiences: Experience[] = [
   {
     company: "Independent Studio",
-    role: "Product-minded Frontend Engineer",
-    period: "2026 - Present",
+    role: "Frontend Developer",
+    period: "2025 - Present",
     location: "Jakarta / Remote",
     description:
-      "Building focused product interfaces, portfolio systems, and content-heavy websites for early teams and independent brands.",
-    highlights: ["Next.js delivery", "Interface systems", "Performance audits"],
+      "Building polished frontend experiences for product teams, independent brands, and portfolio-driven websites with a strong focus on clarity and performance.",
+    highlights: ["Next.js delivery", "UI implementation", "Performance audits"],
   },
   {
     company: "Fintech Studio",
@@ -154,7 +154,7 @@ export const experiences: Experience[] = [
   {
     company: "Creative Partner",
     role: "Designer Developer",
-    period: "2022 - 2024",
+    period: "2023 - 2024",
     location: "Indonesia",
     description:
       "Shipped marketing sites and editorial pages with strong typography, fast page loads, and practical CMS structures.",
