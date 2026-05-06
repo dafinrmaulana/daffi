@@ -10,7 +10,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
     <Section id="experience">
       <SectionTitle
         eyebrow="Experience"
-        title="Frontend work across legacy systems, modern stacks, and mobile with React Native."
+        title="Experience building frontend applications across web, mobile, and enterprise systems."
       />
       <div className="border-t border-border">
         {items.map((item) => (

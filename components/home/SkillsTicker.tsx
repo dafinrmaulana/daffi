@@ -1,13 +1,4 @@
-const skills = [
-  "Next.js",
-  "TypeScript",
-  "Tailwind CSS",
-  "Design Systems",
-  "Performance",
-  "MDX",
-  "Product UI",
-  "Accessibility",
-]
+import { skills } from "@/lib/content";
 
 export function SkillsTicker() {
   return (
@@ -24,5 +15,5 @@ export function SkillsTicker() {
         ))}
       </div>
     </div>
-  )
+  );
 }

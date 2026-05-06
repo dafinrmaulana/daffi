@@ -2,8 +2,8 @@ import Link from "next/link"
 
 const socialLinks = [
   { href: "https://github.com/dafinrmaulana", label: "GitHub" },
-  { href: "https://linkedin.com/in/dafinrmaulana", label: "LinkedIn" },
-  { href: "https://instagram.com/dafinrmaulana", label: "Instagram" },
+  { href: "https://linkedin.com/in/dafinmaulana", label: "LinkedIn" },
+  { href: "https://instagram.com/dafi.nrm", label: "Instagram" },
 ]
 
 export function SocialRail() {

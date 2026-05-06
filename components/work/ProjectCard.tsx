@@ -1,20 +1,14 @@
-import Link from "next/link"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
 
-import { Badge } from "@/components/ui/Badge"
-import { formatIndex } from "@/lib/utils"
-import type { Project } from "@/lib/content"
+import { Badge } from "@/components/ui/Badge";
+import { formatIndex } from "@/lib/utils";
+import type { Project } from "@/lib/content";
 
-export function ProjectCard({
-  project,
-  index,
-}: {
-  project: Project
-  index: number
-}) {
+export function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <Link
-      href={`/work/${project.slug}`}
+      href={project.demo_url}
       className="group grid gap-5 border-t border-border py-7 transition-colors hover:border-fg lg:grid-cols-[80px_320px_1fr]"
       aria-label={`Open project ${project.title}`}
     >
@@ -42,10 +36,12 @@ export function ProjectCard({
           ))}
         </div>
         <div className="grid gap-1 sm:grid-cols-[1fr_auto] sm:items-end">
-          <p className="font-mono text-xs uppercase text-muted">{project.company} · {project.year}</p>
+          <p className="font-mono text-xs uppercase text-muted">
+            {project.company} · {project.year}
+          </p>
           <p className="text-lg">{project.metric}</p>
         </div>
       </div>
     </Link>
-  )
+  );
 }

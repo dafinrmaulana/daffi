@@ -10,7 +10,7 @@ export function Hero() {
           Jakarta · Available for work · Frontend Developer
         </p>
         <h1 className="max-w-6xl font-serif text-[clamp(4.5rem,16vw,13rem)] leading-[0.85] text-balance">
-          Dafi N. Maulana
+          Dafi Nurrohman Maulana
         </h1>
       </div>
       <div className="grid gap-8 border-t border-border pt-6 md:grid-cols-[1fr_auto] md:items-end">
@@ -18,7 +18,7 @@ export function Hero() {
           Frontend developer who can adapt to legacy or modern technologies, and also build mobile apps with React Native.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button href="/work">View work</Button>
+          <Button href="/docs/Dafi Nurrohman Maulana.pdf">View Resume</Button>
           <a href="#contact" className="inline-flex items-center gap-2 px-4 py-3 text-sm text-muted hover:text-fg">
             Scroll <ArrowDown size={16} aria-hidden="true" />
           </a>
