@@ -15,8 +15,13 @@ export default function AboutPage() {
   return (
     <>
       <Section>
-        <p className="mb-4 font-mono text-xs uppercase text-muted">## About</p>
-        <h1 className="max-w-5xl font-serif text-6xl leading-none sm:text-8xl">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="h-px w-12 bg-fg" />
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+            Profile
+          </p>
+        </div>
+        <h1 className="max-w-5xl font-serif text-6xl leading-[0.92] sm:text-8xl">
           Frontend engineer with a typography-first design instinct.
         </h1>
         <div className="mt-12 grid gap-10 md:grid-cols-[1fr_1fr]">

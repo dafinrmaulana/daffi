@@ -9,7 +9,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
   return (
     <Section id="experience">
       <SectionTitle
-        eyebrow="## Experience"
+        eyebrow="Experience"
         title="A timeline of product UI, frontend systems, and editorial web work."
       />
       <div className="border-t border-border">

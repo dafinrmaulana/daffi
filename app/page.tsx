@@ -15,7 +15,7 @@ export default function HomePage() {
       <WorkPreview />
       <ExperienceSection compact />
       <Section id="about">
-        <SectionTitle eyebrow="## About" title="I care about interfaces that stay useful after the launch day." />
+        <SectionTitle eyebrow="About Dafi" title="I care about interfaces that stay useful after the launch day." />
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
           <p className="text-lg leading-relaxed text-muted">
             Dafi is a frontend-focused builder working across product dashboards,

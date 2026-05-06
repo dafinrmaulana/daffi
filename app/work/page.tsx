@@ -12,8 +12,13 @@ export default function WorkPage() {
   return (
     <Section>
       <div className="mb-12">
-        <p className="mb-4 font-mono text-xs uppercase text-muted">## Work</p>
-        <h1 className="max-w-5xl font-serif text-6xl leading-none sm:text-8xl">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="h-px w-12 bg-fg" />
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+            Project Archive
+          </p>
+        </div>
+        <h1 className="max-w-5xl font-serif text-6xl leading-[0.92] sm:text-8xl">
           Project archive and selected case studies.
         </h1>
       </div>

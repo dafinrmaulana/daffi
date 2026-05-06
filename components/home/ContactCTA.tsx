@@ -1,10 +1,11 @@
 import { Section } from "@/components/layout/Section"
+import { SectionTitle } from "@/components/shared/SectionTitle"
 
 export function ContactCTA() {
   return (
     <Section id="contact" className="pb-24">
-      <div className="border-t border-border pt-5">
-        <p className="font-mono text-xs uppercase text-muted">## Contact</p>
+      <div>
+        <SectionTitle eyebrow="Contact" title="Open for selected collaborations, product work, and thoughtful web builds." />
         <a
           href="mailto:hello@dafi.dev"
           className="mt-8 block break-words font-serif text-[clamp(3rem,11vw,9rem)] leading-none hover:text-muted"

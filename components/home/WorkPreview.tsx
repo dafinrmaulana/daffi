@@ -9,7 +9,7 @@ export function WorkPreview() {
 
   return (
     <Section id="work">
-      <SectionTitle eyebrow="## Work" title="Selected projects with measurable product outcomes." />
+      <SectionTitle eyebrow="Selected Work" title="Projects shaped by product thinking and measurable outcomes." />
       <div>
         {featured.map((project, index) => (
           <ProjectCard key={project.slug} project={project} index={index} />
