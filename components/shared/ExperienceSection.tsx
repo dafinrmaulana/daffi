@@ -1,5 +1,4 @@
 import { Section } from "@/components/layout/Section"
-import { AnimatedReveal } from "@/components/shared/AnimatedReveal"
 import { SectionTitle } from "@/components/shared/SectionTitle"
 import { Badge } from "@/components/ui/Badge"
 import { experiences } from "@/lib/content"
@@ -9,17 +8,14 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
 
   return (
     <Section id="experience">
-      <AnimatedReveal>
-        <SectionTitle
-          eyebrow="Experience"
-          title="Frontend work across legacy systems, modern stacks, and mobile with React Native."
-        />
-      </AnimatedReveal>
+      <SectionTitle
+        eyebrow="Experience"
+        title="Frontend work across legacy systems, modern stacks, and mobile with React Native."
+      />
       <div className="border-t border-border">
         {items.map((item) => (
-          <AnimatedReveal
+          <article
             key={`${item.company}-${item.period}`}
-            delay={0.04}
             className="grid gap-5 border-b border-border py-7 md:grid-cols-[180px_1fr]"
           >
             <div>
@@ -40,7 +36,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
                 ))}
               </div>
             </div>
-          </AnimatedReveal>
+          </article>
         ))}
       </div>
     </Section>
