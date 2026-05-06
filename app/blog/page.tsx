@@ -17,9 +17,11 @@ export default function BlogPage() {
           Notes on interface craft and web systems.
         </h1>
       </div>
-      {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
+      <div className="grid gap-6 md:grid-cols-2">
+        {posts.map((post) => (
+          <PostCard key={post.slug} post={post} />
+        ))}
+      </div>
     </Section>
   )
 }
