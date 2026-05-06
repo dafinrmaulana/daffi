@@ -139,8 +139,8 @@ export const experiences: Experience[] = [
     period: "2025 - Present",
     location: "Jakarta / Remote",
     description:
-      "Building polished frontend experiences for product teams, independent brands, and portfolio-driven websites with a strong focus on clarity and performance.",
-    highlights: ["Next.js delivery", "UI implementation", "Performance audits"],
+      "Building frontend experiences for product teams and independent brands, adapting to legacy codebases, modern stacks, and mobile needs with React Native.",
+    highlights: ["Legacy modernization", "UI implementation", "React Native"],
   },
   {
     company: "Fintech Studio",

@@ -24,7 +24,7 @@ export default function AboutPage() {
             </p>
           </div>
           <h1 className="max-w-5xl font-serif text-6xl leading-[0.92] sm:text-8xl">
-            Frontend developer shipping user-facing products and polished interfaces.
+            Frontend developer adapting to legacy and modern technologies across web and mobile.
           </h1>
         </AnimatedReveal>
         <AnimatedReveal delay={0.06} className="mt-12 grid gap-10 md:grid-cols-[1fr_1fr]">
@@ -39,9 +39,9 @@ export default function AboutPage() {
               />
             </div>
             <p className="text-lg leading-relaxed text-muted">
-              I build focused web surfaces for teams that need clarity, speed, and
-              maintainable implementation. My work usually sits between product
-              thinking, visual systems, and production frontend engineering.
+              I build frontend products that stay maintainable whether the stack is legacy or modern.
+              Most of my work lives on the web, and I can also build mobile apps with React Native
+              when the product needs a native-feeling mobile surface.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

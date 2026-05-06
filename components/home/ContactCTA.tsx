@@ -6,7 +6,7 @@ export function ContactCTA() {
   return (
     <Section id="contact" className="pb-24">
       <AnimatedReveal>
-        <SectionTitle eyebrow="Contact" title="Available for frontend roles, product work, and detail-focused web builds." />
+        <SectionTitle eyebrow="Contact" title="Available for frontend roles across web stacks, including mobile work with React Native." />
       </AnimatedReveal>
       <AnimatedReveal delay={0.06}>
         <a

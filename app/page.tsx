@@ -17,13 +17,13 @@ export default function HomePage() {
       <ExperienceSection compact />
       <Section id="about">
         <AnimatedReveal>
-          <SectionTitle eyebrow="About Dafi" title="Frontend developer focused on clean interfaces and reliable implementation." />
+          <SectionTitle eyebrow="About Dafi" title="Frontend developer who adapts across stacks and ships reliable interfaces." />
         </AnimatedReveal>
         <AnimatedReveal delay={0.06} className="grid gap-6 md:grid-cols-[1fr_1fr]">
           <p className="text-lg leading-relaxed text-muted">
-            Dafi is a frontend developer building dashboards,
-            internal tools, portfolio systems, and polished web interfaces. The work
-            blends UI precision, strong implementation habits, and practical product sense.
+            Dafi is a frontend developer who can work across legacy systems and modern stacks,
+            building dashboards, internal tools, portfolio systems, and polished web interfaces.
+            He also builds mobile apps with React Native when the product needs it.
           </p>
           <div className="md:text-right">
             <Button href="/about">Read about</Button>

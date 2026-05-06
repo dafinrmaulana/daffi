@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     template: "%s - Dafi",
   },
   description:
-    "Frontend developer building product interfaces, polished web systems, and fast user-facing experiences.",
+    "Frontend developer who adapts across legacy and modern technologies, and also builds mobile apps with React Native.",
   openGraph: {
     title: "Dafi - Frontend developer",
     description:
-      "Frontend developer building product interfaces, polished web systems, and fast user-facing experiences.",
+      "Frontend developer who adapts across legacy and modern technologies, and also builds mobile apps with React Native.",
     type: "website",
   },
 }

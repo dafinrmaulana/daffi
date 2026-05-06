@@ -20,7 +20,7 @@ export function GET() {
       >
         <div style={{ fontSize: 28, letterSpacing: 0 }}>Dafi Portfolio</div>
         <div style={{ fontSize: 96, lineHeight: 0.95, maxWidth: 900 }}>
-          Precise web interfaces for product teams.
+          Frontend for legacy, modern, and React Native products.
         </div>
       </div>
     ),

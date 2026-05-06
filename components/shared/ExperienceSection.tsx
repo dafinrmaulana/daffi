@@ -12,7 +12,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
       <AnimatedReveal>
         <SectionTitle
           eyebrow="Experience"
-          title="Frontend work across product UI, internal tools, and web systems."
+          title="Frontend work across legacy systems, modern stacks, and mobile with React Native."
         />
       </AnimatedReveal>
       <div className="border-t border-border">

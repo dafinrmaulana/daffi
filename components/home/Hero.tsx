@@ -16,7 +16,7 @@ export function Hero() {
       </AnimatedReveal>
       <AnimatedReveal delay={0.08} className="grid gap-8 border-t border-border pt-6 md:grid-cols-[1fr_auto] md:items-end">
         <p className="max-w-2xl text-lg leading-relaxed text-muted">
-          Frontend developer building clean product interfaces, performant web apps, and thoughtful design systems.
+          Frontend developer who can adapt to legacy or modern technologies, and also build mobile apps with React Native.
         </p>
         <div className="flex flex-wrap gap-3">
           <Button href="/work">View work</Button>
