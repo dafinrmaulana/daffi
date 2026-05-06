@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Image from "next/image"
 
 import { Badge } from "@/components/ui/Badge"
@@ -13,10 +12,7 @@ export function ProjectCard({
   index: number
 }) {
   return (
-    <Link
-      href={`/work/${project.slug}`}
-      className="group grid gap-5 border-t border-border py-7 transition-colors hover:border-fg lg:grid-cols-[80px_320px_1fr]"
-    >
+    <article className="group grid gap-5 border-t border-border py-7 transition-colors hover:border-fg lg:grid-cols-[80px_320px_1fr]">
       <span className="font-mono text-sm text-muted">{formatIndex(index)}</span>
       <div className="relative aspect-[4/3] overflow-hidden border border-border bg-muted/10">
         <Image
@@ -45,6 +41,6 @@ export function ProjectCard({
           <p className="text-lg">{project.metric}</p>
         </div>
       </div>
-    </Link>
+    </article>
   )
 }

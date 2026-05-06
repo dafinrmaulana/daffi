@@ -4,7 +4,6 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle"
 
 const nav = [
   { href: "/work", label: "Work" },
-  { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ]

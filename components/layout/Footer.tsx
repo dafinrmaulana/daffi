@@ -7,7 +7,6 @@ export function Footer() {
         <p>© 2026 Dafi. Built with Next.js.</p>
         <div className="flex gap-4">
           <Link href="/work" className="hover:text-fg">Work</Link>
-          <Link href="/blog" className="hover:text-fg">Writing</Link>
           <a href="mailto:hello@dafi.dev" className="hover:text-fg">Email</a>
         </div>
       </div>
