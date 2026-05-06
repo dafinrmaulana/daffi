@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/Hero"
 import { SkillsTicker } from "@/components/home/SkillsTicker"
 import { WorkPreview } from "@/components/home/WorkPreview"
 import { Section } from "@/components/layout/Section"
+import { ExperienceSection } from "@/components/shared/ExperienceSection"
 import { SectionTitle } from "@/components/shared/SectionTitle"
 import { Button } from "@/components/ui/Button"
 
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Hero />
       <SkillsTicker />
       <WorkPreview />
+      <ExperienceSection compact />
       <Section id="about">
         <SectionTitle eyebrow="## About" title="I care about interfaces that stay useful after the launch day." />
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">

@@ -25,6 +25,15 @@ export type Post = {
   body: string[]
 }
 
+export type Experience = {
+  company: string
+  role: string
+  period: string
+  location: string
+  description: string
+  highlights: string[]
+}
+
 export const projects: Project[] = [
   {
     slug: "ops-command",
@@ -120,6 +129,36 @@ export const posts: Post[] = [
       "A strong portfolio does not need to explain every capability at once. It should give readers enough signal to understand taste, range, and process.",
       "Case studies are most useful when they show constraints, decisions, and measurable change.",
     ],
+  },
+]
+
+export const experiences: Experience[] = [
+  {
+    company: "Independent Studio",
+    role: "Product-minded Frontend Engineer",
+    period: "2026 - Present",
+    location: "Jakarta / Remote",
+    description:
+      "Building focused product interfaces, portfolio systems, and content-heavy websites for early teams and independent brands.",
+    highlights: ["Next.js delivery", "Interface systems", "Performance audits"],
+  },
+  {
+    company: "Fintech Studio",
+    role: "Frontend Lead",
+    period: "2024 - 2025",
+    location: "Remote",
+    description:
+      "Led frontend implementation for reporting workflows, internal tools, and reusable data visualization primitives.",
+    highlights: ["Dashboard UX", "TypeScript architecture", "Design handoff"],
+  },
+  {
+    company: "Creative Partner",
+    role: "Designer Developer",
+    period: "2022 - 2024",
+    location: "Indonesia",
+    description:
+      "Shipped marketing sites and editorial pages with strong typography, fast page loads, and practical CMS structures.",
+    highlights: ["Brand sites", "CMS modeling", "Accessibility"],
   },
 ]
 
