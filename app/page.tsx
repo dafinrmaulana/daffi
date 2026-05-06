@@ -18,7 +18,7 @@ export default function HomePage() {
         <SectionTitle eyebrow="## About" title="I care about interfaces that stay useful after the launch day." />
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
           <p className="text-lg leading-relaxed text-muted">
-            Daffi is a frontend-focused builder working across product dashboards,
+            Dafi is a frontend-focused builder working across product dashboards,
             portfolio systems, and content-heavy websites. The work blends careful
             interaction design with production-grade implementation.
           </p>

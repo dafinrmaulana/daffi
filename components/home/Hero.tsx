@@ -10,7 +10,7 @@ export function Hero() {
           Jakarta · Available for selected work · Product-minded frontend
         </p>
         <h1 className="max-w-6xl font-serif text-[clamp(4.5rem,16vw,13rem)] leading-[0.85] text-balance">
-          Daffi builds precise web interfaces.
+          Dafi builds precise web interfaces.
         </h1>
       </div>
       <div className="grid gap-8 border-t border-border pt-6 md:grid-cols-[1fr_auto] md:items-end">

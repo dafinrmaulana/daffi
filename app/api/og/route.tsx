@@ -18,7 +18,7 @@ export function GET() {
           fontFamily: "Arial",
         }}
       >
-        <div style={{ fontSize: 28, letterSpacing: 0 }}>Daffi Portfolio</div>
+        <div style={{ fontSize: 28, letterSpacing: 0 }}>Dafi Portfolio</div>
         <div style={{ fontSize: 96, lineHeight: 0.95, maxWidth: 900 }}>
           Precise web interfaces for product teams.
         </div>

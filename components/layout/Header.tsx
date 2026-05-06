@@ -6,7 +6,7 @@ const nav = [
   { href: "/work", label: "Work" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#contact", label: "Contact" },
 ]
 
 export function Header() {
@@ -14,7 +14,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="/" className="font-mono text-sm uppercase">
-          Daffi
+          Dafi
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-muted sm:flex">
           {nav.map((item) => (
