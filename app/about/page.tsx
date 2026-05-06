@@ -24,7 +24,7 @@ export default function AboutPage() {
             </p>
           </div>
           <h1 className="max-w-5xl font-serif text-6xl leading-[0.92] sm:text-8xl">
-            Frontend developer with 3 years of experience shipping user-facing products.
+            Frontend developer shipping user-facing products and polished interfaces.
           </h1>
         </AnimatedReveal>
         <AnimatedReveal delay={0.06} className="mt-12 grid gap-10 md:grid-cols-[1fr_1fr]">

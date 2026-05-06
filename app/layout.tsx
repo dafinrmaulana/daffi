@@ -9,15 +9,15 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
-    default: "Dafi - Frontend developer with 3 years of experience",
+    default: "Dafi - Frontend developer",
     template: "%s - Dafi",
   },
   description:
-    "Frontend developer with 3 years of experience building product interfaces, polished web systems, and fast user-facing experiences.",
+    "Frontend developer building product interfaces, polished web systems, and fast user-facing experiences.",
   openGraph: {
-    title: "Dafi - Frontend developer with 3 years of experience",
+    title: "Dafi - Frontend developer",
     description:
-      "Frontend developer with 3 years of experience building product interfaces, polished web systems, and fast user-facing experiences.",
+      "Frontend developer building product interfaces, polished web systems, and fast user-facing experiences.",
     type: "website",
   },
 }

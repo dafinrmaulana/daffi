@@ -12,7 +12,7 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
       <AnimatedReveal>
         <SectionTitle
           eyebrow="Experience"
-          title="Three years of frontend work across product UI, internal tools, and web systems."
+          title="Frontend work across product UI, internal tools, and web systems."
         />
       </AnimatedReveal>
       <div className="border-t border-border">
