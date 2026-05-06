@@ -5,6 +5,7 @@ export type Project = {
   year: string
   role: string
   tags: string[]
+  thumbnail: string
   metric: string
   metrics: Array<{ label: string; value: string }>
   excerpt: string
@@ -19,6 +20,7 @@ export type Post = {
   date: string
   readTime: string
   tags: string[]
+  thumbnail: string
   excerpt: string
   body: string[]
 }
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     year: "2026",
     role: "Product Engineer",
     tags: ["Next.js", "Dashboard", "Design System"],
+    thumbnail: "/images/project-ops-command.svg",
     metric: "42% faster triage",
     metrics: [
       { label: "Workflow speed", value: "+42%" },
@@ -51,6 +54,7 @@ export const projects: Project[] = [
     year: "2025",
     role: "Frontend Lead",
     tags: ["TypeScript", "Charts", "Automation"],
+    thumbnail: "/images/project-ledgerflow.svg",
     metric: "3.1x report output",
     metrics: [
       { label: "Report output", value: "3.1x" },
@@ -71,6 +75,7 @@ export const projects: Project[] = [
     year: "2024",
     role: "Designer Developer",
     tags: ["Brand", "CMS", "Performance"],
+    thumbnail: "/images/project-northstar-site.svg",
     metric: "98 Lighthouse score",
     metrics: [
       { label: "Performance", value: "98" },
@@ -94,6 +99,7 @@ export const posts: Post[] = [
     date: "2026-04-18",
     readTime: "4 min",
     tags: ["Design", "Frontend"],
+    thumbnail: "/images/blog-dense-interfaces.svg",
     excerpt:
       "Notes on hierarchy, rhythm, and restraint for tools that users keep open all day.",
     body: [
@@ -107,6 +113,7 @@ export const posts: Post[] = [
     date: "2026-03-02",
     readTime: "3 min",
     tags: ["Portfolio", "Writing"],
+    thumbnail: "/images/blog-portfolio-product.svg",
     excerpt:
       "A portfolio can do more than display work; it can demonstrate judgment in the way it is structured.",
     body: [

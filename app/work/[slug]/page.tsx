@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { Badge } from "@/components/ui/Badge"
@@ -32,6 +33,16 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         {project.tags.map((tag) => (
           <Badge key={tag}>{tag}</Badge>
         ))}
+      </div>
+      <div className="relative mt-12 aspect-[16/8] overflow-hidden border border-border bg-muted/10">
+        <Image
+          src={project.thumbnail}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
       </div>
       <div className="mt-12 grid gap-4 border-y border-border py-6 sm:grid-cols-2">
         {project.metrics.map((metric) => (
