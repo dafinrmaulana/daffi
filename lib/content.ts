@@ -79,27 +79,6 @@ export const projects: Project[] = [
       "Implemented responsive layouts, SEO optimization, and scalable frontend architecture to improve brand visibility and user engagement.",
     ],
   },
-  {
-    demo_url: "https://stg.fe.erp.herca.id",
-    title: "Revamping Herca ERP Web Interface",
-    company: "PT. Herca Cipta Dermal Perdana",
-    year: "2026",
-    role: "Frontend Developer",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "ESLint", "ERP"],
-    thumbnail: "/images/portfolio/fe-herca-erp.png",
-    metric: "Modernized ERP experience",
-    metrics: [
-      { label: "Frontend stack", value: "Next.js + TS" },
-      { label: "UI system", value: "Redesigned" },
-    ],
-    excerpt:
-      "A complete UI revamp of the internal ERP platform using a modern frontend stack and updated design system architecture.",
-    featured: true,
-    body: [
-      "Revamped the internal ERP web interface based on the latest UI/UX design direction to improve usability, consistency, and overall user experience.",
-      "Rebuilt the frontend architecture from scratch using Next.js, TypeScript, ESLint, and Tailwind CSS to establish a scalable and maintainable development foundation.",
-    ],
-  },
 
   {
     demo_url: "https://play.google.com/store/apps/details?id=com.herca.erp&hl=en",
