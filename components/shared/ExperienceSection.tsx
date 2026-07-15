@@ -1,10 +1,10 @@
-import { Section } from "@/components/layout/Section"
-import { SectionTitle } from "@/components/shared/SectionTitle"
-import { Badge } from "@/components/ui/Badge"
-import { experiences } from "@/lib/content"
+import { Section } from "@/components/layout/Section";
+import { SectionTitle } from "@/components/shared/SectionTitle";
+import { Badge } from "@/components/ui/Badge";
+import { experiences } from "@/lib/content";
 
 export function ExperienceSection({ compact = false }: { compact?: boolean }) {
-  const items = compact ? experiences.slice(0, 3) : experiences
+  const items = compact ? experiences.slice(0, 3) : experiences;
 
   return (
     <Section id="experience">
@@ -24,11 +24,17 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
             </div>
             <div className="grid gap-5 lg:grid-cols-[1fr_280px]">
               <div>
-                <h3 className="font-serif text-3xl leading-tight sm:text-4xl">
-                  {item.role}
-                </h3>
+                <h3 className="font-serif text-3xl leading-tight sm:text-4xl">{item.role}</h3>
                 <p className="mt-2 font-mono text-xs uppercase text-muted">{item.company}</p>
-                <p className="mt-4 max-w-2xl text-muted">{item.description}</p>
+                {Array.isArray(item.description) ? (
+                  <ul className="mt-4 max-w-2xl list-disc space-y-2 pl-5 text-muted">
+                    {item.description.map((desc) => (
+                      <li key={desc}>{desc}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-4 max-w-2xl text-muted">{item.description}</p>
+                )}
               </div>
               <div className="flex flex-wrap content-start gap-2 lg:justify-end">
                 {item.highlights.map((highlight) => (
@@ -40,5 +46,5 @@ export function ExperienceSection({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
     </Section>
-  )
+  );
 }

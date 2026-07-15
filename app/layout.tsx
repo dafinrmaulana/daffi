@@ -1,11 +1,11 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
-import { Footer } from "@/components/layout/Footer"
-import { Header } from "@/components/layout/Header"
-import { SocialRail } from "@/components/layout/SocialRail"
-import { ThemeProvider } from "@/components/theme-provider"
-import { mono, sans, serif } from "@/lib/fonts"
-import "./globals.css"
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { SocialRail } from "@/components/layout/SocialRail";
+import { ThemeProvider } from "@/components/theme-provider";
+import { mono, sans, serif } from "@/lib/fonts";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
@@ -13,18 +13,31 @@ export const metadata: Metadata = {
     template: "%s - Dafi",
   },
   description:
-    "Frontend developer who adapts across legacy and modern technologies, and also builds mobile apps with React Native.",
+    "Experienced Front-End Developer with building responsive, maintainable web and mobile applications using React, React Native, JavaScript, and TypeScript. Passionate about creating intuitive user interfaces, writing clean code, and delivering high-quality solutions that provide a great user experience.",
   openGraph: {
     title: "Dafi - Frontend developer",
     description:
-      "Frontend developer who adapts across legacy and modern technologies, and also builds mobile apps with React Native.",
+      "Experienced Front-End Developer with building responsive, maintainable web and mobile applications using React, React Native, JavaScript, and TypeScript. Passionate about creating intuitive user interfaces, writing clean code, and delivering high-quality solutions that provide a great user experience.",
     type: "website",
+    images: [
+      {
+        url: "/profile.webp",
+        width: 512,
+        height: 512,
+        alt: "Dafi",
+      },
+    ],
   },
-}
+  icons: {
+    icon: "/profile.webp",
+    shortcut: "/profile.webp",
+    apple: "/profile.webp",
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} ${mono.variable}`}>
         <ThemeProvider>
           <Header />
@@ -34,5 +47,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

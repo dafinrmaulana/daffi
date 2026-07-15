@@ -1,6 +1,6 @@
-import { ArrowDown } from "lucide-react"
+import { ArrowDown } from "lucide-react";
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/Button";
 
 export function Hero() {
   return (
@@ -16,15 +16,17 @@ export function Hero() {
       </div>
       <div className="grid gap-8 border-t border-border pt-6 md:grid-cols-[1fr_auto] md:items-end">
         <p className="max-w-2xl text-lg leading-relaxed text-muted">
-          Frontend developer who can adapt to legacy or modern technologies, and also build mobile apps with React Native.
+          Experienced Front-End Developer with building responsive, maintainable web and mobile applications using
+          React, React Native, JavaScript, and TypeScript. Passionate about creating intuitive user interfaces, writing
+          clean code, and delivering high-quality solutions that provide a great user experience.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button href="/docs/Dafi Nurrohman Maulana.pdf">View Resume</Button>
+          <Button href="/docs/Dafi - Frontend Developer.pdf">View Resume</Button>
           <a href="#contact" className="inline-flex items-center gap-2 px-4 py-3 text-sm text-muted hover:text-fg">
             Scroll <ArrowDown size={16} aria-hidden="true" />
           </a>
         </div>
       </div>
     </section>
-  )
+  );
 }

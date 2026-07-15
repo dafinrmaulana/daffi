@@ -30,7 +30,7 @@ export type Experience = {
   role: string;
   period: string;
   location: string;
-  description: string;
+  description: string | string[];
   highlights: string[];
 };
 
@@ -311,11 +311,21 @@ export const posts: Post[] = [
 export const experiences: Experience[] = [
   {
     company: "PT. Herca Cipta Dermal Perdana",
-    role: "Frontend Developer",
+    role: "Front-End Developer",
     period: "MAR 2025 - Present",
-    location: "Jakarta / On Site",
-    description:
-      "I was responsible for developing, maintaining, and improving the company's internal applications and websites. This included building new features, optimizing performance, and ensuring the systems ran smoothly and efficiently. I worked closely with different teams to understand requirements, troubleshoot issues, and deliver secure and user-friendly solutions. I also looked for ways to improve the overall functionality and adopted best practices to keep the codebase clean and scalable.",
+    location: "West Jakarta, Indonesia",
+    description: [
+      "Built the internal ERP Mobile app from scratch using React Native.",
+      "Created a modern Next.js boilerplate for incremental legacy ERP web migration.",
+      "Built dynamic, API-driven features (filters, forms, sidebars) across web and mobile.",
+      "Created cross-platform authentication to prevent users from re-logging between legacy and Next.js applications.",
+      "Modernized the internal HRIS by upgrading it to Next.js 15 and Tailwind CSS.",
+      "Resolved complex TypeScript type issues and linting errors across legacy projects.",
+      "Isolated legacy HRIS code with Redux and dedicated ESLint configurations to prevent breaking changes.",
+      "Maintained and expanded internal React and React Native UI libraries published on NPM (@herca/r-kit and @herca/rn-kit).",
+      "Collaborated with UI/UX designers, backend engineers, and QA to deliver production-ready features.",
+      "Improved performance and type safety through dependency patches, debugging, and code reviews.",
+    ],
     highlights: [
       "Legacy modernization",
       "UI implementation",
@@ -330,40 +340,34 @@ export const experiences: Experience[] = [
     ],
   },
   {
-    company: "Freelance Web Developer",
-    role: "Fullstack Developer",
-    period: "JAN 2025 - MAR 2025",
-    location: "Remote",
-    description:
-      "Developed and maintained custom web applications, company profiles, and internal business systems using modern and legacy web technologies.",
-    highlights: [
-      "Next.js",
-      "Nuxt.js",
-      "Laravel",
-      "PHP",
-      "Vue.js",
-      "jQuery",
-      "Tailwind CSS",
-      "Bootstrap",
-      "Responsive frontend development",
-    ],
-  },
-  {
     company: "PT. Kodingkeun Digital Solution",
-    role: "Frontend Developer",
-    period: "JUL 2022 - JAN 2025",
-    location: "Indonesia",
-    description:
-      "In this role, I focused on delivering visually appealing and highly functional designs that met client requirements while ensuring optimal user experience and responsiveness across all devices. This experience enhanced my skills in web design, front-end development, and user-centric design principles, enabling me to contribute effectively to a variety of digital projects.",
+    role: "Fron-End Developer",
+    period: "JUL 2022 - MAR 2025",
+    location: "Pangandaran, Indonesia",
+    description: [
+      "Built a public survey and feedback application targeting users within the Tasikmalaya region.",
+      "Rebuilt an e-voting system for a local vocational high school (SMK) election using modern web technologies.",
+      "Created responsive Bootstrap templates for a browser-based wedding invitation builder.",
+      "Designed and developed the landing page for umkm.page, a WordPress-based website builder.",
+      "Revamped the akunmu.id landing page using Laravel Blade and Tailwind CSS.",
+      "Maintained the akunmu.id dashboard by implementing new features and resolving bugs.",
+      "Designed UI/UX mockups and developed responsive frontend interfaces based on client requirements.",
+      "Integrated RESTful APIs to build dynamic, data-driven user interfaces.",
+      "Collaborated with Designers, Backend Engineers, and QA to continuously improve product features.",
+    ],
     highlights: ["Vue.JS", "React.JS", "Next.JS", "Nuxt.JS", "Laravel"],
   },
   {
     company: "PT. CIGS Indonesia Digital",
-    role: "Junior Programmer - PKL",
+    role: "Full-Stack Developer - Intern",
     period: "JUL 2021 - OCT 2021",
-    location: "Indonesia",
-    description:
-      "I contributed as a full-stack developer in the development of an e-voting application using Laravel. My primary responsibility was to design and implement a user-friendly interface that is fully responsive across all devices. Additionally, I collaborated with the team to perform thorough debugging and testing to ensure the application operated smoothly and securely. This experience strengthened my skills in full-stack development, responsive design, and teamwork to deliver a functional and reliable product.",
+    location: "Cimahi, Indonesia",
+    description: [
+      "Developed a full-stack e-voting application from scratch using Laravel.",
+      "Tested and debugged the application to ensure security and stability before election day.",
+      "Managed version control using Git and GitHub to maintain a clean and organized codebase.",
+      "Successfully deployed the application, onboarding hundreds of active student and teacher voters.",
+    ],
     highlights: ["Laravel", "MySQL", "HTML", "CSS", "JQuery", "Bootstrap", "Javascript"],
   },
 ];
