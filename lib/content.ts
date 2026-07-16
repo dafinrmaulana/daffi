@@ -341,7 +341,7 @@ export const experiences: Experience[] = [
   },
   {
     company: "PT. Kodingkeun Digital Solution",
-    role: "Fron-End Developer",
+    role: "Front-End Developer",
     period: "JUL 2022 - MAR 2025",
     location: "Pangandaran, Indonesia",
     description: [
