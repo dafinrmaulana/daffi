@@ -41,6 +41,24 @@ describe("SiteChrome", () => {
     expect(screen.getByRole("main")).toHaveTextContent("Page content")
   })
 
+  it.each(["/admin", "/admin/projects", "/admin/projects/create"])(
+    "omits portfolio chrome on %s",
+    (pathname) => {
+      usePathname.mockReturnValue(pathname)
+
+      render(
+        <SiteChrome>
+          <div>Admin content</div>
+        </SiteChrome>,
+      )
+
+      expect(screen.queryByText("Portfolio header")).not.toBeInTheDocument()
+      expect(screen.queryByText("Portfolio social rail")).not.toBeInTheDocument()
+      expect(screen.queryByText("Portfolio footer")).not.toBeInTheDocument()
+      expect(screen.getByRole("main")).toHaveTextContent("Admin content")
+    },
+  )
+
   it("renders portfolio chrome around page content on regular routes", () => {
     usePathname.mockReturnValue("/")
 

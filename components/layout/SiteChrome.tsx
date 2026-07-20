@@ -8,8 +8,9 @@ import { SocialRail } from "@/components/layout/SocialRail"
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const isStandaloneRoute = pathname === "/login" || pathname === "/admin" || pathname.startsWith("/admin/")
 
-  if (pathname === "/login") {
+  if (isStandaloneRoute) {
     return <main>{children}</main>
   }
 
