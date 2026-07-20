@@ -11,9 +11,11 @@ export const metadata: Metadata = {
 }
 
 export default function LoginPage() {
+  const year = new Date().getFullYear()
+
   return (
-    <section className="grid min-h-screen bg-bg lg:grid-cols-[45fr_55fr]">
-      <div className="order-2 flex min-h-[70vh] flex-col px-5 py-6 sm:px-10 lg:order-1 lg:min-h-screen lg:px-12 xl:px-20">
+    <section className="grid min-h-screen bg-bg lg:grid-cols-2">
+      <div className="flex min-h-screen flex-col px-5 py-6 sm:px-10 lg:px-12 xl:px-20">
         <div className="flex items-center justify-between">
           <Link
             href="/"
@@ -35,11 +37,14 @@ export default function LoginPage() {
         </div>
 
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-          © 2026 Dafi
+          © {year} Dafi. Built with Passion.
         </p>
       </div>
 
-      <aside className="order-1 flex min-h-64 flex-col justify-between border-b border-border bg-fg p-5 text-bg sm:p-10 lg:order-2 lg:min-h-screen lg:border-b-0 lg:border-l lg:px-12 lg:py-10 xl:px-16">
+      <aside
+        data-testid="login-editorial-panel"
+        className="hidden min-h-screen flex-col justify-between border-l border-border bg-fg px-12 py-10 text-bg lg:flex xl:px-16"
+      >
         <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.16em]">
           <span>Dafi — Frontend Developer</span>
           <span>Jakarta · ID</span>
