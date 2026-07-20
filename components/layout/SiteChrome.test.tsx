@@ -29,18 +29,33 @@ describe("SiteChrome", () => {
   it("omits portfolio chrome on the login route", () => {
     usePathname.mockReturnValue("/login")
 
-    const { container } = render(<SiteChrome />)
+    render(
+      <SiteChrome>
+        <div>Page content</div>
+      </SiteChrome>,
+    )
 
-    expect(container).toBeEmptyDOMElement()
+    expect(screen.queryByText("Portfolio header")).not.toBeInTheDocument()
+    expect(screen.queryByText("Portfolio social rail")).not.toBeInTheDocument()
+    expect(screen.queryByText("Portfolio footer")).not.toBeInTheDocument()
+    expect(screen.getByRole("main")).toHaveTextContent("Page content")
   })
 
-  it("renders portfolio chrome on regular routes", () => {
+  it("renders portfolio chrome around page content on regular routes", () => {
     usePathname.mockReturnValue("/")
 
-    render(<SiteChrome />)
+    const { container } = render(
+      <SiteChrome>
+        <div>Page content</div>
+      </SiteChrome>,
+    )
 
     expect(screen.getByText("Portfolio header")).toBeInTheDocument()
     expect(screen.getByText("Portfolio social rail")).toBeInTheDocument()
     expect(screen.getByText("Portfolio footer")).toBeInTheDocument()
+    expect(screen.getByRole("main")).toHaveTextContent("Page content")
+    expect(container).toHaveTextContent(
+      "Portfolio headerPortfolio social railPage contentPortfolio footer",
+    )
   })
 })

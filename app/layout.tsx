@@ -38,8 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} ${mono.variable}`}>
         <ThemeProvider>
-          <SiteChrome />
-          <main>{children}</main>
+          <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>
