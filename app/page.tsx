@@ -18,7 +18,7 @@ export default function HomePage() {
         <SectionTitle eyebrow="About Dafi" title="Frontend developer who adapts across stacks and ships reliable interfaces." />
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
           <p className="text-lg leading-relaxed text-muted">
-            I'm a frontend developer who can work across legacy systems and modern stacks,
+            I&apos;m a frontend developer who can work across legacy systems and modern stacks,
             building dashboards, internal tools, portfolio systems, and polished web interfaces.
             He also builds mobile apps with React Native when the product needs it.
           </p>
