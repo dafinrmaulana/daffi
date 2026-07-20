@@ -15,7 +15,6 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
@@ -36,26 +35,14 @@ export function LoginForm() {
           <Mail className="ml-4 shrink-0 text-muted" size={18} aria-hidden="true" />
           <input
             id="email"
-            type="email"
+            type="text"
+            inputMode="email"
             autoComplete="email"
-            aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "email-error" : undefined}
             className="min-w-0 flex-1 bg-transparent px-3 py-4 outline-none placeholder:text-muted"
             placeholder="you@example.com"
-            {...register("email", {
-              required: "Email is required.",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Enter a valid email address.",
-              },
-            })}
+            {...register("email")}
           />
         </div>
-        {errors.email && (
-          <p id="email-error" role="alert" className="mt-2 text-sm text-muted">
-            {errors.email.message}
-          </p>
-        )}
       </div>
 
       <div>
@@ -68,13 +55,9 @@ export function LoginForm() {
             id="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? "password-error" : undefined}
             className="min-w-0 flex-1 bg-transparent px-3 py-4 outline-none placeholder:text-muted"
             placeholder="Enter your password"
-            {...register("password", {
-              required: "Password is required.",
-            })}
+            {...register("password")}
           />
           <button
             type="button"
@@ -86,11 +69,6 @@ export function LoginForm() {
             {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
           </button>
         </div>
-        {errors.password && (
-          <p id="password-error" role="alert" className="mt-2 text-sm text-muted">
-            {errors.password.message}
-          </p>
-        )}
       </div>
 
       <label className="flex w-fit cursor-pointer items-center gap-3 text-sm text-muted">

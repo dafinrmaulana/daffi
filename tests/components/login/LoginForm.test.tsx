@@ -14,25 +14,26 @@ describe("LoginForm", () => {
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
   })
 
-  it("shows validation feedback for empty required fields", async () => {
+  it("submits empty fields without validation feedback", async () => {
     const user = userEvent.setup()
     render(<LoginForm />)
 
     await user.click(screen.getByRole("button", { name: "Sign in" }))
 
-    expect(await screen.findByText("Email is required.")).toBeInTheDocument()
-    expect(screen.getByText("Password is required.")).toBeInTheDocument()
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Email")).not.toHaveAttribute("aria-invalid")
+    expect(screen.getByLabelText("Password")).not.toHaveAttribute("aria-invalid")
   })
 
-  it("rejects an invalid email address", async () => {
+  it("accepts arbitrary email text without validation feedback", async () => {
     const user = userEvent.setup()
     render(<LoginForm />)
 
     await user.type(screen.getByLabelText("Email"), "not-an-email")
-    await user.type(screen.getByLabelText("Password"), "secret")
     await user.click(screen.getByRole("button", { name: "Sign in" }))
 
-    expect(await screen.findByText("Enter a valid email address.")).toBeInTheDocument()
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Email")).toHaveValue("not-an-email")
   })
 
   it("toggles password visibility and accessible state", async () => {
