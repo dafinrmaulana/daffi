@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  title     String
+  company   Company  @relation(fields: [companyId], references: [id])
+  role      String
+  year      Int
+  demoUrl   String?  @map("demo_url")
+  thumbnail String
+  metric    String?
+  excerpt   String
+  featured  Boolean  @default(false)
+  tags      Tag[]
+  body      String   @db.Text
+  metrics   Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  companyId Int      @map("company_id")
+
+  @@map("projects")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  date      DateTime
+  readTime  Int?     @map("read_time")
+  thumbnail String
+  excerpt   String
+  published Boolean  @default(false)
+  tags      Tag[]
+  body      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("posts")
+}
+
+model Experience {
+  id                 Int              @id @default(autoincrement())
+  companyId          Int              @map("company_id")
+  company            Company          @relation(fields: [companyId], references: [id])
+  role               String
+  startDate          DateTime         @map("start_date")
+  endDate            DateTime?        @map("end_date")
+  location           String
+  description        String           @db.Text
+  higlight           ProjectHighlight @relation(fields: [projectHighlightId], references: [id])
+  skills             Skill[]
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  projectHighlightId Int              @map("project_highlight_id")
+
+  @@map("experiences")
+}
+
+model Skill {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  experiences Experience[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("skills")
+}
+
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  posts       Post[]
+  projects    Project[]
+
+  @@map("tags")
+}
+
+model ProjectHighlight {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  experiences Experience[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("project_highlights")
+}
+
+model Company {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  companyLogo String?      @map("company_logo")
+  projects    Project[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  experiences Experience[]
+
+  @@map("companies")
+}
