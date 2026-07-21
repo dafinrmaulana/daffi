@@ -1,0 +1,316 @@
+"use client";
+
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import EmptyContent from "@/components/admin/EmptyContent";
+import { EntityCard } from "@/components/admin/EntityCard";
+import { Modal } from "@/components/admin/Modal";
+import Input from "@/components/form/Input";
+import { CrudLayout } from "@/components/layout/CrudLayout";
+import GridLayout from "@/components/layout/grid-layout";
+import Alert from "@/components/ui/alert";
+import { Button } from "@/components/ui/Button";
+import CreateButton from "@/components/ui/CreateButton";
+import { TagSchema } from "@/lib/form/tag.schema";
+import { useCreateTag } from "@/lib/services/tags/create-tag";
+import { useDeleteTag } from "@/lib/services/tags/delete-tag";
+import { useGetTags } from "@/lib/services/tags/get-tags";
+import { useUpdateTag } from "@/lib/services/tags/update-tag";
+import { AxiosError } from "axios";
+import { FileText, Tag as TagIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+type ModalFormState = {
+  open: boolean;
+  mode: "create" | "edit";
+};
+
+type TagData = TagSchema & {
+  id: number;
+};
+
+type ValidationErrorResponse = {
+  message: string;
+  errors?: Partial<Record<keyof TagSchema, string[]>>;
+};
+
+export default function TagsClientPage() {
+  const createMutation = useCreateTag();
+  const deleteMutation = useDeleteTag();
+  const updateMutation = useUpdateTag();
+
+  const [dataToDelete, setDataToDelete] = useState<number | null>(null);
+
+  const [formState, setFormState] = useState<ModalFormState>({
+    open: false,
+    mode: "create",
+  });
+
+  const [selectedTag, setSelectedTag] = useState<TagData | null>(null);
+
+  const [eventMessage, setEventMessage] = useState<{
+    type: "success" | "failed";
+    message: string;
+  } | null>(null);
+
+  const { data: tags, isLoading } = useGetTags();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<TagSchema>({
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
+
+  const isMutating = createMutation.isPending || updateMutation.isPending;
+
+  const handleOpenCreate = () => {
+    clearErrors();
+
+    reset({
+      name: "",
+      description: "",
+    });
+
+    setSelectedTag(null);
+
+    setFormState({
+      open: true,
+      mode: "create",
+    });
+  };
+
+  const handleOpenEdit = (tag: TagData) => {
+    clearErrors();
+
+    reset({
+      name: tag.name,
+      description: tag.description ?? "",
+    });
+
+    setSelectedTag(tag);
+
+    setFormState({
+      open: true,
+      mode: "edit",
+    });
+  };
+
+  const handleCloseForm = () => {
+    reset();
+    clearErrors();
+    setSelectedTag(null);
+
+    setFormState((previous) => ({
+      ...previous,
+      open: false,
+    }));
+  };
+
+  const handleValidationError = (error: unknown) => {
+    const axiosError = error as AxiosError<ValidationErrorResponse>;
+
+    const validationErrors = axiosError.response?.data.errors;
+
+    if (!validationErrors) {
+      setEventMessage({
+        type: "failed",
+        message: "Failed to save tag",
+      });
+
+      return;
+    }
+
+    Object.entries(validationErrors).forEach(([field, messages]) => {
+      const message = messages?.[0];
+
+      if (!message) return;
+
+      setError(field as keyof TagSchema, {
+        type: "server",
+        message,
+      });
+    });
+  };
+
+  const onSubmit = (formData: TagSchema) => {
+    const mutationOptions = {
+      onSuccess: () => {
+        setEventMessage({
+          type: "success",
+          message: formState.mode === "create" ? "Tag created successfully" : "Tag updated successfully",
+        });
+
+        handleCloseForm();
+      },
+
+      onError: handleValidationError,
+    };
+
+    if (formState.mode === "edit") {
+      if (!selectedTag) return;
+
+      updateMutation.mutate(
+        {
+          id: String(selectedTag.id),
+          payload: formData,
+        },
+        mutationOptions,
+      );
+
+      return;
+    }
+
+    createMutation.mutate(formData, mutationOptions);
+  };
+
+  const handleDelete = () => {
+    if (dataToDelete === null) return;
+
+    deleteMutation.mutate(dataToDelete, {
+      onSuccess: () => {
+        setDataToDelete(null);
+
+        setEventMessage({
+          type: "success",
+          message: "Tag deleted successfully",
+        });
+      },
+
+      onError: (error) => {
+        console.error(error);
+        setDataToDelete(null);
+
+        setEventMessage({
+          type: "failed",
+          message: "Failed to delete tag",
+        });
+      },
+    });
+  };
+
+  return (
+    <CrudLayout kind="tags" onCreate={handleOpenCreate} data={tags?.data ?? []}>
+      {eventMessage && (
+        <Alert
+          className="mb-4"
+          color={eventMessage.type === "success" ? "success" : "error"}
+          message={eventMessage.message}
+          onClose={() => setEventMessage(null)}
+        />
+      )}
+
+      {isLoading && (
+        <GridLayout>
+          {Array.from({ length: 10 }).map((_, index) => (
+            <EntityCard key={index} loading title="" />
+          ))}
+        </GridLayout>
+      )}
+
+      {!isLoading && tags?.data.length === 0 && (
+        <EmptyContent
+          title="No tags yet"
+          description="Create the first tag to populate this index."
+          action={<CreateButton label="Create Tag" onCreate={handleOpenCreate} />}
+        />
+      )}
+
+      {!isLoading && tags?.data && tags.data.length > 0 && (
+        <GridLayout>
+          {tags.data.map((tag) => (
+            <EntityCard
+              key={tag.id}
+              eyebrow="Tag"
+              title={tag.name}
+              description={tag.description ?? "No description"}
+              actions={
+                <div className="flex w-full justify-end gap-2">
+                  <Button size="sm" onClick={() => handleOpenEdit(tag)}>
+                    Edit
+                  </Button>
+
+                  <Button size="sm" variant="outline" onClick={() => setDataToDelete(tag.id)}>
+                    Delete
+                  </Button>
+                </div>
+              }
+            />
+          ))}
+        </GridLayout>
+      )}
+
+      <Modal
+        open={formState.open}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleCloseForm();
+            return;
+          }
+
+          setFormState((previous) => ({
+            ...previous,
+            open,
+          }));
+        }}
+        title={formState.mode === "create" ? "Create Tag" : "Edit Tag"}
+        size="md"
+        footer={
+          <div className="flex w-full justify-between">
+            <Button onClick={handleCloseForm} disabled={isMutating}>
+              Cancel
+            </Button>
+
+            <Button variant="primary" onClick={handleSubmit(onSubmit)} loading={isMutating}>
+              Save {formState.mode === "create" ? "Tag" : "Changes"}
+            </Button>
+          </div>
+        }
+      >
+        <div className="flex w-full flex-col gap-3">
+          <Input
+            required
+            id="name"
+            type="text"
+            label="Name"
+            placeholder="Tag name"
+            errorMessage={errors.name?.message}
+            prefixIcon={{
+              icon: TagIcon,
+            }}
+            {...register("name")}
+          />
+
+          <Input
+            id="description"
+            type="text"
+            label="Description"
+            placeholder="Tag description"
+            errorMessage={errors.description?.message}
+            prefixIcon={{
+              icon: FileText,
+            }}
+            {...register("description")}
+          />
+        </div>
+      </Modal>
+
+      <ConfirmDialog
+        open={dataToDelete !== null}
+        title="Delete Tag"
+        description="Are you sure you want to delete this tag? This action cannot be undone."
+        confirmText="Yes, Delete"
+        loading={deleteMutation.isPending}
+        onClose={() => setDataToDelete(null)}
+        onConfirm={handleDelete}
+      />
+    </CrudLayout>
+  );
+}

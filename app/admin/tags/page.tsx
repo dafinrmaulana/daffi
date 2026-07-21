@@ -1,9 +1,8 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
+import TagsClientPage from "./tags-client-page";
 
-import { SimpleCrudPage } from "@/components/layout/CrudLayout"
-
-export const metadata: Metadata = { title: "Tags" }
+export const metadata: Metadata = { title: "Tags" };
 
 export default function TagsPage() {
-  return <SimpleCrudPage kind="tags" />
+  return <TagsClientPage />;
 }
