@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import UsersClientPage from "../tags/users-client-page";
+import UsersClientPage from "./users-client-page";
 
 export const metadata: Metadata = { title: "Users" };
 
