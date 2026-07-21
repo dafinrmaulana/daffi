@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/layout/CrudLayout"
 
 describe("SimpleCrudPage", () => {
   it("creates a user through the modal", async () => {

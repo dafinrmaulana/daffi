@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/layout/CrudLayout"
 
 export const metadata: Metadata = { title: "Tags" }
 

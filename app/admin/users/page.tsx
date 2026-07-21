@@ -1,9 +1,8 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
+import UsersClientPage from "../tags/users-client-page";
 
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
-
-export const metadata: Metadata = { title: "Users" }
+export const metadata: Metadata = { title: "Users" };
 
 export default function UsersPage() {
-  return <SimpleCrudPage kind="users" />
+  return <UsersClientPage />;
 }
