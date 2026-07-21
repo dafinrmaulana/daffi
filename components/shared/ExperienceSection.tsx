@@ -1,7 +1,7 @@
 import { Section } from "@/components/layout/Section";
 import { SectionTitle } from "@/components/shared/SectionTitle";
 import { Badge } from "@/components/ui/Badge";
-import { experiences } from "@/lib/content";
+import { experiences } from "@/lib/constants/main-contents";
 
 export function ExperienceSection({ compact = false }: { compact?: boolean }) {
   const items = compact ? experiences.slice(0, 3) : experiences;

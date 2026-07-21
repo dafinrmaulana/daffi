@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { Badge } from "@/components/ui/Badge";
 import { formatIndex } from "@/lib/utils";
-import type { Project } from "@/lib/content";
+import type { Project } from "@/lib/constants/main-contents";
 
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (

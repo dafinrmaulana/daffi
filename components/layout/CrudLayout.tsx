@@ -1,8 +1,7 @@
 "use client";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { simpleEntityConfigs, type SimpleEntityKind } from "@/lib/admin/simple-entities";
-import clsx from "clsx";
+import { simpleEntityConfigs, type SimpleEntityKind } from "@/lib/constants/simple-entities";
 import CreateButton from "../ui/CreateButton";
 
 type Props<Data> = {
@@ -23,7 +22,7 @@ export function CrudLayout<Data>({ kind, data = [], children, onCreate }: Props<
         count={data.length}
         action={<CreateButton label={`Create ${config.singular}`} onCreate={onCreate} />}
       />
-      <div className={clsx(data?.length > 0 ? "grid gap-4 md:grid-cols-2 xl:grid-cols-3" : "")}>{children}</div>
+      {children}
     </>
   );
 }

@@ -2,7 +2,7 @@ import { Section } from "@/components/layout/Section";
 import { SectionTitle } from "@/components/shared/SectionTitle";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { Button } from "@/components/ui/Button";
-import { projects } from "@/lib/content";
+import { projects } from "@/lib/constants/main-contents";
 
 export function WorkPreview() {
   const featured = projects.filter((project) => project.featured).slice(0, 3);

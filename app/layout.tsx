@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { ThemeProvider } from "@/components/theme-provider";
-import { mono, sans, serif } from "@/lib/fonts";
+import { mono, sans, serif } from "@/lib/constants/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -5,6 +6,7 @@ type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   type?: string;
   placeholder?: string;
+  errorMessage?: string;
   prefixIcon?: {
     icon: LucideIcon;
     onClick?: () => void;
@@ -20,6 +22,7 @@ export default function Input({
   id,
   placeholder = "",
   type = "text",
+  errorMessage,
   suffixIcon: SuffixIcon,
   prefixIcon: PrefixIcon,
   ...props
@@ -30,7 +33,12 @@ export default function Input({
         {label}
         {props.required && <span className="text-red-500 -translate-y-[3px] translate-x-[2px] inline-block">*</span>}
       </label>
-      <div className="mt-1 flex min-h-5 items-center border border-border bg-bg transition-colors focus-within:border-fg">
+      <div
+        className={cn(
+          "mt-1 flex min-h-5 items-center border border-border bg-bg transition-colors focus-within:border-fg",
+          errorMessage && "border-red-500",
+        )}
+      >
         {PrefixIcon?.icon && (
           <PrefixIcon.icon
             onClick={PrefixIcon.onClick}
@@ -59,6 +67,8 @@ export default function Input({
           />
         )}
       </div>
+
+      {errorMessage && <p className="mt-1 text-xs text-red-500">{errorMessage}</p>}
     </div>
   );
 }

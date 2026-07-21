@@ -1,9 +1,10 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, LoaderCircle } from "lucide-react";
 import Link, { type LinkProps } from "next/link";
 
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "secondary" | "outline";
+type ButtonSize = "sm" | "md" | "lg";
 
 type CommonProps = {
   children: React.ReactNode;
@@ -23,9 +24,10 @@ type RegularButtonProps = CommonProps &
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     href?: never;
     externalIcon?: never;
+    loading?: boolean;
+    loadingText?: React.ReactNode;
   };
 
-type ButtonSize = "sm" | "md" | "lg";
 type ButtonProps = LinkButtonProps | RegularButtonProps;
 
 const variants: Record<ButtonVariant, string> = {
@@ -65,16 +67,19 @@ export function Button(props: ButtonProps) {
     return (
       <Link href={href} className={classes} {...linkProps}>
         {children}
+
         {externalIcon && <ArrowUpRight aria-hidden="true" size={iconSizes[size]} />}
       </Link>
     );
   }
 
-  const { type = "button", children, ...buttonProps } = props;
+  const { type = "button", children, loading = false, loadingText, disabled, ...buttonProps } = props;
 
   return (
-    <button type={type} className={classes} {...buttonProps}>
-      {children}
+    <button type={type} className={classes} disabled={disabled || loading} aria-busy={loading} {...buttonProps}>
+      {loading && <LoaderCircle aria-hidden="true" className="animate-spin" size={iconSizes[size]} />}
+
+      {loading ? (loadingText ?? children) : children}
     </button>
   );
 }

@@ -1,6 +1,17 @@
-"use client"
+"use client";
 
-import { Modal } from "@/components/admin/Modal"
+import { Modal } from "@/components/admin/Modal";
+import { Button } from "../ui/Button";
+
+type Props = {
+  open: boolean;
+  title: string;
+  description: string;
+  onClose: () => void;
+  onConfirm: () => void;
+  loading?: boolean;
+  confirmText?: string;
+};
 
 export function ConfirmDialog({
   open,
@@ -8,33 +19,27 @@ export function ConfirmDialog({
   description,
   onClose,
   onConfirm,
-}: {
-  open: boolean
-  title: string
-  description: string
-  onClose: () => void
-  onConfirm: () => void
-}) {
+  loading,
+  confirmText = "Confirm",
+}: Props) {
   return (
     <Modal
       open={open}
       title={title}
-      description={description}
-      onClose={onClose}
+      onOpenChange={onClose}
+      disabled={loading}
       footer={
         <>
-          <button type="button" onClick={onClose} className="border border-border px-4 py-3 text-sm">
+          <Button type="button" onClick={onClose} disabled={loading} size="sm">
             Cancel
-          </button>
-          <button type="button" onClick={onConfirm} className="border border-fg bg-fg px-4 py-3 text-sm text-bg">
-            Delete
-          </button>
+          </Button>
+          <Button variant="primary" type="button" onClick={onConfirm} loading={loading} size="sm">
+            {confirmText}
+          </Button>
         </>
       }
     >
-      <p className="text-sm leading-relaxed text-muted">
-        This action only changes the current UI state during the admin prototype phase.
-      </p>
+      <p className="text-sm leading-relaxed text-muted">{description}</p>
     </Modal>
-  )
+  );
 }

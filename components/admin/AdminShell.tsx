@@ -5,9 +5,9 @@ import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { getAdminPageLabel } from "@/lib/admin/navigation";
+import { getAdminPageLabel } from "@/lib/constants/admin-navigation";
 import { cn } from "@/lib/utils";
-import { QueryProvider } from "@/providers/query-providers";
+import { QueryProvider } from "@/lib/providers/query-providers";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

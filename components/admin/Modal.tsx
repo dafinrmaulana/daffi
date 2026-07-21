@@ -13,9 +13,20 @@ type Props = {
   footer?: React.ReactNode;
   className?: string;
   size?: "sm" | "md" | "lg" | "xl";
+  disabled?: boolean;
 };
 
-export function Modal({ open, title, description, onOpenChange, children, footer, className, size = "sm" }: Props) {
+export function Modal({
+  open,
+  title,
+  description,
+  onOpenChange,
+  children,
+  footer,
+  className,
+  size = "sm",
+  disabled,
+}: Props) {
   const sizeClass = {
     sm: "sm:max-w-xl",
     md: "sm:max-w-2xl",
@@ -45,6 +56,7 @@ export function Modal({ open, title, description, onOpenChange, children, footer
         type="button"
         data-testid="modal-overlay"
         aria-label="Close dialog overlay"
+        disabled={disabled}
         onClick={() => onOpenChange?.(false)}
         className={clsx(
           "absolute inset-0 bg-black/50 backdrop-blur-sm transition-all",
@@ -74,6 +86,7 @@ export function Modal({ open, title, description, onOpenChange, children, footer
             type="button"
             aria-label="Close dialog"
             onClick={() => onOpenChange?.(false)}
+            disabled={disabled}
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border"
           >
             <X size={17} aria-hidden="true" />

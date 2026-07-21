@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Section } from "@/components/layout/Section";
 import { ExperienceSection } from "@/components/shared/ExperienceSection";
 import { Badge } from "@/components/ui/Badge";
-import { skills } from "@/lib/content";
+import { skills } from "@/lib/constants/main-contents";
 
 export const metadata: Metadata = {
   title: "About",

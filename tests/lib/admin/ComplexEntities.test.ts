@@ -2,7 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { describe, expect, it } from "vitest"
 
-import { complexEntityConfigs } from "@/lib/admin/complex-entities"
+import { complexEntityConfigs } from "@/lib/constants/complex-entities"
 
 describe("complexEntityConfigs", () => {
   it.each([

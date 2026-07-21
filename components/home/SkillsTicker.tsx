@@ -1,4 +1,4 @@
-import { skills } from "@/lib/content";
+import { skills } from "@/lib/constants/main-contents";
 
 export function SkillsTicker() {
   return (
