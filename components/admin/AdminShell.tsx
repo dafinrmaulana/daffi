@@ -1,23 +1,24 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Menu } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react";
+import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-import { AdminSidebar } from "@/components/admin/AdminSidebar"
-import { getAdminPageLabel } from "@/lib/admin/navigation"
-import { cn } from "@/lib/utils"
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { getAdminPageLabel } from "@/lib/admin/navigation";
+import { cn } from "@/lib/utils";
+import { QueryProvider } from "@/providers/query-providers";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : ""
+    document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
     <div className="min-h-screen bg-bg">
@@ -56,12 +57,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           >
             <Menu size={18} aria-hidden="true" />
           </button>
-          <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
-            {getAdminPageLabel(pathname)}
-          </p>
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{getAdminPageLabel(pathname)}</p>
         </header>
-        <div className="px-5 py-8 sm:px-8 lg:px-10 lg:py-10">{children}</div>
+        <div className="px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+          <QueryProvider>{children}</QueryProvider>
+        </div>
       </div>
     </div>
-  )
+  );
 }
