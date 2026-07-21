@@ -1,0 +1,25 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+export type DeleteProjectHighlightResponse = {
+  message: string;
+};
+
+async function deleteProjectHighlight(id: number) {
+  const response = await axios.delete<DeleteProjectHighlightResponse>(`/api/project-highlights/${id}`);
+
+  return response.data;
+}
+
+export function useDeleteProjectHighlight() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProjectHighlight,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["project-highlights"],
+      });
+    },
+  });
+}

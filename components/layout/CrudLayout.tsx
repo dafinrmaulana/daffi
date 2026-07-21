@@ -9,9 +9,10 @@ type Props<Data> = {
   data?: Data[];
   children: React.ReactNode;
   onCreate?: () => void;
+  createLabel?: string;
 };
 
-export function CrudLayout<Data>({ kind, data = [], children, onCreate }: Props<Data>) {
+export function CrudLayout<Data>({ kind, data = [], children, onCreate, createLabel }: Props<Data>) {
   const config = simpleEntityConfigs[kind];
 
   return (
@@ -20,7 +21,7 @@ export function CrudLayout<Data>({ kind, data = [], children, onCreate }: Props<
         eyebrow={config.eyebrow}
         title={config.title}
         count={data.length}
-        action={<CreateButton label={`Create ${config.singular}`} onCreate={onCreate} />}
+        action={<CreateButton label={createLabel ?? `Create ${config.singular}`} onCreate={onCreate} />}
       />
       {children}
     </>

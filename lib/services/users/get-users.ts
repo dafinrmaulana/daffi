@@ -1,19 +1,11 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { User } from "@/prisma/generated/prisma/client";
-
-export type UsersMeta = {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-};
+import { MetaPagination } from "@/types/api";
 
 export type GetUsersResponse = {
   data: User[];
-  meta: UsersMeta;
+  meta: MetaPagination;
 };
 
 export type GetUsersParams = {
