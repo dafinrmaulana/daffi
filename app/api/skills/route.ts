@@ -24,11 +24,13 @@ export async function GET(request: Request) {
             {
               name: {
                 contains: search,
+                mode: "insensitive",
               },
             },
             {
               description: {
                 contains: search,
+                mode: "insensitive",
               },
             },
           ],
