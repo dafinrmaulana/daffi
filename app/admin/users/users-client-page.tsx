@@ -33,7 +33,7 @@ export default function UsersClientPage() {
   const deleteMutation = useDeleteUser();
   const updateMutation = useUpdateUser();
 
-  const [dataToDelete, setDataToDelete] = useState<number | null>(null);
+  const [usernameToDelete, setUsernameToDelete] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState<ModalFormState | null>(null);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [eventMessage, setEventMessage] = useState<{
@@ -113,7 +113,7 @@ export default function UsersClientPage() {
     if (isFormOpen?.mode === "edit") {
       if (!selectedUser) return;
 
-      updateMutation.mutate({ id: String(selectedUser.id), payload: formData }, onSettled);
+      updateMutation.mutate({ username: selectedUser.username, payload: formData }, onSettled);
       return;
     }
 
@@ -169,7 +169,7 @@ export default function UsersClientPage() {
                   <Button size="sm" onClick={() => handleOpenEdit(user)}>
                     Edit
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => setDataToDelete(user.id)}>
+                  <Button size="sm" variant="outline" onClick={() => setUsernameToDelete(user.username)}>
                     Delete
                   </Button>
                 </div>
@@ -251,17 +251,17 @@ export default function UsersClientPage() {
       </Modal>
 
       <ConfirmDialog
-        open={!!dataToDelete}
+        open={usernameToDelete !== null}
         title="Delete User"
         description="Are you sure want to delete this user? This action cannot be undone"
         confirmText="Yes, Delete"
-        onClose={() => setDataToDelete(null)}
+        onClose={() => setUsernameToDelete(null)}
         loading={deleteMutation.isPending}
         onConfirm={() => {
-          if (!dataToDelete) return;
-          deleteMutation.mutate(dataToDelete, {
+          if (usernameToDelete === null) return;
+          deleteMutation.mutate(usernameToDelete, {
             onSuccess: () => {
-              setDataToDelete(null);
+              setUsernameToDelete(null);
               setEventMessage({
                 type: "success",
                 message: "User deleted successfully",
@@ -271,7 +271,7 @@ export default function UsersClientPage() {
             onError: (error) => {
               console.error(error);
 
-              setDataToDelete(null);
+              setUsernameToDelete(null);
               setEventMessage({
                 type: "failed",
                 message: "Failed to delete user",

@@ -1,9 +1,9 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { FileText, Wrench } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FileText, Link, Wrench } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import EmptyContent from "@/components/admin/empty-content";
@@ -16,6 +16,7 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import type { SkillSchema } from "@/lib/form/skill-schema";
+import { normalizeSlug } from "@/lib/slug";
 import { useCreateSkill } from "@/lib/services/skills/create-skill";
 import { useDeleteSkill } from "@/lib/services/skills/delete-skill";
 import { useGetSkills } from "@/lib/services/skills/get-skills";
@@ -51,31 +52,46 @@ export default function SkillsClientPage() {
 
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
-  const [skillIdToDelete, setSkillIdToDelete] = useState<number | null>(null);
+  const [skillSlugToDelete, setSkillSlugToDelete] = useState<string | null>(null);
 
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
+  const slugManuallyEdited = useRef(false);
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     setError,
+    setValue,
     clearErrors,
     formState: { errors },
   } = useForm<SkillSchema>({
     defaultValues: {
       name: "",
+      slug: "",
       description: "",
     },
   });
+
+  const watchedName = useWatch({ control, name: "name" });
+  const slugRegistration = register("slug");
+
+  useEffect(() => {
+    if (!slugManuallyEdited.current) {
+      setValue("slug", normalizeSlug(watchedName), { shouldDirty: true });
+    }
+  }, [setValue, watchedName]);
 
   const isFormSubmitting = createSkillMutation.isPending || updateSkillMutation.isPending;
 
   const handleOpenCreate = () => {
     clearErrors();
+    slugManuallyEdited.current = false;
 
     reset({
       name: "",
+      slug: "",
       description: "",
     });
 
@@ -89,9 +105,11 @@ export default function SkillsClientPage() {
 
   const handleOpenEdit = (skill: Skill) => {
     clearErrors();
+    slugManuallyEdited.current = true;
 
     reset({
       name: skill.name,
+      slug: skill.slug,
       description: skill.description ?? "",
     });
 
@@ -106,6 +124,7 @@ export default function SkillsClientPage() {
   const handleCloseForm = () => {
     reset({
       name: "",
+      slug: "",
       description: "",
     });
 
@@ -152,7 +171,7 @@ export default function SkillsClientPage() {
     if (formModal.mode === "edit" && selectedSkill) {
       updateSkillMutation.mutate(
         {
-          id: selectedSkill.id,
+          slug: selectedSkill.slug,
           payload: formData,
         },
         {
@@ -185,13 +204,13 @@ export default function SkillsClientPage() {
   };
 
   const handleDelete = () => {
-    if (skillIdToDelete === null) {
+    if (skillSlugToDelete === null) {
       return;
     }
 
-    deleteSkillMutation.mutate(skillIdToDelete, {
+    deleteSkillMutation.mutate(skillSlugToDelete, {
       onSuccess: () => {
-        setSkillIdToDelete(null);
+        setSkillSlugToDelete(null);
 
         setEventMessage({
           type: "success",
@@ -200,7 +219,7 @@ export default function SkillsClientPage() {
       },
 
       onError: (error) => {
-        setSkillIdToDelete(null);
+        setSkillSlugToDelete(null);
 
         setEventMessage({
           type: "failed",
@@ -251,7 +270,7 @@ export default function SkillsClientPage() {
                     Edit
                   </Button>
 
-                  <Button size="sm" variant="outline" onClick={() => setSkillIdToDelete(skill.id)}>
+                  <Button size="sm" variant="outline" onClick={() => setSkillSlugToDelete(skill.slug)}>
                     Delete
                   </Button>
                 </div>
@@ -290,6 +309,22 @@ export default function SkillsClientPage() {
       >
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
           <Input
+            id="slug"
+            type="text"
+            label="Slug"
+            placeholder="skill-name"
+            errorMessage={errors.slug?.message}
+            prefixIcon={{
+              icon: Link,
+            }}
+            {...slugRegistration}
+            onChange={(event) => {
+              slugManuallyEdited.current = true;
+              slugRegistration.onChange(event);
+            }}
+          />
+
+          <Input
             required
             id="name"
             type="text"
@@ -317,12 +352,12 @@ export default function SkillsClientPage() {
       </Modal>
 
       <ConfirmDialog
-        open={skillIdToDelete !== null}
+        open={skillSlugToDelete !== null}
         title="Delete Skill"
         description="Are you sure you want to delete this skill? This action cannot be undone."
         confirmText="Yes, Delete"
         loading={deleteSkillMutation.isPending}
-        onClose={() => setSkillIdToDelete(null)}
+        onClose={() => setSkillSlugToDelete(null)}
         onConfirm={handleDelete}
       />
     </CrudLayout>

@@ -1,9 +1,9 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { Building2, FileText, ImageIcon } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Building2, FileText, ImageIcon, Link } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import EmptyContent from "@/components/admin/empty-content";
@@ -16,6 +16,7 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import type { CompanySchema } from "@/lib/form/company-schema";
+import { normalizeSlug } from "@/lib/slug";
 import { useCreateCompany } from "@/lib/services/companies/create-company";
 import { useDeleteCompany } from "@/lib/services/companies/delete-company";
 import { useGetCompanies } from "@/lib/services/companies/get-companies";
@@ -50,31 +51,46 @@ export default function CompaniesClientPage() {
   });
 
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-  const [companyIdToDelete, setCompanyIdToDelete] = useState<number | null>(null);
+  const [companySlugToDelete, setCompanySlugToDelete] = useState<string | null>(null);
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
+  const slugManuallyEdited = useRef(false);
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     setError,
+    setValue,
     clearErrors,
     formState: { errors },
   } = useForm<CompanySchema>({
     defaultValues: {
       name: "",
+      slug: "",
       description: "",
       companyLogo: "",
     },
   });
 
+  const watchedName = useWatch({ control, name: "name" });
+  const slugRegistration = register("slug");
+
+  useEffect(() => {
+    if (!slugManuallyEdited.current) {
+      setValue("slug", normalizeSlug(watchedName), { shouldDirty: true });
+    }
+  }, [setValue, watchedName]);
+
   const isFormSubmitting = createCompanyMutation.isPending || updateCompanyMutation.isPending;
 
   const handleOpenCreate = () => {
     clearErrors();
+    slugManuallyEdited.current = false;
 
     reset({
       name: "",
+      slug: "",
       description: "",
       companyLogo: "",
     });
@@ -89,9 +105,11 @@ export default function CompaniesClientPage() {
 
   const handleOpenEdit = (company: Company) => {
     clearErrors();
+    slugManuallyEdited.current = true;
 
     reset({
       name: company.name,
+      slug: company.slug,
       description: company.description ?? "",
       companyLogo: company.companyLogo ?? "",
     });
@@ -107,6 +125,7 @@ export default function CompaniesClientPage() {
   const handleCloseForm = () => {
     reset({
       name: "",
+      slug: "",
       description: "",
       companyLogo: "",
     });
@@ -152,7 +171,7 @@ export default function CompaniesClientPage() {
     if (formModal.mode === "edit" && selectedCompany) {
       updateCompanyMutation.mutate(
         {
-          id: selectedCompany.id,
+          slug: selectedCompany.slug,
           payload: formData,
         },
         {
@@ -185,13 +204,13 @@ export default function CompaniesClientPage() {
   };
 
   const handleDelete = () => {
-    if (companyIdToDelete === null) {
+    if (companySlugToDelete === null) {
       return;
     }
 
-    deleteCompanyMutation.mutate(companyIdToDelete, {
+    deleteCompanyMutation.mutate(companySlugToDelete, {
       onSuccess: () => {
-        setCompanyIdToDelete(null);
+        setCompanySlugToDelete(null);
 
         setEventMessage({
           type: "success",
@@ -200,7 +219,7 @@ export default function CompaniesClientPage() {
       },
 
       onError: (error) => {
-        setCompanyIdToDelete(null);
+        setCompanySlugToDelete(null);
 
         setEventMessage({
           type: "failed",
@@ -253,7 +272,7 @@ export default function CompaniesClientPage() {
                     Edit
                   </Button>
 
-                  <Button size="sm" variant="outline" onClick={() => setCompanyIdToDelete(company.id)}>
+                  <Button size="sm" variant="outline" onClick={() => setCompanySlugToDelete(company.slug)}>
                     Delete
                   </Button>
                 </div>
@@ -291,6 +310,22 @@ export default function CompaniesClientPage() {
         }
       >
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            id="slug"
+            type="text"
+            label="Slug"
+            placeholder="company-name"
+            errorMessage={errors.slug?.message}
+            prefixIcon={{
+              icon: Link,
+            }}
+            {...slugRegistration}
+            onChange={(event) => {
+              slugManuallyEdited.current = true;
+              slugRegistration.onChange(event);
+            }}
+          />
+
           <Input
             required
             id="name"
@@ -331,12 +366,12 @@ export default function CompaniesClientPage() {
       </Modal>
 
       <ConfirmDialog
-        open={companyIdToDelete !== null}
+        open={companySlugToDelete !== null}
         title="Delete Company"
         description="Are you sure you want to delete this company? This action cannot be undone."
         confirmText="Yes, Delete"
         loading={deleteCompanyMutation.isPending}
-        onClose={() => setCompanyIdToDelete(null)}
+        onClose={() => setCompanySlugToDelete(null)}
         onConfirm={handleDelete}
       />
     </CrudLayout>

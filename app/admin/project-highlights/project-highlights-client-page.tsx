@@ -15,18 +15,16 @@ import { useCreateProjectHighlight } from "@/lib/services/project-highlights/cre
 import { useDeleteProjectHighlight } from "@/lib/services/project-highlights/delete-project-highlight";
 import { useGetProjectHighlights } from "@/lib/services/project-highlights/get-project-highlights";
 import { useUpdateProjectHighlight } from "@/lib/services/project-highlights/update-project-highlight";
+import { normalizeSlug } from "@/lib/slug";
+import type { ProjectHighlight } from "@/prisma/generated/prisma/client";
 import { AxiosError } from "axios";
-import { FileText, Highlighter } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FileText, Highlighter, Link } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 type ModalFormState = {
   open: boolean;
   mode?: "create" | "edit";
-};
-
-type ProjectHighlightData = ProjectHighlightSchema & {
-  id: number;
 };
 
 type ValidationErrorResponse = {
@@ -38,11 +36,12 @@ export default function ProjectHighlightsClientPage() {
   const deleteMutation = useDeleteProjectHighlight();
   const updateMutation = useUpdateProjectHighlight();
 
-  const [dataToDelete, setDataToDelete] = useState<number | null>(null);
+  const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
 
   const [isFormOpen, setIsFormOpen] = useState<ModalFormState | null>(null);
 
-  const [selectedProjectHighlight, setSelectedProjectHighlight] = useState<ProjectHighlightData | null>(null);
+  const [selectedProjectHighlight, setSelectedProjectHighlight] = useState<ProjectHighlight | null>(null);
+  const slugManuallyEdited = useRef(false);
 
   const [eventMessage, setEventMessage] = useState<{
     type: "success" | "failed";
@@ -53,22 +52,37 @@ export default function ProjectHighlightsClientPage() {
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<ProjectHighlightSchema>({
     defaultValues: {
       name: "",
+      slug: "",
       description: "",
     },
   });
 
+  const watchedName = useWatch({ control, name: "name" });
+  const slugRegistration = register("slug");
+
+  useEffect(() => {
+    if (!slugManuallyEdited.current) {
+      setValue("slug", normalizeSlug(watchedName), { shouldDirty: true });
+    }
+  }, [setValue, watchedName]);
+
   const isMutating = createMutation.isPending || updateMutation.isPending;
 
   const handleOpenCreate = () => {
+    slugManuallyEdited.current = false;
+
     reset({
       name: "",
+      slug: "",
       description: "",
     });
 
@@ -79,9 +93,12 @@ export default function ProjectHighlightsClientPage() {
     });
   };
 
-  const handleOpenEdit = (projectHighlight: ProjectHighlightData) => {
+  const handleOpenEdit = (projectHighlight: ProjectHighlight) => {
+    slugManuallyEdited.current = true;
+
     reset({
       name: projectHighlight.name,
+      slug: projectHighlight.slug,
       description: projectHighlight.description ?? "",
     });
 
@@ -145,7 +162,7 @@ export default function ProjectHighlightsClientPage() {
 
       updateMutation.mutate(
         {
-          id: String(selectedProjectHighlight.id),
+          slug: selectedProjectHighlight.slug,
           payload: formData,
         },
         mutationOptions,
@@ -213,7 +230,7 @@ export default function ProjectHighlightsClientPage() {
                     Edit
                   </Button>
 
-                  <Button size="sm" variant="outline" onClick={() => setDataToDelete(projectHighlight.id)}>
+                  <Button size="sm" variant="outline" onClick={() => setSlugToDelete(projectHighlight.slug)}>
                     Delete
                   </Button>
                 </div>
@@ -247,6 +264,22 @@ export default function ProjectHighlightsClientPage() {
       >
         <div className="flex w-full flex-col gap-3">
           <Input
+            label="Slug"
+            id="slug"
+            type="text"
+            placeholder="project-highlight-name"
+            errorMessage={errors.slug?.message}
+            {...slugRegistration}
+            onChange={(event) => {
+              slugManuallyEdited.current = true;
+              slugRegistration.onChange(event);
+            }}
+            prefixIcon={{
+              icon: Link,
+            }}
+          />
+
+          <Input
             required
             label="Name"
             id="name"
@@ -274,18 +307,18 @@ export default function ProjectHighlightsClientPage() {
       </Modal>
 
       <ConfirmDialog
-        open={dataToDelete !== null}
+        open={slugToDelete !== null}
         title="Delete Project Highlight"
         description="Are you sure you want to delete this project highlight? This action cannot be undone."
         confirmText="Yes, Delete"
-        onClose={() => setDataToDelete(null)}
+        onClose={() => setSlugToDelete(null)}
         loading={deleteMutation.isPending}
         onConfirm={() => {
-          if (dataToDelete === null) return;
+          if (slugToDelete === null) return;
 
-          deleteMutation.mutate(dataToDelete, {
+          deleteMutation.mutate(slugToDelete, {
             onSuccess: () => {
-              setDataToDelete(null);
+              setSlugToDelete(null);
 
               setEventMessage({
                 type: "success",
@@ -295,7 +328,7 @@ export default function ProjectHighlightsClientPage() {
 
             onError: (error) => {
               console.error(error);
-              setDataToDelete(null);
+              setSlugToDelete(null);
 
               setEventMessage({
                 type: "failed",
