@@ -51,7 +51,7 @@ const iconSizes: Record<ButtonSize, number> = {
 };
 
 export function Button(props: ButtonProps) {
-  const { className, variant = "outline", size = "md" } = props;
+  const { className, variant = "outline", size = "md", ...restProps } = props;
 
   const classes = cn(
     "inline-flex items-center justify-center gap-2 border transition-colors",
@@ -63,11 +63,11 @@ export function Button(props: ButtonProps) {
     className,
   );
 
-  if (props.href !== undefined) {
-    const { href, externalIcon = true, children, ...linkProps } = props;
+  if (restProps.href !== undefined) {
+    const { href, externalIcon = true, children, ...linkProps } = restProps;
 
     return (
-      <Link href={href} className={classes} {...linkProps}>
+      <Link {...linkProps} href={href} className={classes}>
         {children}
 
         {externalIcon && <ArrowUpRight aria-hidden="true" size={iconSizes[size]} />}
@@ -75,10 +75,10 @@ export function Button(props: ButtonProps) {
     );
   }
 
-  const { type = "button", children, loading = false, loadingText, disabled, ...buttonProps } = props;
+  const { type = "button", children, loading = false, loadingText, disabled, ...buttonProps } = restProps;
 
   return (
-    <button type={type} className={classes} disabled={disabled || loading} aria-busy={loading} {...buttonProps}>
+    <button {...buttonProps} type={type} className={classes} disabled={disabled || loading} aria-busy={loading}>
       {loading && <LoaderCircle aria-hidden="true" className="animate-spin" size={iconSizes[size]} />}
 
       {loading ? (loadingText ?? children) : children}
