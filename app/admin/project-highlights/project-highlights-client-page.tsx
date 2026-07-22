@@ -111,7 +111,6 @@ export default function ProjectHighlightsClientPage() {
 
   const handleValidationError = (error: unknown) => {
     const axiosError = error as AxiosError<ValidationErrorResponse>;
-
     const validationErrors = axiosError.response?.data.errors;
 
     if (!validationErrors) {

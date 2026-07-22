@@ -1,9 +1,8 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
+import CompaniesClientPage from "./company-client-page";
 
-import { SimpleCrudPage } from "@/components/layout/CrudLayout"
-
-export const metadata: Metadata = { title: "Companies" }
+export const metadata: Metadata = { title: "Companies" };
 
 export default function CompaniesPage() {
-  return <SimpleCrudPage kind="companies" />
+  return <CompaniesClientPage />;
 }
