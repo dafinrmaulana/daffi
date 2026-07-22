@@ -4,9 +4,7 @@ import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-type UpdateTagVariables = MutationVariables<UpdateTagSchema, "slug">;
-
-async function updateTag({ slug, payload }: UpdateTagVariables) {
+async function updateTag({ slug, payload }: MutationVariables<UpdateTagSchema, "slug">) {
   const response = await axios.patch<ApiResponse<Tag>>(`/api/tags/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
@@ -18,7 +16,7 @@ export function useUpdateTag() {
   return useMutation<
     Awaited<ReturnType<typeof updateTag>>,
     AxiosError<ValidationErrorResponse<keyof TagSchema>>,
-    UpdateTagVariables
+    MutationVariables<UpdateTagSchema, "slug">
   >({
     mutationFn: updateTag,
     onSuccess: async (data, variables) => {

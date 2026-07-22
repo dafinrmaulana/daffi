@@ -4,9 +4,7 @@ import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-type UpdateUserVariables = MutationVariables<Partial<UserSchema>, "username">;
-
-async function updateUser({ username, payload }: UpdateUserVariables) {
+async function updateUser({ username, payload }: MutationVariables<Partial<UserSchema>, "username">) {
   const response = await axios.patch<ApiResponse<User>>(`/api/users/${encodeURIComponent(username)}`, payload);
   return response.data;
 }
@@ -17,7 +15,7 @@ export function useUpdateUser() {
   return useMutation<
     Awaited<ReturnType<typeof updateUser>>,
     AxiosError<ValidationErrorResponse<keyof UserSchema>>,
-    UpdateUserVariables
+    MutationVariables<Partial<UserSchema>, "username">
   >({
     mutationFn: updateUser,
     onSuccess: async (data, variables) => {

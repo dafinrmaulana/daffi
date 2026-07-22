@@ -4,9 +4,10 @@ import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-type UpdateProjectHighlightVariables = MutationVariables<UpdateProjectHighlightSchema, "slug">;
-
-async function updateProjectHighlight({ slug, payload }: UpdateProjectHighlightVariables) {
+async function updateProjectHighlight({
+  slug,
+  payload,
+}: MutationVariables<UpdateProjectHighlightSchema, "slug">) {
   const response = await axios.patch<ApiResponse<ProjectHighlight>>(
     `/api/project-highlights/${encodeURIComponent(slug)}`,
     payload,
@@ -21,7 +22,7 @@ export function useUpdateProjectHighlight() {
   return useMutation<
     Awaited<ReturnType<typeof updateProjectHighlight>>,
     AxiosError<ValidationErrorResponse<keyof ProjectHighlightSchema>>,
-    UpdateProjectHighlightVariables
+    MutationVariables<UpdateProjectHighlightSchema, "slug">
   >({
     mutationFn: updateProjectHighlight,
     onSuccess: async (data, variables) => {

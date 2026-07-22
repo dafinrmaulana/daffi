@@ -5,9 +5,10 @@ import type { CompanySchema, UpdateCompanySchema } from "@/lib/form/company-sche
 import type { Company } from "@/prisma/generated/prisma/client";
 import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/types/api";
 
-type UpdateCompanyVariables = MutationVariables<UpdateCompanySchema, "slug">;
-
-async function updateCompany({ slug, payload }: UpdateCompanyVariables): Promise<ApiResponse<Company>> {
+async function updateCompany({
+  slug,
+  payload,
+}: MutationVariables<UpdateCompanySchema, "slug">): Promise<ApiResponse<Company>> {
   const response = await axios.patch<ApiResponse<Company>>(`/api/companies/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
@@ -19,7 +20,7 @@ export function useUpdateCompany() {
   return useMutation<
     ApiResponse<Company>,
     AxiosError<ValidationErrorResponse<keyof CompanySchema>>,
-    UpdateCompanyVariables
+    MutationVariables<UpdateCompanySchema, "slug">
   >({
     mutationFn: updateCompany,
     onSuccess: async (data, variables) => {
