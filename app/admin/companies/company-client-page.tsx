@@ -311,6 +311,19 @@ export default function CompaniesClientPage() {
       >
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
           <Input
+            required
+            id="name"
+            type="text"
+            label="Name"
+            placeholder="Company name"
+            errorMessage={errors.name?.message}
+            prefixIcon={{
+              icon: Building2,
+            }}
+            {...register("name")}
+          />
+
+          <Input
             id="slug"
             type="text"
             label="Slug"
@@ -324,19 +337,6 @@ export default function CompaniesClientPage() {
               slugManuallyEdited.current = true;
               slugRegistration.onChange(event);
             }}
-          />
-
-          <Input
-            required
-            id="name"
-            type="text"
-            label="Name"
-            placeholder="Company name"
-            errorMessage={errors.name?.message}
-            prefixIcon={{
-              icon: Building2,
-            }}
-            {...register("name")}
           />
 
           <Input

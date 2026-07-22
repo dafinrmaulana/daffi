@@ -264,6 +264,19 @@ export default function ProjectHighlightsClientPage() {
       >
         <div className="flex w-full flex-col gap-3">
           <Input
+            required
+            label="Name"
+            id="name"
+            type="text"
+            placeholder="Project highlight name"
+            errorMessage={errors.name?.message}
+            {...register("name")}
+            prefixIcon={{
+              icon: Highlighter,
+            }}
+          />
+
+          <Input
             label="Slug"
             id="slug"
             type="text"
@@ -276,19 +289,6 @@ export default function ProjectHighlightsClientPage() {
             }}
             prefixIcon={{
               icon: Link,
-            }}
-          />
-
-          <Input
-            required
-            label="Name"
-            id="name"
-            type="text"
-            placeholder="Project highlight name"
-            errorMessage={errors.name?.message}
-            {...register("name")}
-            prefixIcon={{
-              icon: Highlighter,
             }}
           />
 

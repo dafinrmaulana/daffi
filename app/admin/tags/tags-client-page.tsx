@@ -291,6 +291,19 @@ export default function TagsClientPage() {
       >
         <div className="flex w-full flex-col gap-3">
           <Input
+            required
+            id="name"
+            type="text"
+            label="Name"
+            placeholder="Tag name"
+            errorMessage={errors.name?.message}
+            prefixIcon={{
+              icon: TagIcon,
+            }}
+            {...register("name")}
+          />
+
+          <Input
             id="slug"
             type="text"
             label="Slug"
@@ -304,19 +317,6 @@ export default function TagsClientPage() {
               slugManuallyEdited.current = true;
               slugRegistration.onChange(event);
             }}
-          />
-
-          <Input
-            required
-            id="name"
-            type="text"
-            label="Name"
-            placeholder="Tag name"
-            errorMessage={errors.name?.message}
-            prefixIcon={{
-              icon: TagIcon,
-            }}
-            {...register("name")}
           />
 
           <Input

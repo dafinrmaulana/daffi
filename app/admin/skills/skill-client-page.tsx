@@ -309,6 +309,19 @@ export default function SkillsClientPage() {
       >
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
           <Input
+            required
+            id="name"
+            type="text"
+            label="Name"
+            placeholder="Skill name"
+            errorMessage={errors.name?.message}
+            prefixIcon={{
+              icon: Wrench,
+            }}
+            {...register("name")}
+          />
+
+          <Input
             id="slug"
             type="text"
             label="Slug"
@@ -322,19 +335,6 @@ export default function SkillsClientPage() {
               slugManuallyEdited.current = true;
               slugRegistration.onChange(event);
             }}
-          />
-
-          <Input
-            required
-            id="name"
-            type="text"
-            label="Name"
-            placeholder="Skill name"
-            errorMessage={errors.name?.message}
-            prefixIcon={{
-              icon: Wrench,
-            }}
-            {...register("name")}
           />
 
           <Input
