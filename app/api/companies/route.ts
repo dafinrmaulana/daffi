@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { companySchema } from "@/lib/form/company-schema";
-import { Prisma } from "@/prisma/generated/prisma/client";
 import prisma from "@/lib/providers/prisma";
+import { normalizeSlug } from "@/lib/slug";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 export async function GET(request: Request) {
   try {
@@ -80,9 +81,50 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const validatedData = companySchema.parse(body);
+    const slug = normalizeSlug(validatedData.slug || validatedData.name);
+
+    if (!slug) {
+      return NextResponse.json(
+        {
+          message: "Validation failed",
+          errors: {
+            slug: ["The slug field is required."],
+          },
+        },
+        {
+          status: 422,
+        },
+      );
+    }
+
+    const existingCompany = await prisma.company.findUnique({
+      where: {
+        slug,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingCompany) {
+      return NextResponse.json(
+        {
+          message: "Validation failed",
+          errors: {
+            slug: ["The slug has already been taken."],
+          },
+        },
+        {
+          status: 422,
+        },
+      );
+    }
 
     const company = await prisma.company.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        slug,
+      },
     });
 
     return NextResponse.json(
@@ -100,6 +142,20 @@ export async function POST(request: Request) {
         {
           message: "Validation failed",
           errors: z.flattenError(error).fieldErrors,
+        },
+        {
+          status: 422,
+        },
+      );
+    }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return NextResponse.json(
+        {
+          message: "Validation failed",
+          errors: {
+            slug: ["The slug has already been taken."],
+          },
         },
         {
           status: 422,
