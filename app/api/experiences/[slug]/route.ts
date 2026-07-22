@@ -38,10 +38,8 @@ export async function GET(_request: Request, { params }: RouteContext<{ slug: st
 
     return NextResponse.json({ message: "Experience retrieved successfully", data: experience });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error", error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 },
-    );
+    console.error("Failed to retrieve experience", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -144,10 +142,8 @@ export async function PATCH(request: Request, { params }: RouteContext<{ slug: s
       if (error.code === "P2025") return NextResponse.json({ message: "Experience not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { message: "Internal server error", error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 },
-    );
+    console.error("Failed to update experience", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -163,9 +159,7 @@ export async function DELETE(_request: Request, { params }: RouteContext<{ slug:
       return NextResponse.json({ message: "Experience not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { message: "Internal server error", error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 },
-    );
+    console.error("Failed to delete experience", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

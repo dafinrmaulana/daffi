@@ -37,6 +37,7 @@ type InfiniteSelectBaseProps = {
   onRetry: () => void;
   errorMessage?: string;
   required?: boolean;
+  clearable?: boolean;
   disabled?: boolean;
 };
 

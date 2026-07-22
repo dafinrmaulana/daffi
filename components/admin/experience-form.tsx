@@ -154,6 +154,7 @@ export function ExperienceForm({ mode, initialExperience, isSubmitting, submitEr
           label="Project Highlight"
           placeholder="No project highlight"
           searchPlaceholder="Search project highlights…"
+          clearable
           value={highlight}
           onChange={(option) => {
             setHighlight(option);

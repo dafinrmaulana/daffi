@@ -67,10 +67,8 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error", error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 },
-    );
+    console.error("Failed to list experiences", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -139,9 +137,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json(
-      { message: "Internal server error", error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 },
-    );
+    console.error("Failed to create experience", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

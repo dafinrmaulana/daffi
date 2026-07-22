@@ -25,6 +25,7 @@ export function InfiniteSelect(props: InfiniteSelectProps) {
     onRetry,
     errorMessage,
     required,
+    clearable,
     disabled,
     multiple = false,
     value,
@@ -188,6 +189,19 @@ export function InfiniteSelect(props: InfiniteSelectProps) {
           </div>
 
           <div id={`${id}-listbox`} role="listbox" aria-multiselectable={multiple || undefined} className="max-h-64 overflow-y-auto py-1">
+            {!multiple && clearable && selectedSingle && (
+              <button
+                type="button"
+                onClick={() => {
+                  (onChange as (next: RelationOption | null) => void)(null);
+                  closeDropdown();
+                }}
+                className="flex w-full items-center gap-2 border-b border-border px-3 py-2.5 text-left text-sm text-muted hover:bg-fg hover:text-bg"
+              >
+                <X size={14} aria-hidden="true" />
+                Clear selection
+              </button>
+            )}
             {isLoading && <p className="flex items-center gap-2 px-3 py-4 text-sm text-muted"><LoaderCircle className="animate-spin" size={15} /> Loading options…</p>}
             {isError && (
               <div className="flex items-center justify-between gap-3 px-3 py-3 text-sm text-red-500">
