@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export type DeleteProjectHighlightResponse = {
-  message: string;
-};
+import type { DeleteResponse } from "@/types/api";
 
 async function deleteProjectHighlight(slug: string) {
-  const response = await axios.delete<DeleteProjectHighlightResponse>(
+  const response = await axios.delete<DeleteResponse>(
     `/api/project-highlights/${encodeURIComponent(slug)}`,
   );
 

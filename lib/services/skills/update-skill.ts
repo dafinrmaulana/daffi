@@ -3,24 +3,12 @@ import axios, { AxiosError } from "axios";
 
 import type { SkillSchema, UpdateSkillSchema } from "@/lib/form/skill-schema";
 import type { Skill } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/types/api";
 
-export type UpdateSkillPayload = {
-  slug: string;
-  payload: UpdateSkillSchema;
-};
+type UpdateSkillVariables = MutationVariables<UpdateSkillSchema, "slug">;
 
-export type UpdateSkillResponse = {
-  message: string;
-  data: Skill;
-};
-
-export type SkillValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof SkillSchema, string[]>>;
-};
-
-async function updateSkill({ slug, payload }: UpdateSkillPayload): Promise<UpdateSkillResponse> {
-  const response = await axios.patch<UpdateSkillResponse>(`/api/skills/${encodeURIComponent(slug)}`, payload);
+async function updateSkill({ slug, payload }: UpdateSkillVariables): Promise<ApiResponse<Skill>> {
+  const response = await axios.patch<ApiResponse<Skill>>(`/api/skills/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -28,7 +16,7 @@ async function updateSkill({ slug, payload }: UpdateSkillPayload): Promise<Updat
 export function useUpdateSkill() {
   const queryClient = useQueryClient();
 
-  return useMutation<UpdateSkillResponse, AxiosError<SkillValidationErrorResponse>, UpdateSkillPayload>({
+  return useMutation<ApiResponse<Skill>, AxiosError<ValidationErrorResponse<keyof SkillSchema>>, UpdateSkillVariables>({
     mutationFn: updateSkill,
 
     onSuccess: async (data, variables) => {

@@ -3,19 +3,10 @@ import axios, { AxiosError } from "axios";
 
 import type { SkillSchema } from "@/lib/form/skill-schema";
 import type { Skill } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, ValidationErrorResponse } from "@/types/api";
 
-export type CreateSkillResponse = {
-  message: string;
-  data: Skill;
-};
-
-export type SkillValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof SkillSchema, string[]>>;
-};
-
-async function createSkill(payload: SkillSchema): Promise<CreateSkillResponse> {
-  const response = await axios.post<CreateSkillResponse>("/api/skills", payload);
+async function createSkill(payload: SkillSchema): Promise<ApiResponse<Skill>> {
+  const response = await axios.post<ApiResponse<Skill>>("/api/skills", payload);
 
   return response.data;
 }
@@ -23,7 +14,7 @@ async function createSkill(payload: SkillSchema): Promise<CreateSkillResponse> {
 export function useCreateSkill() {
   const queryClient = useQueryClient();
 
-  return useMutation<CreateSkillResponse, AxiosError<SkillValidationErrorResponse>, SkillSchema>({
+  return useMutation<ApiResponse<Skill>, AxiosError<ValidationErrorResponse<keyof SkillSchema>>, SkillSchema>({
     mutationFn: createSkill,
 
     onSuccess: async () => {

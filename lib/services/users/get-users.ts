@@ -1,24 +1,13 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { User } from "@/prisma/generated/prisma/client";
-import { MetaPagination } from "@/types/api";
+import type { User } from "@/prisma/generated/prisma/client";
+import type { PaginatedResponse, QueryParams } from "@/types/api";
 
-export type GetUsersResponse = {
-  data: User[];
-  meta: MetaPagination;
-};
-
-export type GetUsersParams = {
-  page?: number;
-  limit?: number;
-  search?: string;
-};
-
-export const useGetUsers = ({ page = 1, limit = 10, search = "" }: GetUsersParams = {}) => {
+export const useGetUsers = ({ page = 1, limit = 10, search = "" }: QueryParams = {}) => {
   return useQuery({
     queryKey: ["users", { page, limit, search }],
     queryFn: async () => {
-      const { data } = await axios.get<GetUsersResponse>("/api/users", {
+      const { data } = await axios.get<PaginatedResponse<User>>("/api/users", {
         params: { page, limit, search: search || undefined },
       });
 

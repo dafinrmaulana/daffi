@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export type DeleteUserResponse = {
-  message: string;
-};
+import type { DeleteResponse } from "@/types/api";
 
 async function deleteUser(username: string) {
-  const response = await axios.delete<DeleteUserResponse>(`/api/users/${encodeURIComponent(username)}`);
+  const response = await axios.delete<DeleteResponse>(`/api/users/${encodeURIComponent(username)}`);
   return response.data;
 }
 

@@ -1,17 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type DeleteCompanyResponse = {
-  message: string;
-};
+import type { DeleteErrorResponse, DeleteResponse } from "@/types/api";
 
-export type DeleteCompanyErrorResponse = {
-  message: string;
-  error?: string;
-};
-
-async function deleteCompany(slug: string): Promise<DeleteCompanyResponse> {
-  const response = await axios.delete<DeleteCompanyResponse>(`/api/companies/${encodeURIComponent(slug)}`);
+async function deleteCompany(slug: string): Promise<DeleteResponse> {
+  const response = await axios.delete<DeleteResponse>(`/api/companies/${encodeURIComponent(slug)}`);
 
   return response.data;
 }
@@ -19,7 +12,7 @@ async function deleteCompany(slug: string): Promise<DeleteCompanyResponse> {
 export function useDeleteCompany() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeleteCompanyResponse, AxiosError<DeleteCompanyErrorResponse>, string>({
+  return useMutation<DeleteResponse, AxiosError<DeleteErrorResponse>, string>({
     mutationFn: deleteCompany,
     onSuccess: async () => {
       await queryClient.invalidateQueries({

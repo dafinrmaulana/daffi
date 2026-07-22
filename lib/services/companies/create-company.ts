@@ -3,19 +3,10 @@ import axios, { AxiosError } from "axios";
 
 import type { CompanySchema } from "@/lib/form/company-schema";
 import type { Company } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, ValidationErrorResponse } from "@/types/api";
 
-export type CreateCompanyResponse = {
-  message: string;
-  data: Company;
-};
-
-export type CompanyValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof CompanySchema, string[]>>;
-};
-
-async function createCompany(payload: CompanySchema): Promise<CreateCompanyResponse> {
-  const response = await axios.post<CreateCompanyResponse>("/api/companies", payload);
+async function createCompany(payload: CompanySchema): Promise<ApiResponse<Company>> {
+  const response = await axios.post<ApiResponse<Company>>("/api/companies", payload);
 
   return response.data;
 }
@@ -23,7 +14,7 @@ async function createCompany(payload: CompanySchema): Promise<CreateCompanyRespo
 export function useCreateCompany() {
   const queryClient = useQueryClient();
 
-  return useMutation<CreateCompanyResponse, AxiosError<CompanyValidationErrorResponse>, CompanySchema>({
+  return useMutation<ApiResponse<Company>, AxiosError<ValidationErrorResponse<keyof CompanySchema>>, CompanySchema>({
     mutationFn: createCompany,
     onSuccess: async () => {
       await queryClient.invalidateQueries({

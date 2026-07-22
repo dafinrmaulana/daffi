@@ -1,27 +1,13 @@
-import { TagSchema, UpdateTagSchema } from "@/lib/form/tag-schema";
+import type { TagSchema, UpdateTagSchema } from "@/lib/form/tag-schema";
 import type { Tag } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/types/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type UpdateTagPayload = UpdateTagSchema;
-
-export type UpdateTagResponse = {
-  message: string;
-  data: Tag;
-};
-
-export type TagValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof TagSchema, string[]>>;
-};
-
-type UpdateTagVariables = {
-  slug: string;
-  payload: UpdateTagPayload;
-};
+type UpdateTagVariables = MutationVariables<UpdateTagSchema, "slug">;
 
 async function updateTag({ slug, payload }: UpdateTagVariables) {
-  const response = await axios.patch<UpdateTagResponse>(`/api/tags/${encodeURIComponent(slug)}`, payload);
+  const response = await axios.patch<ApiResponse<Tag>>(`/api/tags/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -31,7 +17,7 @@ export function useUpdateTag() {
 
   return useMutation<
     Awaited<ReturnType<typeof updateTag>>,
-    AxiosError<TagValidationErrorResponse>,
+    AxiosError<ValidationErrorResponse<keyof TagSchema>>,
     UpdateTagVariables
   >({
     mutationFn: updateTag,

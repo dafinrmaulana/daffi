@@ -1,17 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type DeleteSkillResponse = {
-  message: string;
-};
+import type { DeleteErrorResponse, DeleteResponse } from "@/types/api";
 
-export type DeleteSkillErrorResponse = {
-  message: string;
-  error?: string;
-};
-
-async function deleteSkill(slug: string): Promise<DeleteSkillResponse> {
-  const response = await axios.delete<DeleteSkillResponse>(`/api/skills/${encodeURIComponent(slug)}`);
+async function deleteSkill(slug: string): Promise<DeleteResponse> {
+  const response = await axios.delete<DeleteResponse>(`/api/skills/${encodeURIComponent(slug)}`);
 
   return response.data;
 }
@@ -19,7 +12,7 @@ async function deleteSkill(slug: string): Promise<DeleteSkillResponse> {
 export function useDeleteSkill() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeleteSkillResponse, AxiosError<DeleteSkillErrorResponse>, string>({
+  return useMutation<DeleteResponse, AxiosError<DeleteErrorResponse>, string>({
     mutationFn: deleteSkill,
 
     onSuccess: async () => {

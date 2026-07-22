@@ -2,29 +2,14 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import type { Company } from "@/prisma/generated/prisma/client";
+import type { LegacyMetaPagination, PaginatedResponse, QueryParams } from "@/types/api";
 
-export type CompaniesPaginationMeta = {
-  currentPage: number;
-  perPage: number;
-  total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
-export type GetCompaniesResponse = {
-  data: Company[];
-  meta: CompaniesPaginationMeta;
-};
-
-export type GetCompaniesParams = {
-  page?: number;
-  limit?: number;
-  search?: string;
-};
-
-async function getCompanies({ page = 1, limit = 10, search = "" }: GetCompaniesParams): Promise<GetCompaniesResponse> {
-  const response = await axios.get<GetCompaniesResponse>("/api/companies", {
+async function getCompanies({
+  page = 1,
+  limit = 10,
+  search = "",
+}: QueryParams): Promise<PaginatedResponse<Company, LegacyMetaPagination>> {
+  const response = await axios.get<PaginatedResponse<Company, LegacyMetaPagination>>("/api/companies", {
     params: {
       page,
       limit,
@@ -35,7 +20,7 @@ async function getCompanies({ page = 1, limit = 10, search = "" }: GetCompaniesP
   return response.data;
 }
 
-export function useGetCompanies(params: GetCompaniesParams = {}) {
+export function useGetCompanies(params: QueryParams = {}) {
   const { page = 1, limit = 10, search = "" } = params;
 
   return useQuery({

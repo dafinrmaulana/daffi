@@ -2,29 +2,14 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import type { Skill } from "@/prisma/generated/prisma/client";
+import type { LegacyMetaPagination, PaginatedResponse, QueryParams } from "@/types/api";
 
-export type SkillsPaginationMeta = {
-  currentPage: number;
-  perPage: number;
-  total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
-export type GetSkillsResponse = {
-  data: Skill[];
-  meta: SkillsPaginationMeta;
-};
-
-export type GetSkillsParams = {
-  page?: number;
-  limit?: number;
-  search?: string;
-};
-
-async function getSkills({ page = 1, limit = 10, search = "" }: GetSkillsParams): Promise<GetSkillsResponse> {
-  const response = await axios.get<GetSkillsResponse>("/api/skills", {
+async function getSkills({
+  page = 1,
+  limit = 10,
+  search = "",
+}: QueryParams): Promise<PaginatedResponse<Skill, LegacyMetaPagination>> {
+  const response = await axios.get<PaginatedResponse<Skill, LegacyMetaPagination>>("/api/skills", {
     params: {
       page,
       limit,
@@ -35,7 +20,7 @@ async function getSkills({ page = 1, limit = 10, search = "" }: GetSkillsParams)
   return response.data;
 }
 
-export function useGetSkills(params: GetSkillsParams = {}) {
+export function useGetSkills(params: QueryParams = {}) {
   const { page = 1, limit = 10, search = "" } = params;
 
   return useQuery({

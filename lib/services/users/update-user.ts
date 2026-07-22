@@ -1,27 +1,13 @@
-import { UserSchema } from "@/lib/form/user-schema";
+import type { UserSchema } from "@/lib/form/user-schema";
 import type { User } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/types/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type UpdateUserPayload = Partial<UserSchema>;
-
-export type UpdateUserResponse = {
-  message: string;
-  data: User;
-};
-
-export type ValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof UserSchema, string[]>>;
-};
-
-type UpdateUserVariables = {
-  username: string;
-  payload: UpdateUserPayload;
-};
+type UpdateUserVariables = MutationVariables<Partial<UserSchema>, "username">;
 
 async function updateUser({ username, payload }: UpdateUserVariables) {
-  const response = await axios.patch<UpdateUserResponse>(`/api/users/${encodeURIComponent(username)}`, payload);
+  const response = await axios.patch<ApiResponse<User>>(`/api/users/${encodeURIComponent(username)}`, payload);
   return response.data;
 }
 
@@ -30,7 +16,7 @@ export function useUpdateUser() {
 
   return useMutation<
     Awaited<ReturnType<typeof updateUser>>,
-    AxiosError<ValidationErrorResponse>,
+    AxiosError<ValidationErrorResponse<keyof UserSchema>>,
     UpdateUserVariables
   >({
     mutationFn: updateUser,

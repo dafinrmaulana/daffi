@@ -1,25 +1,14 @@
-import { Tag } from "@/prisma/generated/prisma/client";
-import { MetaPagination } from "@/types/api";
+import type { Tag } from "@/prisma/generated/prisma/client";
+import type { LegacyMetaPagination, PaginatedResponse, QueryParams } from "@/types/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export type GetTagsResponse = {
-  data: Tag[];
-  meta: MetaPagination;
-};
-
-export type GetTagsParams = {
-  page?: number;
-  limit?: number;
-  search?: string;
-};
-
-export const useGetTags = ({ page = 1, limit = 10, search = "" }: GetTagsParams = {}) => {
+export const useGetTags = ({ page = 1, limit = 10, search = "" }: QueryParams = {}) => {
   return useQuery({
     queryKey: ["tags", { page, limit, search }],
 
     queryFn: async () => {
-      const { data } = await axios.get<GetTagsResponse>("/api/tags", {
+      const { data } = await axios.get<PaginatedResponse<Tag, LegacyMetaPagination>>("/api/tags", {
         params: {
           page,
           limit,

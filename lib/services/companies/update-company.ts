@@ -3,24 +3,12 @@ import axios, { AxiosError } from "axios";
 
 import type { CompanySchema, UpdateCompanySchema } from "@/lib/form/company-schema";
 import type { Company } from "@/prisma/generated/prisma/client";
+import type { ApiResponse, MutationVariables, ValidationErrorResponse } from "@/types/api";
 
-export type UpdateCompanyPayload = {
-  slug: string;
-  payload: UpdateCompanySchema;
-};
+type UpdateCompanyVariables = MutationVariables<UpdateCompanySchema, "slug">;
 
-export type UpdateCompanyResponse = {
-  message: string;
-  data: Company;
-};
-
-export type CompanyValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof CompanySchema, string[]>>;
-};
-
-async function updateCompany({ slug, payload }: UpdateCompanyPayload): Promise<UpdateCompanyResponse> {
-  const response = await axios.patch<UpdateCompanyResponse>(`/api/companies/${encodeURIComponent(slug)}`, payload);
+async function updateCompany({ slug, payload }: UpdateCompanyVariables): Promise<ApiResponse<Company>> {
+  const response = await axios.patch<ApiResponse<Company>>(`/api/companies/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -28,7 +16,11 @@ async function updateCompany({ slug, payload }: UpdateCompanyPayload): Promise<U
 export function useUpdateCompany() {
   const queryClient = useQueryClient();
 
-  return useMutation<UpdateCompanyResponse, AxiosError<CompanyValidationErrorResponse>, UpdateCompanyPayload>({
+  return useMutation<
+    ApiResponse<Company>,
+    AxiosError<ValidationErrorResponse<keyof CompanySchema>>,
+    UpdateCompanyVariables
+  >({
     mutationFn: updateCompany,
     onSuccess: async (data, variables) => {
       await Promise.all([
