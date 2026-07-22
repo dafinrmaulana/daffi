@@ -32,7 +32,7 @@ export function LoginForm() {
     <form className="mt-10 space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
       <Input
         id="email"
-        type="email"
+        type="text"
         inputMode="email"
         autoComplete="email"
         label="Email"
@@ -57,7 +57,7 @@ export function LoginForm() {
             type="button"
             size="icon"
             variant="secondary"
-            className="mr-2 border-0 hover:bg-transparent"
+            className="mr-2 h-10 min-h-10 w-10 border-0 text-muted hover:bg-transparent hover:text-fg"
             aria-label={showPassword ? "Hide password" : "Show password"}
             aria-pressed={showPassword}
             onClick={() => setShowPassword((visible) => !visible)}
@@ -81,7 +81,7 @@ export function LoginForm() {
         type="submit"
         variant="primary"
         size="lg"
-        className="w-full justify-between px-5 hover:bg-bg hover:text-fg hover:opacity-100"
+        className="w-full justify-between px-5 text-sm font-medium hover:bg-bg hover:text-fg hover:opacity-100"
       >
         Sign in
         <ArrowRight size={18} aria-hidden="true" />
