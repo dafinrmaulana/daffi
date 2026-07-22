@@ -64,20 +64,20 @@ model Post {
 }
 
 model Experience {
-  id                 Int              @id @default(autoincrement())
-  slug               String           @unique
-  companyId          Int              @map("company_id")
-  company            Company          @relation(fields: [companyId], references: [id])
+  id                 Int               @id @default(autoincrement())
+  companyId          Int               @map("company_id")
+  company            Company           @relation(fields: [companyId], references: [id])
   role               String
-  startDate          DateTime         @map("start_date")
-  endDate            DateTime?        @map("end_date")
+  slug               String            @unique
+  startDate          DateTime          @map("start_date")
+  endDate            DateTime?         @map("end_date")
   location           String
-  description        String           @db.Text
-  higlight           ProjectHighlight @relation(fields: [projectHighlightId], references: [id])
+  description        String            @db.Text
+  projectHighlightId Int?              @map("project_highlight_id")
+  projectHighlight   ProjectHighlight? @relation(fields: [projectHighlightId], references: [id])
   skills             Skill[]
-  createdAt          DateTime         @default(now()) @map("created_at")
-  updatedAt          DateTime         @updatedAt @map("updated_at")
-  projectHighlightId Int              @map("project_highlight_id")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
 
   @@map("experiences")
 }
