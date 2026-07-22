@@ -1,32 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { useState } from "react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import { useForm } from "react-hook-form";
 
-import Input from "@/components/form/input"
-import { Button } from "@/components/ui/button"
+import Input from "@/components/form/input";
+import { Button } from "@/components/ui/button";
 
 type LoginFormValues = {
-  email: string
-  password: string
-  remember: boolean
-}
+  email: string;
+  password: string;
+  remember: boolean;
+};
 
 export function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const {
-    register,
-    handleSubmit,
-  } = useForm<LoginFormValues>({
+  const [showPassword, setShowPassword] = useState(false);
+  const { register, handleSubmit } = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
       password: "",
       remember: false,
     },
-  })
+  });
 
-  const onSubmit = () => undefined
+  const onSubmit = () => undefined;
 
   return (
     <form className="mt-10 space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -69,23 +66,14 @@ export function LoginForm() {
       />
 
       <label className="flex w-fit cursor-pointer items-center gap-3 text-sm text-muted">
-        <input
-          type="checkbox"
-          className="h-4 w-4 accent-current"
-          {...register("remember")}
-        />
+        <input type="checkbox" className="h-4 w-4 accent-current" {...register("remember")} />
         Remember me
       </label>
 
-      <Button
-        type="submit"
-        variant="primary"
-        size="lg"
-        className="w-full justify-between px-5 text-sm font-medium hover:bg-bg hover:text-fg hover:opacity-100"
-      >
+      <Button type="submit" variant="primary" size="lg" className="w-full flex items-center justify-between">
         Sign in
         <ArrowRight size={18} aria-hidden="true" />
       </Button>
     </form>
-  )
+  );
 }
