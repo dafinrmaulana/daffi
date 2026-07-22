@@ -84,6 +84,7 @@ model Experience {
 
 model Skill {
   id          Int          @id @default(autoincrement())
+  slug        String       @unique
   name        String       @unique
   description String?
   experiences Experience[]
@@ -95,6 +96,7 @@ model Skill {
 
 model Tag {
   id          Int       @id @default(autoincrement())
+  slug        String    @unique
   name        String    @unique
   description String?
   createdAt   DateTime  @default(now()) @map("created_at")
@@ -107,6 +109,7 @@ model Tag {
 
 model ProjectHighlight {
   id          Int          @id @default(autoincrement())
+  slug        String       @unique
   name        String       @unique
   description String?
   experiences Experience[]
@@ -118,6 +121,7 @@ model ProjectHighlight {
 
 model Company {
   id          Int          @id @default(autoincrement())
+  slug        String       @unique
   name        String
   description String?
   companyLogo String?      @map("company_logo")
