@@ -15,7 +15,7 @@ export type EventMessage = {
   message: string;
 };
 
-export type ComplexEntityKind = "projects" | "posts" | "experiences";
+export type ComplexEntityKind = "projects" | "posts";
 
 export type ComplexFieldType =
   | "text"

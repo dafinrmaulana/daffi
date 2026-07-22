@@ -8,15 +8,6 @@ const tags = [
   { label: "Frontend", value: "frontend" },
   { label: "Product Design", value: "product-design" },
 ]
-const skills = [
-  { label: "React", value: "react" },
-  { label: "TypeScript", value: "typescript" },
-]
-const projectHighlights = [
-  { label: "Design System", value: "design-system" },
-  { label: "Platform Migration", value: "platform-migration" },
-]
-
 export const complexEntityConfigs: Record<ComplexEntityKind, ComplexEntityConfig> = {
   projects: {
     title: "Projects",
@@ -89,41 +80,6 @@ export const complexEntityConfigs: Record<ComplexEntityKind, ComplexEntityConfig
         description: "Treating a personal site as a maintained product.",
         meta: [{ label: "Status", value: "Draft" }, { label: "Read", value: "6 min" }],
         values: { slug: "portfolio-as-product", title: "Portfolio as Product", date: "2026-06-01", readTime: "6", thumbnail: "/images/blog-portfolio-product.svg", excerpt: "Treating a personal site as a maintained product.", published: false, tags: ["frontend"], body: "Portfolio product article." },
-      },
-    ],
-  },
-  experiences: {
-    title: "Experiences",
-    singular: "experience",
-    eyebrow: "Career",
-    indexHref: "/admin/experiences",
-    fields: [
-      { name: "slug", label: "Slug", type: "text", placeholder: "company-role" },
-      { name: "company", label: "Company", type: "select", options: companies },
-      { name: "role", label: "Role", type: "text", placeholder: "Frontend Developer" },
-      { name: "startDate", label: "Start date", type: "date" },
-      { name: "endDate", label: "End date", type: "date" },
-      { name: "location", label: "Location", type: "text", placeholder: "Jakarta, Indonesia" },
-      { name: "description", label: "Description", type: "textarea", placeholder: "Experience summary" },
-      { name: "projectHighlight", label: "Project highlight", type: "select", options: projectHighlights },
-      { name: "skills", label: "Skills", type: "checkboxGroup", options: skills },
-    ],
-    records: [
-      {
-        id: "experience-1",
-        slug: "northstar-frontend-developer",
-        title: "Frontend Developer · Northstar",
-        description: "Built product interfaces and a design system.",
-        meta: [{ label: "Period", value: "2024 — Present" }, { label: "Location", value: "Jakarta" }],
-        values: { slug: "northstar-frontend-developer", company: "northstar", role: "Frontend Developer", startDate: "2024-01-01", endDate: "", location: "Jakarta", description: "Built product interfaces and a design system.", projectHighlight: "design-system", skills: ["react", "typescript"] },
-      },
-      {
-        id: "experience-2",
-        slug: "ledgerflow-product-engineer",
-        title: "Product Engineer · Ledgerflow",
-        description: "Migrated legacy operations interfaces.",
-        meta: [{ label: "Period", value: "2022 — 2024" }, { label: "Location", value: "Remote" }],
-        values: { slug: "ledgerflow-product-engineer", company: "ledgerflow", role: "Product Engineer", startDate: "2022-01-01", endDate: "2024-01-01", location: "Remote", description: "Migrated legacy operations interfaces.", projectHighlight: "platform-migration", skills: ["typescript"] },
       },
     ],
   },
