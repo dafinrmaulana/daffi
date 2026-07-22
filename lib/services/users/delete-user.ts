@@ -5,8 +5,8 @@ export type DeleteUserResponse = {
   message: string;
 };
 
-async function deleteUser(id: number) {
-  const response = await axios.delete<DeleteUserResponse>(`/api/users/${id}`);
+async function deleteUser(username: string) {
+  const response = await axios.delete<DeleteUserResponse>(`/api/users/${encodeURIComponent(username)}`);
   return response.data;
 }
 

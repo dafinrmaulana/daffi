@@ -10,8 +10,8 @@ export type DeleteCompanyErrorResponse = {
   error?: string;
 };
 
-async function deleteCompany(id: number): Promise<DeleteCompanyResponse> {
-  const response = await axios.delete<DeleteCompanyResponse>(`/api/companies/${id}`);
+async function deleteCompany(slug: string): Promise<DeleteCompanyResponse> {
+  const response = await axios.delete<DeleteCompanyResponse>(`/api/companies/${encodeURIComponent(slug)}`);
 
   return response.data;
 }
@@ -19,7 +19,7 @@ async function deleteCompany(id: number): Promise<DeleteCompanyResponse> {
 export function useDeleteCompany() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeleteCompanyResponse, AxiosError<DeleteCompanyErrorResponse>, number>({
+  return useMutation<DeleteCompanyResponse, AxiosError<DeleteCompanyErrorResponse>, string>({
     mutationFn: deleteCompany,
     onSuccess: async () => {
       await queryClient.invalidateQueries({

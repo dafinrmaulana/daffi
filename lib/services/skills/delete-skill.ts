@@ -10,8 +10,8 @@ export type DeleteSkillErrorResponse = {
   error?: string;
 };
 
-async function deleteSkill(id: number): Promise<DeleteSkillResponse> {
-  const response = await axios.delete<DeleteSkillResponse>(`/api/skills/${id}`);
+async function deleteSkill(slug: string): Promise<DeleteSkillResponse> {
+  const response = await axios.delete<DeleteSkillResponse>(`/api/skills/${encodeURIComponent(slug)}`);
 
   return response.data;
 }
@@ -19,7 +19,7 @@ async function deleteSkill(id: number): Promise<DeleteSkillResponse> {
 export function useDeleteSkill() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeleteSkillResponse, AxiosError<DeleteSkillErrorResponse>, number>({
+  return useMutation<DeleteSkillResponse, AxiosError<DeleteSkillErrorResponse>, string>({
     mutationFn: deleteSkill,
 
     onSuccess: async () => {

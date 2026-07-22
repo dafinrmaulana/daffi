@@ -5,8 +5,10 @@ export type DeleteProjectHighlightResponse = {
   message: string;
 };
 
-async function deleteProjectHighlight(id: number) {
-  const response = await axios.delete<DeleteProjectHighlightResponse>(`/api/project-highlights/${id}`);
+async function deleteProjectHighlight(slug: string) {
+  const response = await axios.delete<DeleteProjectHighlightResponse>(
+    `/api/project-highlights/${encodeURIComponent(slug)}`,
+  );
 
   return response.data;
 }

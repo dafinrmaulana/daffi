@@ -1,12 +1,13 @@
-import { ProjectHighlightSchema } from "@/lib/form/project-highlight-schema";
+import { ProjectHighlightSchema, UpdateProjectHighlightSchema } from "@/lib/form/project-highlight-schema";
+import type { ProjectHighlight } from "@/prisma/generated/prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type UpdateProjectHighlightPayload = Partial<ProjectHighlightSchema>;
+export type UpdateProjectHighlightPayload = UpdateProjectHighlightSchema;
 
 export type UpdateProjectHighlightResponse = {
   message: string;
-  data: ProjectHighlightSchema;
+  data: ProjectHighlight;
 };
 
 export type ProjectHighlightValidationErrorResponse = {
@@ -14,8 +15,16 @@ export type ProjectHighlightValidationErrorResponse = {
   errors?: Partial<Record<keyof ProjectHighlightSchema, string[]>>;
 };
 
-async function updateProjectHighlight({ id, payload }: { id: string; payload: UpdateProjectHighlightPayload }) {
-  const response = await axios.patch<UpdateProjectHighlightResponse>(`/api/project-highlights/${id}`, payload);
+type UpdateProjectHighlightVariables = {
+  slug: string;
+  payload: UpdateProjectHighlightPayload;
+};
+
+async function updateProjectHighlight({ slug, payload }: UpdateProjectHighlightVariables) {
+  const response = await axios.patch<UpdateProjectHighlightResponse>(
+    `/api/project-highlights/${encodeURIComponent(slug)}`,
+    payload,
+  );
 
   return response.data;
 }
@@ -26,20 +35,15 @@ export function useUpdateProjectHighlight() {
   return useMutation<
     Awaited<ReturnType<typeof updateProjectHighlight>>,
     AxiosError<ProjectHighlightValidationErrorResponse>,
-    {
-      id: string;
-      payload: UpdateProjectHighlightPayload;
-    }
+    UpdateProjectHighlightVariables
   >({
     mutationFn: updateProjectHighlight,
-    onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["project-highlights"],
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: ["project-highlights", variables.id],
-      });
+    onSuccess: async (data, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["project-highlights"] }),
+        queryClient.invalidateQueries({ queryKey: ["project-highlights", variables.slug] }),
+        queryClient.invalidateQueries({ queryKey: ["project-highlights", data.data.slug] }),
+      ]);
     },
   });
 }

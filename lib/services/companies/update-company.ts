@@ -5,7 +5,7 @@ import type { CompanySchema, UpdateCompanySchema } from "@/lib/form/company-sche
 import type { Company } from "@/prisma/generated/prisma/client";
 
 export type UpdateCompanyPayload = {
-  id: number;
+  slug: string;
   payload: UpdateCompanySchema;
 };
 
@@ -19,8 +19,8 @@ export type CompanyValidationErrorResponse = {
   errors?: Partial<Record<keyof CompanySchema, string[]>>;
 };
 
-async function updateCompany({ id, payload }: UpdateCompanyPayload): Promise<UpdateCompanyResponse> {
-  const response = await axios.patch<UpdateCompanyResponse>(`/api/companies/${id}`, payload);
+async function updateCompany({ slug, payload }: UpdateCompanyPayload): Promise<UpdateCompanyResponse> {
+  const response = await axios.patch<UpdateCompanyResponse>(`/api/companies/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -30,14 +30,13 @@ export function useUpdateCompany() {
 
   return useMutation<UpdateCompanyResponse, AxiosError<CompanyValidationErrorResponse>, UpdateCompanyPayload>({
     mutationFn: updateCompany,
-    onSuccess: async (_data, variables) => {
+    onSuccess: async (data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: ["companies"],
         }),
-        queryClient.invalidateQueries({
-          queryKey: ["companies", variables.id],
-        }),
+        queryClient.invalidateQueries({ queryKey: ["companies", variables.slug] }),
+        queryClient.invalidateQueries({ queryKey: ["companies", data.data.slug] }),
       ]);
     },
   });

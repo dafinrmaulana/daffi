@@ -1,4 +1,5 @@
 import { UserSchema } from "@/lib/form/user-schema";
+import type { User } from "@/prisma/generated/prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
@@ -6,7 +7,7 @@ export type UpdateUserPayload = Partial<UserSchema>;
 
 export type UpdateUserResponse = {
   message: string;
-  data: UserSchema;
+  data: User;
 };
 
 export type ValidationErrorResponse = {
@@ -14,8 +15,13 @@ export type ValidationErrorResponse = {
   errors?: Partial<Record<keyof UserSchema, string[]>>;
 };
 
-async function updateUser({ id, payload }: { id: string; payload: UpdateUserPayload }) {
-  const response = await axios.patch<UpdateUserResponse>(`/api/users/${id}`, payload);
+type UpdateUserVariables = {
+  username: string;
+  payload: UpdateUserPayload;
+};
+
+async function updateUser({ username, payload }: UpdateUserVariables) {
+  const response = await axios.patch<UpdateUserResponse>(`/api/users/${encodeURIComponent(username)}`, payload);
   return response.data;
 }
 
@@ -25,16 +31,15 @@ export function useUpdateUser() {
   return useMutation<
     Awaited<ReturnType<typeof updateUser>>,
     AxiosError<ValidationErrorResponse>,
-    { id: string; payload: UpdateUserPayload }
+    UpdateUserVariables
   >({
     mutationFn: updateUser,
-    onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["users"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["users", variables.id],
-      });
+    onSuccess: async (data, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["users"] }),
+        queryClient.invalidateQueries({ queryKey: ["users", variables.username] }),
+        queryClient.invalidateQueries({ queryKey: ["users", data.data.username] }),
+      ]);
     },
   });
 }

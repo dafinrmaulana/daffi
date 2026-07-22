@@ -5,7 +5,7 @@ import type { SkillSchema, UpdateSkillSchema } from "@/lib/form/skill-schema";
 import type { Skill } from "@/prisma/generated/prisma/client";
 
 export type UpdateSkillPayload = {
-  id: number;
+  slug: string;
   payload: UpdateSkillSchema;
 };
 
@@ -19,8 +19,8 @@ export type SkillValidationErrorResponse = {
   errors?: Partial<Record<keyof SkillSchema, string[]>>;
 };
 
-async function updateSkill({ id, payload }: UpdateSkillPayload): Promise<UpdateSkillResponse> {
-  const response = await axios.patch<UpdateSkillResponse>(`/api/skills/${id}`, payload);
+async function updateSkill({ slug, payload }: UpdateSkillPayload): Promise<UpdateSkillResponse> {
+  const response = await axios.patch<UpdateSkillResponse>(`/api/skills/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -31,14 +31,18 @@ export function useUpdateSkill() {
   return useMutation<UpdateSkillResponse, AxiosError<SkillValidationErrorResponse>, UpdateSkillPayload>({
     mutationFn: updateSkill,
 
-    onSuccess: async (_data, variables) => {
+    onSuccess: async (data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: ["skills"],
         }),
 
         queryClient.invalidateQueries({
-          queryKey: ["skills", variables.id],
+          queryKey: ["skills", variables.slug],
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: ["skills", data.data.slug],
         }),
       ]);
     },

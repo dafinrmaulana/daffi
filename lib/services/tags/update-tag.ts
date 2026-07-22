@@ -1,12 +1,13 @@
-import { TagSchema } from "@/lib/form/tag-schema";
+import { TagSchema, UpdateTagSchema } from "@/lib/form/tag-schema";
+import type { Tag } from "@/prisma/generated/prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-export type UpdateTagPayload = Partial<TagSchema>;
+export type UpdateTagPayload = UpdateTagSchema;
 
 export type UpdateTagResponse = {
   message: string;
-  data: TagSchema;
+  data: Tag;
 };
 
 export type TagValidationErrorResponse = {
@@ -14,8 +15,13 @@ export type TagValidationErrorResponse = {
   errors?: Partial<Record<keyof TagSchema, string[]>>;
 };
 
-async function updateTag({ id, payload }: { id: string; payload: UpdateTagPayload }) {
-  const response = await axios.patch<UpdateTagResponse>(`/api/tags/${id}`, payload);
+type UpdateTagVariables = {
+  slug: string;
+  payload: UpdateTagPayload;
+};
+
+async function updateTag({ slug, payload }: UpdateTagVariables) {
+  const response = await axios.patch<UpdateTagResponse>(`/api/tags/${encodeURIComponent(slug)}`, payload);
 
   return response.data;
 }
@@ -26,20 +32,15 @@ export function useUpdateTag() {
   return useMutation<
     Awaited<ReturnType<typeof updateTag>>,
     AxiosError<TagValidationErrorResponse>,
-    {
-      id: string;
-      payload: UpdateTagPayload;
-    }
+    UpdateTagVariables
   >({
     mutationFn: updateTag,
-    onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["tags"],
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: ["tags", variables.id],
-      });
+    onSuccess: async (data, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["tags"] }),
+        queryClient.invalidateQueries({ queryKey: ["tags", variables.slug] }),
+        queryClient.invalidateQueries({ queryKey: ["tags", data.data.slug] }),
+      ]);
     },
   });
 }

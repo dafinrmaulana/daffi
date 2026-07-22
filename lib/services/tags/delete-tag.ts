@@ -5,8 +5,8 @@ export type DeleteTagResponse = {
   message: string;
 };
 
-async function deleteTag(id: number) {
-  const response = await axios.delete<DeleteTagResponse>(`/api/tags/${id}`);
+async function deleteTag(slug: string) {
+  const response = await axios.delete<DeleteTagResponse>(`/api/tags/${encodeURIComponent(slug)}`);
 
   return response.data;
 }
