@@ -7,6 +7,8 @@ type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   type?: string;
   placeholder?: string;
   errorMessage?: string;
+  suffix?: React.ReactNode;
+  controlClassName?: string;
   prefixIcon?: {
     icon: LucideIcon;
     onClick?: () => void;
@@ -23,8 +25,11 @@ export default function Input({
   placeholder = "",
   type = "text",
   errorMessage,
+  suffix,
+  controlClassName,
   suffixIcon: SuffixIcon,
   prefixIcon: PrefixIcon,
+  className,
   ...props
 }: Props) {
   return (
@@ -37,6 +42,7 @@ export default function Input({
         className={cn(
           "mt-1 flex min-h-5 items-center border border-border bg-bg transition-colors focus-within:border-fg",
           errorMessage && "border-red-500",
+          controlClassName,
         )}
       >
         {PrefixIcon?.icon && (
@@ -53,10 +59,12 @@ export default function Input({
           type={type}
           inputMode="email"
           autoComplete="email"
-          className="min-w-0 flex-1 bg-transparent p-3 outline-none placeholder:text-muted"
+          className={cn("min-w-0 flex-1 bg-transparent p-3 outline-none placeholder:text-muted", className)}
           placeholder={placeholder}
           {...props}
         />
+
+        {suffix}
 
         {SuffixIcon?.icon && (
           <SuffixIcon.icon

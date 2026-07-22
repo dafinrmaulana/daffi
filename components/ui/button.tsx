@@ -4,7 +4,7 @@ import Link, { type LinkProps } from "next/link";
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "secondary" | "outline";
-type ButtonSize = "sm" | "md" | "lg";
+type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 type CommonProps = {
   children: React.ReactNode;
@@ -40,12 +40,14 @@ const sizes: Record<ButtonSize, string> = {
   sm: "min-h-9 px-3 text-xs",
   md: "min-h-11 px-4 text-sm",
   lg: "min-h-14 px-6 text-base",
+  icon: "h-9 min-h-9 w-9 p-0",
 };
 
 const iconSizes: Record<ButtonSize, number> = {
   sm: 14,
   md: 16,
   lg: 18,
+  icon: 16,
 };
 
 export function Button(props: ButtonProps) {
