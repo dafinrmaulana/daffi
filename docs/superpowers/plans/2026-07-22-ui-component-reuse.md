@@ -30,7 +30,7 @@
 
 **Interfaces:**
 - Consumes: Existing `ButtonProps`, `ButtonSize`, `Input` HTML props, and `cn()` class merging.
-- Produces: `Button` with `size="icon"`; `Input` with `suffix?: React.ReactNode` and safely merged input classes.
+- Produces: `Button` with `size="icon"`; `Input` with `suffix?: React.ReactNode`, `controlClassName?: string`, and safely merged input classes.
 
 - [ ] **Step 1: Add the icon button size**
 
@@ -62,6 +62,7 @@ Extend `components/form/input.tsx` so its props include:
 
 ```tsx
 suffix?: React.ReactNode;
+controlClassName?: string;
 ```
 
 Destructure the native input `className` and merge it with the primitive styles:
@@ -74,12 +75,15 @@ export default function Input({
   type = "text",
   errorMessage,
   suffix,
+  controlClassName,
   suffixIcon: SuffixIcon,
   prefixIcon: PrefixIcon,
   className,
   ...props
 }: Props) {
 ```
+
+Merge `controlClassName` into the existing bordered input container with `cn()`.
 
 Render the input and suffix as:
 
@@ -148,6 +152,7 @@ Import `Input` and `Button`, then replace the manual email field with:
   label="Email"
   placeholder="you@example.com"
   prefixIcon={{ icon: Mail }}
+  controlClassName="mt-2 min-h-14"
   className="py-4"
   {...register("email")}
 />
@@ -163,6 +168,7 @@ Replace the manual password field with:
   label="Password"
   placeholder="Enter your password"
   prefixIcon={{ icon: LockKeyhole }}
+  controlClassName="mt-2 min-h-14"
   className="py-4"
   suffix={
     <Button

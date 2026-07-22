@@ -62,7 +62,7 @@ The existing `sm`, `md`, and `lg` sizes remain unchanged. Existing callers do no
 
 ### Input
 
-Extend `components/form/input.tsx` with an optional `suffix: React.ReactNode` slot. This slot renders inside the input container after the native input.
+Extend `components/form/input.tsx` with an optional `suffix: React.ReactNode` slot and `controlClassName?: string`. The suffix renders inside the input container after the native input, while `controlClassName` allows a consumer to preserve a context-specific container height and spacing without rebuilding the control markup.
 
 The login password field uses this slot to render an accessible icon-sized `Button`. The existing `suffixIcon` API remains available for current callers, avoiding unrelated migration work.
 
