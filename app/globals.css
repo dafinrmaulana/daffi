@@ -42,3 +42,89 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+.tiptap {
+  min-height: 18rem;
+  padding: 1rem;
+  outline: none;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap p,
+.rich-text p {
+  margin-block: 0.8rem;
+  line-height: 1.75;
+}
+
+.tiptap h2,
+.tiptap h3,
+.rich-text h2,
+.rich-text h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  line-height: 1.15;
+}
+
+.tiptap h2,
+.rich-text h2 {
+  margin-block: 2rem 0.75rem;
+  font-size: 2rem;
+}
+
+.tiptap h3,
+.rich-text h3 {
+  margin-block: 1.5rem 0.6rem;
+  font-size: 1.5rem;
+}
+
+.tiptap ul,
+.tiptap ol,
+.rich-text ul,
+.rich-text ol {
+  margin-block: 1rem;
+  padding-left: 1.5rem;
+}
+
+.tiptap ul,
+.rich-text ul {
+  list-style: square;
+}
+
+.tiptap ol,
+.rich-text ol {
+  list-style: decimal;
+}
+
+.tiptap li,
+.rich-text li {
+  margin-block: 0.35rem;
+  line-height: 1.7;
+}
+
+.tiptap blockquote,
+.rich-text blockquote {
+  margin-block: 1.25rem;
+  border-left: 2px solid var(--fg);
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+.tiptap a,
+.rich-text a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.rich-text > :first-child {
+  margin-top: 0;
+}
+
+.rich-text > :last-child {
+  margin-bottom: 0;
+}
