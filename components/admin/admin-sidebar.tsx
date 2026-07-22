@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ArrowUpRight, X } from "lucide-react"
 
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Button } from "@/components/ui/button"
 import { adminNavItems, isAdminNavItemActive } from "@/lib/constants/admin-navigation"
 import { cn } from "@/lib/utils"
 
@@ -16,14 +17,16 @@ export function AdminSidebar({
     <div className="flex h-full flex-col bg-bg">
       <div className="flex h-16 items-center justify-between border-b border-border px-5">
         <span className="font-mono text-xs uppercase tracking-[0.16em]">Admin Workspace</span>
-        <button
+        <Button
           type="button"
+          size="icon"
+          variant="secondary"
           aria-label="Close admin menu"
           onClick={onNavigate}
-          className="inline-flex h-9 w-9 items-center justify-center border border-border lg:hidden"
+          className="hover:bg-transparent lg:hidden"
         >
           <X size={17} aria-hidden="true" />
-        </button>
+        </Button>
       </div>
 
       <nav aria-label="Admin navigation" className="flex-1 overflow-y-auto py-4">

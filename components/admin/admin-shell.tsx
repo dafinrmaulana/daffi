@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { Button } from "@/components/ui/button";
 import { getAdminPageLabel } from "@/lib/constants/admin-navigation";
 import { cn } from "@/lib/utils";
 import { QueryProvider } from "@/lib/providers/query-providers";
@@ -49,14 +50,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
       <div className="min-h-screen lg:pl-64">
         <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-border bg-bg/95 px-5 backdrop-blur sm:px-8">
-          <button
+          <Button
             type="button"
+            size="icon"
+            variant="secondary"
             aria-label="Open admin menu"
             onClick={() => setIsOpen(true)}
-            className="inline-flex h-9 w-9 items-center justify-center border border-border lg:hidden"
+            className="hover:bg-transparent lg:hidden"
           >
             <Menu size={18} aria-hidden="true" />
-          </button>
+          </Button>
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{getAdminPageLabel(pathname)}</p>
         </header>
         <div className="px-5 py-8 sm:px-8 lg:px-10 lg:py-10">

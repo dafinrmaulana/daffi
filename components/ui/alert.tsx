@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type AlertColor = "success" | "error" | "warning" | "info";
@@ -26,9 +27,16 @@ export default function Alert({ message, color = "success", onClose, className }
       <p className="flex-1">{message}</p>
 
       {onClose && (
-        <button type="button" className="shrink-0" onClick={onClose} aria-label="Close alert">
+        <Button
+          type="button"
+          size="icon"
+          variant="secondary"
+          className="h-6 min-h-6 w-6 shrink-0 border-0 p-0 text-current hover:bg-transparent"
+          onClick={onClose}
+          aria-label="Close alert"
+        >
           <X size={15} />
-        </button>
+        </Button>
       )}
     </div>
   );

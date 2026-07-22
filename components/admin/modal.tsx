@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { X } from "lucide-react";
 import clsx from "clsx";
 
+import { Button } from "@/components/ui/button";
+
 type Props = {
   open: boolean;
   title: string;
@@ -82,15 +84,17 @@ export function Modal({
             </h2>
             {description && <p className="mt-2 text-sm text-muted">{description}</p>}
           </div>
-          <button
+          <Button
             type="button"
+            size="icon"
+            variant="secondary"
             aria-label="Close dialog"
             onClick={() => onOpenChange?.(false)}
             disabled={disabled}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border"
+            className="shrink-0 hover:bg-transparent"
           >
             <X size={17} aria-hidden="true" />
-          </button>
+          </Button>
         </div>
         <div className="p-5">{children}</div>
         {footer && <div className="flex justify-end gap-3 border-t border-border p-5">{footer}</div>}

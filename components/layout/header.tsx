@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const nav = [
@@ -55,14 +56,16 @@ export function Header() {
           </nav>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <button
+            <Button
               type="button"
+              size="icon"
+              variant="secondary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               onClick={() => setIsOpen((value) => !value)}
-              className="inline-flex h-9 w-9 items-center justify-center border border-border transition-colors hover:border-fg focus:outline-none focus:ring-2 focus:ring-fg focus:ring-offset-2 focus:ring-offset-bg sm:hidden"
+              className="hover:bg-transparent sm:hidden"
             >
               {isOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -81,14 +84,16 @@ export function Header() {
       >
         <div className="flex items-center justify-between">
           <span className="font-mono text-sm uppercase">Menu</span>
-          <button
+          <Button
             type="button"
+            size="icon"
+            variant="secondary"
             aria-label="Close menu"
             onClick={() => setIsOpen(false)}
-            className="inline-flex h-9 w-9 items-center justify-center border border-border"
+            className="hover:bg-transparent"
           >
             <X size={18} />
-          </button>
+          </Button>
         </div>
         <nav className="mt-10 flex flex-col border-t border-border">
           {nav.map((item) => (
