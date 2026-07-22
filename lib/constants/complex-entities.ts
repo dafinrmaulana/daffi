@@ -1,40 +1,4 @@
-export type ComplexEntityKind = "projects" | "posts" | "experiences"
-
-export type ComplexFieldType =
-  | "text"
-  | "url"
-  | "number"
-  | "date"
-  | "textarea"
-  | "checkbox"
-  | "select"
-  | "checkboxGroup"
-
-export type ComplexField = {
-  name: string
-  label: string
-  type: ComplexFieldType
-  placeholder?: string
-  options?: Array<{ label: string; value: string }>
-}
-
-export type ComplexRecord = {
-  id: string
-  slug: string
-  title: string
-  description: string
-  meta: Array<{ label: string; value: string }>
-  values: Record<string, string | boolean | string[]>
-}
-
-export type ComplexEntityConfig = {
-  title: string
-  singular: string
-  eyebrow: string
-  indexHref: string
-  fields: ComplexField[]
-  records: ComplexRecord[]
-}
+import type { ComplexEntityConfig, ComplexEntityKind } from "@/types/admin"
 
 const companies = [
   { label: "Northstar Studio", value: "northstar" },
