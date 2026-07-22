@@ -15,15 +15,12 @@ import { useCreateUser } from "@/lib/services/users/create-user";
 import { useDeleteUser } from "@/lib/services/users/delete-user";
 import { useGetUsers } from "@/lib/services/users/get-users";
 import { useUpdateUser } from "@/lib/services/users/update-user";
+import type { EventMessage, OptionalModeFormModalState } from "@/types/admin";
+import type { ValidationErrorResponse } from "@/types/api";
 import { AxiosError } from "axios";
 import { Mail, User, UserCog } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
-type ModalFormState = {
-  open: boolean;
-  mode?: "create" | "edit";
-};
 
 // Bentuk data user dari API — sesuaikan kalau shape aslinya beda
 type UserData = UserSchema & { id: number };
@@ -34,12 +31,9 @@ export default function UsersClientPage() {
   const updateMutation = useUpdateUser();
 
   const [usernameToDelete, setUsernameToDelete] = useState<string | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState<ModalFormState | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState<OptionalModeFormModalState | null>(null);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
-  const [eventMessage, setEventMessage] = useState<{
-    type: "success" | "failed";
-    message: string;
-  } | null>(null);
+  const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
 
   const { data: users, isLoading } = useGetUsers();
 
@@ -93,7 +87,7 @@ export default function UsersClientPage() {
       },
 
       onError: (err: unknown) => {
-        const error = err as AxiosError<{ errors: Record<string, string[]> }>;
+        const error = err as AxiosError<ValidationErrorResponse<keyof UserSchema>>;
         const validationErrors = error.response?.data.errors;
         if (!validationErrors) return;
 

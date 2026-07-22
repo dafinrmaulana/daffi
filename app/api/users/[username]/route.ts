@@ -4,18 +4,13 @@ import { z } from "zod";
 import { userSchema } from "@/lib/form/user-schema";
 import prisma from "@/lib/providers/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
-
-type Context = {
-  params: Promise<{
-    username: string;
-  }>;
-};
+import type { RouteContext } from "@/types/api";
 
 export const updateUserSchema = userSchema.partial().refine((data) => Object.keys(data).length > 0, {
   message: "At least one field must be provided.",
 });
 
-export async function PATCH(request: Request, { params }: Context) {
+export async function PATCH(request: Request, { params }: RouteContext<{ username: string }>) {
   try {
     const { username } = await params;
 
@@ -124,7 +119,7 @@ export async function PATCH(request: Request, { params }: Context) {
   }
 }
 
-export async function DELETE(_request: Request, { params }: Context) {
+export async function DELETE(_request: Request, { params }: RouteContext<{ username: string }>) {
   try {
     const { username } = await params;
 

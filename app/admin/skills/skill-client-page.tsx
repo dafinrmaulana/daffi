@@ -22,21 +22,8 @@ import { useDeleteSkill } from "@/lib/services/skills/delete-skill";
 import { useGetSkills } from "@/lib/services/skills/get-skills";
 import { useUpdateSkill } from "@/lib/services/skills/update-skill";
 import type { Skill } from "@/prisma/generated/prisma/client";
-
-type FormModalState = {
-  open: boolean;
-  mode: "create" | "edit";
-};
-
-type EventMessage = {
-  type: "success" | "failed";
-  message: string;
-};
-
-type SkillValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof SkillSchema, string[]>>;
-};
+import type { EventMessage, FormModalState } from "@/types/admin";
+import type { ValidationErrorResponse } from "@/types/api";
 
 export default function SkillsClientPage() {
   const createSkillMutation = useCreateSkill();
@@ -138,7 +125,7 @@ export default function SkillsClientPage() {
   };
 
   const handleValidationError = (error: unknown) => {
-    const axiosError = error as AxiosError<SkillValidationErrorResponse>;
+    const axiosError = error as AxiosError<ValidationErrorResponse<keyof SkillSchema>>;
 
     const responseData = axiosError.response?.data;
 

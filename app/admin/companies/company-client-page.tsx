@@ -22,21 +22,8 @@ import { useDeleteCompany } from "@/lib/services/companies/delete-company";
 import { useGetCompanies } from "@/lib/services/companies/get-companies";
 import { useUpdateCompany } from "@/lib/services/companies/update-company";
 import type { Company } from "@/prisma/generated/prisma/client";
-
-type FormModalState = {
-  open: boolean;
-  mode: "create" | "edit";
-};
-
-type EventMessage = {
-  type: "success" | "failed";
-  message: string;
-};
-
-type CompanyValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof CompanySchema, string[]>>;
-};
+import type { EventMessage, FormModalState } from "@/types/admin";
+import type { ValidationErrorResponse } from "@/types/api";
 
 export default function CompaniesClientPage() {
   const createCompanyMutation = useCreateCompany();
@@ -140,7 +127,7 @@ export default function CompaniesClientPage() {
   };
 
   const handleValidationError = (error: unknown) => {
-    const axiosError = error as AxiosError<CompanyValidationErrorResponse>;
+    const axiosError = error as AxiosError<ValidationErrorResponse<keyof CompanySchema>>;
     const responseData = axiosError.response?.data;
     const validationErrors = responseData?.errors;
 

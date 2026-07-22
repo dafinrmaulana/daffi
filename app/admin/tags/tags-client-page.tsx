@@ -17,20 +17,12 @@ import { useGetTags } from "@/lib/services/tags/get-tags";
 import { useUpdateTag } from "@/lib/services/tags/update-tag";
 import { normalizeSlug } from "@/lib/slug";
 import type { Tag } from "@/prisma/generated/prisma/client";
+import type { EventMessage, FormModalState } from "@/types/admin";
+import type { ValidationErrorResponse } from "@/types/api";
 import { AxiosError } from "axios";
 import { FileText, Link, Tag as TagIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-
-type ModalFormState = {
-  open: boolean;
-  mode: "create" | "edit";
-};
-
-type ValidationErrorResponse = {
-  message: string;
-  errors?: Partial<Record<keyof TagSchema, string[]>>;
-};
 
 export default function TagsClientPage() {
   const createMutation = useCreateTag();
@@ -39,7 +31,7 @@ export default function TagsClientPage() {
 
   const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
 
-  const [formState, setFormState] = useState<ModalFormState>({
+  const [formState, setFormState] = useState<FormModalState>({
     open: false,
     mode: "create",
   });
@@ -47,10 +39,7 @@ export default function TagsClientPage() {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const slugManuallyEdited = useRef(false);
 
-  const [eventMessage, setEventMessage] = useState<{
-    type: "success" | "failed";
-    message: string;
-  } | null>(null);
+  const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
 
   const { data: tags, isLoading } = useGetTags();
 
@@ -130,7 +119,7 @@ export default function TagsClientPage() {
   };
 
   const handleValidationError = (error: unknown) => {
-    const axiosError = error as AxiosError<ValidationErrorResponse>;
+    const axiosError = error as AxiosError<ValidationErrorResponse<keyof TagSchema>>;
 
     const validationErrors = axiosError.response?.data.errors;
 

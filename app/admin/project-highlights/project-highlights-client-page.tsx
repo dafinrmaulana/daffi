@@ -17,19 +17,12 @@ import { useGetProjectHighlights } from "@/lib/services/project-highlights/get-p
 import { useUpdateProjectHighlight } from "@/lib/services/project-highlights/update-project-highlight";
 import { normalizeSlug } from "@/lib/slug";
 import type { ProjectHighlight } from "@/prisma/generated/prisma/client";
+import type { EventMessage, OptionalModeFormModalState } from "@/types/admin";
+import type { ValidationErrorResponse } from "@/types/api";
 import { AxiosError } from "axios";
 import { FileText, Highlighter, Link } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-
-type ModalFormState = {
-  open: boolean;
-  mode?: "create" | "edit";
-};
-
-type ValidationErrorResponse = {
-  errors?: Partial<Record<keyof ProjectHighlightSchema, string[]>>;
-};
 
 export default function ProjectHighlightsClientPage() {
   const createMutation = useCreateProjectHighlight();
@@ -38,15 +31,12 @@ export default function ProjectHighlightsClientPage() {
 
   const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
 
-  const [isFormOpen, setIsFormOpen] = useState<ModalFormState | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState<OptionalModeFormModalState | null>(null);
 
   const [selectedProjectHighlight, setSelectedProjectHighlight] = useState<ProjectHighlight | null>(null);
   const slugManuallyEdited = useRef(false);
 
-  const [eventMessage, setEventMessage] = useState<{
-    type: "success" | "failed";
-    message: string;
-  } | null>(null);
+  const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
 
   const { data: projectHighlights, isLoading } = useGetProjectHighlights();
 
@@ -127,7 +117,7 @@ export default function ProjectHighlightsClientPage() {
   };
 
   const handleValidationError = (error: unknown) => {
-    const axiosError = error as AxiosError<ValidationErrorResponse>;
+    const axiosError = error as AxiosError<ValidationErrorResponse<keyof ProjectHighlightSchema>>;
     const validationErrors = axiosError.response?.data.errors;
 
     if (!validationErrors) {
