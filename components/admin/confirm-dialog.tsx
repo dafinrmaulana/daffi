@@ -1,7 +1,7 @@
 "use client";
 
-import { Modal } from "@/components/admin/Modal";
-import { Button } from "../ui/Button";
+import { Modal } from "@/components/admin/modal";
+import { Button } from "../ui/button";
 
 type Props = {
   open: boolean;

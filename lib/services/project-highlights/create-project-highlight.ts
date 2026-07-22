@@ -1,4 +1,4 @@
-import { ProjectHighlightSchema } from "@/lib/form/project-highlight.schema";
+import { ProjectHighlightSchema } from "@/lib/form/project-highlight-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 

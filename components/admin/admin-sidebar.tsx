@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowUpRight, X } from "lucide-react"
 
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { adminNavItems, isAdminNavItemActive } from "@/lib/constants/admin-navigation"
 import { cn } from "@/lib/utils"
 

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 
-import { Badge } from "@/components/ui/Badge"
+import { Badge } from "@/components/ui/badge"
 import type { Post } from "@/lib/constants/main-contents"
 
 export function PostCard({ post }: { post: Post }) {

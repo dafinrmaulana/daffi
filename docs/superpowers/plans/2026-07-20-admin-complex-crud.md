@@ -27,7 +27,7 @@
 **Files:**
 - Modify: `prisma/schema.prisma`
 - Create: `lib/admin/complex-entities.ts`
-- Create: `tests/lib/admin/ComplexEntities.test.ts`
+- Create: `tests/lib/admin/complex-entities.test.ts`
 
 **Interfaces:**
 - Produces: `ComplexEntityKind = "projects" | "posts" | "experiences"`.
@@ -42,7 +42,7 @@ posts: slug,title,date,readTime,thumbnail,excerpt,published,tags,body
 experiences: slug,company,role,startDate,endDate,location,description,projectHighlight,skills
 ```
 
-- [ ] Run `npm test -- tests/lib/admin/ComplexEntities.test.ts`; expect failure because configuration and two slug fields are missing.
+- [ ] Run `npm test -- tests/lib/admin/complex-entities.test.ts`; expect failure because configuration and two slug fields are missing.
 
 - [ ] Add `slug String @unique` immediately after `id` in Project and Experience.
 
@@ -98,9 +98,9 @@ Add two fixtures per model. Use slugs `northstar-commerce`, `ledgerflow-operatio
 ### Task 2: Complex Index and Full-Page Form Components
 
 **Files:**
-- Create: `components/admin/ComplexIndexPage.tsx`
-- Create: `components/admin/ComplexEntityForm.tsx`
-- Create: `tests/components/admin/ComplexCrud.test.tsx`
+- Create: `components/admin/complex-index-page.tsx`
+- Create: `components/admin/complex-entity-form.tsx`
+- Create: `tests/components/admin/complex-crud.test.tsx`
 
 **Interfaces:**
 - Produces: `ComplexIndexPage({ kind }: { kind: ComplexEntityKind })`.
@@ -132,7 +132,7 @@ render(<ComplexEntityForm kind="experiences" slug="missing" />)
 
 Mock `useRouter` from `next/navigation` with a `push` spy.
 
-- [ ] Run `npm test -- tests/components/admin/ComplexCrud.test.tsx`; expect failure because both components are missing.
+- [ ] Run `npm test -- tests/components/admin/complex-crud.test.tsx`; expect failure because both components are missing.
 
 - [ ] Implement `ComplexIndexPage` as a client component:
 

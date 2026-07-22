@@ -1,11 +1,11 @@
-import { ContactCTA } from "@/components/home/ContactCTA"
-import { Hero } from "@/components/home/Hero"
-import { SkillsTicker } from "@/components/home/SkillsTicker"
-import { WorkPreview } from "@/components/home/WorkPreview"
-import { Section } from "@/components/layout/Section"
-import { ExperienceSection } from "@/components/shared/ExperienceSection"
-import { SectionTitle } from "@/components/shared/SectionTitle"
-import { Button } from "@/components/ui/Button"
+import { ContactCTA } from "@/components/home/contact-cta"
+import { Hero } from "@/components/home/hero"
+import { SkillsTicker } from "@/components/home/skills-ticker"
+import { WorkPreview } from "@/components/home/work-preview"
+import { Section } from "@/components/layout/section"
+import { ExperienceSection } from "@/components/shared/experience-section"
+import { SectionTitle } from "@/components/shared/section-title"
+import { Button } from "@/components/ui/button"
 
 export default function HomePage() {
   return (

@@ -1,4 +1,4 @@
-import { UserSchema } from "@/lib/form/user.schema";
+import { UserSchema } from "@/lib/form/user-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 

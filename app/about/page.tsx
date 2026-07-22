@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import { Section } from "@/components/layout/Section";
-import { ExperienceSection } from "@/components/shared/ExperienceSection";
-import { Badge } from "@/components/ui/Badge";
+import { Section } from "@/components/layout/section";
+import { ExperienceSection } from "@/components/shared/experience-section";
+import { Badge } from "@/components/ui/badge";
 import { skills } from "@/lib/constants/main-contents";
 
 export const metadata: Metadata = {

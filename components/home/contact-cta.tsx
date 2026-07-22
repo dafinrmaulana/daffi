@@ -1,5 +1,5 @@
-import { Section } from "@/components/layout/Section"
-import { SectionTitle } from "@/components/shared/SectionTitle"
+import { Section } from "@/components/layout/section"
+import { SectionTitle } from "@/components/shared/section-title"
 
 export function ContactCTA() {
   return (

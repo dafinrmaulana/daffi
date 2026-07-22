@@ -1,4 +1,4 @@
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader"
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
 
 export default function AdminDashboardPage() {
   return (

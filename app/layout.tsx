@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { SiteChrome } from "@/components/layout/SiteChrome";
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { ThemeProvider } from "@/components/theme-provider";
 import { mono, sans, serif } from "@/lib/constants/fonts";
 import "./globals.css";

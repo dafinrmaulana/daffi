@@ -1,6 +1,6 @@
-import { Section } from "@/components/layout/Section";
-import { SectionTitle } from "@/components/shared/SectionTitle";
-import { Badge } from "@/components/ui/Badge";
+import { Section } from "@/components/layout/section";
+import { SectionTitle } from "@/components/shared/section-title";
+import { Badge } from "@/components/ui/badge";
 import { experiences } from "@/lib/constants/main-contents";
 
 export function ExperienceSection({ compact = false }: { compact?: boolean }) {

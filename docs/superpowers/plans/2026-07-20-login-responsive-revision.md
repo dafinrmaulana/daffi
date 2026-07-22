@@ -23,21 +23,21 @@
 
 ## File Structure
 
-- `components/login/LoginForm.tsx`: retains form state and password behavior without validation.
+- `components/login/login-form.tsx`: retains form state and password behavior without validation.
 - `app/login/page.tsx`: owns the 50/50 desktop layout, desktop-only editorial panel, and dynamic year.
-- `tests/components/layout/SiteChrome.test.tsx`: moved site chrome behavior tests.
-- `tests/components/login/LoginForm.test.tsx`: moved and revised form behavior tests.
-- `tests/components/login/LoginPage.test.tsx`: moved and revised responsive composition tests.
+- `tests/components/layout/site-chrome.test.tsx`: moved site chrome behavior tests.
+- `tests/components/login/login-form.test.tsx`: moved and revised form behavior tests.
+- `tests/components/login/login-page.test.tsx`: moved and revised responsive composition tests.
 
 ---
 
 ### Task 1: Move Existing Tests and Remove Form Validation
 
 **Files:**
-- Move: `components/layout/SiteChrome.test.tsx` → `tests/components/layout/SiteChrome.test.tsx`
-- Move: `components/login/LoginForm.test.tsx` → `tests/components/login/LoginForm.test.tsx`
-- Move: `components/login/LoginPage.test.tsx` → `tests/components/login/LoginPage.test.tsx`
-- Modify: `components/login/LoginForm.tsx`
+- Move: `components/layout/site-chrome.test.tsx` → `tests/components/layout/site-chrome.test.tsx`
+- Move: `components/login/login-form.test.tsx` → `tests/components/login/login-form.test.tsx`
+- Move: `components/login/login-page.test.tsx` → `tests/components/login/login-page.test.tsx`
+- Modify: `components/login/login-form.tsx`
 
 **Interfaces:**
 - Consumes: React Hook Form `register` and `handleSubmit`.
@@ -49,14 +49,14 @@ Use repository-aware file moves so Git retains their history:
 
 ```bash
 mkdir -p tests/components/layout tests/components/login
-git mv components/layout/SiteChrome.test.tsx tests/components/layout/SiteChrome.test.tsx
-git mv components/login/LoginForm.test.tsx tests/components/login/LoginForm.test.tsx
-git mv components/login/LoginPage.test.tsx tests/components/login/LoginPage.test.tsx
+git mv components/layout/site-chrome.test.tsx tests/components/layout/site-chrome.test.tsx
+git mv components/login/login-form.test.tsx tests/components/login/login-form.test.tsx
+git mv components/login/login-page.test.tsx tests/components/login/login-page.test.tsx
 ```
 
 - [ ] **Step 2: Replace validation tests with the desired no-validation behavior**
 
-In `tests/components/login/LoginForm.test.tsx`, remove the tests named `shows validation feedback for empty required fields` and `rejects an invalid email address`. Add:
+In `tests/components/login/login-form.test.tsx`, remove the tests named `shows validation feedback for empty required fields` and `rejects an invalid email address`. Add:
 
 ```tsx
 it("submits empty fields without validation feedback", async () => {
@@ -87,14 +87,14 @@ it("accepts arbitrary email text without validation feedback", async () => {
 Run:
 
 ```bash
-npm test -- tests/components/login/LoginForm.test.tsx
+npm test -- tests/components/login/login-form.test.tsx
 ```
 
 Expected: FAIL because the existing inputs still expose validation ARIA state and invalid email submission still renders an alert.
 
 - [ ] **Step 4: Remove validation from the production form**
 
-Change the `useForm` destructuring in `components/login/LoginForm.tsx` to:
+Change the `useForm` destructuring in `components/login/login-form.tsx` to:
 
 ```tsx
 const {
@@ -151,7 +151,7 @@ Expected: 3 test files pass and the form suite contains 5 passing tests.
 - [ ] **Step 6: Commit the test organization and form behavior**
 
 ```bash
-git add components/login/LoginForm.tsx tests/components components/layout/SiteChrome.test.tsx components/login/LoginForm.test.tsx components/login/LoginPage.test.tsx
+git add components/login/login-form.tsx tests/components components/layout/site-chrome.test.tsx components/login/login-form.test.tsx components/login/login-page.test.tsx
 git commit -m "refactor: separate component tests and remove login validation"
 ```
 
@@ -160,7 +160,7 @@ git commit -m "refactor: separate component tests and remove login validation"
 ### Task 2: Equal Desktop Panels, Mobile Form-Only Layout, and Dynamic Footer
 
 **Files:**
-- Modify: `tests/components/login/LoginPage.test.tsx`
+- Modify: `tests/components/login/login-page.test.tsx`
 - Modify: `app/login/page.tsx`
 
 **Interfaces:**
@@ -169,7 +169,7 @@ git commit -m "refactor: separate component tests and remove login validation"
 
 - [ ] **Step 1: Update the route composition test**
 
-Replace `tests/components/login/LoginPage.test.tsx` with:
+Replace `tests/components/login/login-page.test.tsx` with:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
@@ -177,11 +177,11 @@ import { expect, it, vi } from "vitest"
 
 import LoginPage, { metadata } from "@/app/login/page"
 
-vi.mock("@/components/login/LoginForm", () => ({
+vi.mock("@/components/login/login-form", () => ({
   LoginForm: () => <div>Login form</div>,
 }))
 
-vi.mock("@/components/ui/ThemeToggle", () => ({
+vi.mock("@/components/ui/theme-toggle", () => ({
   ThemeToggle: () => <button type="button">Toggle theme</button>,
 }))
 
@@ -206,7 +206,7 @@ it("composes the responsive editorial login page", () => {
 Run:
 
 ```bash
-npm test -- tests/components/login/LoginPage.test.tsx
+npm test -- tests/components/login/login-page.test.tsx
 ```
 
 Expected: FAIL because the page still uses `lg:grid-cols-[45fr_55fr]`, the aside is visible below `lg`, and the footer is hard-coded.
@@ -251,7 +251,7 @@ Change the editorial aside opening tag to:
 Run:
 
 ```bash
-npm test -- tests/components/login/LoginPage.test.tsx
+npm test -- tests/components/login/login-page.test.tsx
 npm test -- tests/components
 ```
 
@@ -260,7 +260,7 @@ Expected: the route test passes, followed by all 3 component test files passing.
 - [ ] **Step 5: Commit the responsive revision**
 
 ```bash
-git add app/login/page.tsx tests/components/login/LoginPage.test.tsx
+git add app/login/page.tsx tests/components/login/login-page.test.tsx
 git commit -m "feat: refine responsive login layout"
 ```
 

@@ -25,28 +25,28 @@
 ## File Structure
 
 - `lib/admin/navigation.ts`: typed navigation metadata and active-label lookup.
-- `components/admin/AdminSidebar.tsx`: sidebar identity, navigation, theme control, portfolio link, and mobile close control.
-- `components/admin/AdminShell.tsx`: desktop/mobile layout, drawer state, overlay, and compact top bar.
-- `components/admin/AdminPageHeader.tsx`: reusable eyebrow, title, count, and primary action region.
-- `components/admin/EntityCard.tsx`: reusable bordered entity card with metadata and actions.
-- `components/admin/CardGrid.tsx`: responsive card grid and shared empty state.
-- `components/admin/Modal.tsx`: accessible controlled dialog presentation.
-- `components/admin/ConfirmDialog.tsx`: delete confirmation specialization.
+- `components/admin/admin-sidebar.tsx`: sidebar identity, navigation, theme control, portfolio link, and mobile close control.
+- `components/admin/admin-shell.tsx`: desktop/mobile layout, drawer state, overlay, and compact top bar.
+- `components/admin/admin-page-header.tsx`: reusable eyebrow, title, count, and primary action region.
+- `components/admin/entity-card.tsx`: reusable bordered entity card with metadata and actions.
+- `components/admin/card-grid.tsx`: responsive card grid and shared empty state.
+- `components/admin/modal.tsx`: accessible controlled dialog presentation.
+- `components/admin/confirm-dialog.tsx`: delete confirmation specialization.
 - `app/admin/layout.tsx`: admin metadata and shell composition.
 - `app/admin/page.tsx`: empty dashboard route.
-- `components/layout/SiteChrome.tsx`: excludes admin routes from portfolio chrome.
-- `tests/components/admin/AdminShell.test.tsx`: navigation, active state, and drawer behavior.
-- `tests/components/admin/AdminPrimitives.test.tsx`: page header, card grid, modal, and confirmation behavior.
-- `tests/app/admin/AdminDashboard.test.tsx`: empty dashboard composition.
-- `tests/components/layout/SiteChrome.test.tsx`: admin route portfolio-chrome regression.
+- `components/layout/site-chrome.tsx`: excludes admin routes from portfolio chrome.
+- `tests/components/admin/admin-shell.test.tsx`: navigation, active state, and drawer behavior.
+- `tests/components/admin/admin-primitives.test.tsx`: page header, card grid, modal, and confirmation behavior.
+- `tests/app/admin/admin-dashboard.test.tsx`: empty dashboard composition.
+- `tests/components/layout/site-chrome.test.tsx`: admin route portfolio-chrome regression.
 
 ---
 
 ### Task 1: Exclude Admin Routes from Portfolio Chrome
 
 **Files:**
-- Modify: `tests/components/layout/SiteChrome.test.tsx`
-- Modify: `components/layout/SiteChrome.tsx`
+- Modify: `tests/components/layout/site-chrome.test.tsx`
+- Modify: `components/layout/site-chrome.tsx`
 
 **Interfaces:**
 - Consumes: `usePathname(): string`.
@@ -54,7 +54,7 @@
 
 - [ ] **Step 1: Add the failing admin chrome regression test**
 
-Add this case to `tests/components/layout/SiteChrome.test.tsx`:
+Add this case to `tests/components/layout/site-chrome.test.tsx`:
 
 ```tsx
 it.each(["/admin", "/admin/projects", "/admin/projects/create"])(
@@ -81,14 +81,14 @@ it.each(["/admin", "/admin/projects", "/admin/projects/create"])(
 Run:
 
 ```bash
-npm test -- tests/components/layout/SiteChrome.test.tsx
+npm test -- tests/components/layout/site-chrome.test.tsx
 ```
 
 Expected: 3 new cases fail because admin paths still render portfolio chrome.
 
 - [ ] **Step 3: Implement the admin route exclusion**
 
-Replace the route condition in `components/layout/SiteChrome.tsx` with:
+Replace the route condition in `components/layout/site-chrome.tsx` with:
 
 ```tsx
 const isStandaloneRoute = pathname === "/login" || pathname === "/admin" || pathname.startsWith("/admin/")
@@ -103,7 +103,7 @@ if (isStandaloneRoute) {
 Run:
 
 ```bash
-npm test -- tests/components/layout/SiteChrome.test.tsx
+npm test -- tests/components/layout/site-chrome.test.tsx
 ```
 
 Expected: all 5 cases pass.
@@ -111,7 +111,7 @@ Expected: all 5 cases pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add components/layout/SiteChrome.tsx tests/components/layout/SiteChrome.test.tsx
+git add components/layout/site-chrome.tsx tests/components/layout/site-chrome.test.tsx
 git commit -m "feat: reserve standalone admin routes"
 ```
 
@@ -121,9 +121,9 @@ git commit -m "feat: reserve standalone admin routes"
 
 **Files:**
 - Create: `lib/admin/navigation.ts`
-- Create: `components/admin/AdminSidebar.tsx`
-- Create: `components/admin/AdminShell.tsx`
-- Create: `tests/components/admin/AdminShell.test.tsx`
+- Create: `components/admin/admin-sidebar.tsx`
+- Create: `components/admin/admin-shell.tsx`
+- Create: `tests/components/admin/admin-shell.test.tsx`
 
 **Interfaces:**
 - Produces: `AdminNavItem` with `href`, `label`, `icon`, and optional `exact`.
@@ -134,14 +134,14 @@ git commit -m "feat: reserve standalone admin routes"
 
 - [ ] **Step 1: Write the failing shell tests**
 
-Create `tests/components/admin/AdminShell.test.tsx`:
+Create `tests/components/admin/admin-shell.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { AdminShell } from "@/components/admin/AdminShell"
+import { AdminShell } from "@/components/admin/admin-shell"
 
 const usePathname = vi.fn()
 
@@ -149,7 +149,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => usePathname(),
 }))
 
-vi.mock("@/components/ui/ThemeToggle", () => ({
+vi.mock("@/components/ui/theme-toggle", () => ({
   ThemeToggle: () => <button type="button">Toggle theme</button>,
 }))
 
@@ -216,7 +216,7 @@ describe("AdminShell", () => {
 Run:
 
 ```bash
-npm test -- tests/components/admin/AdminShell.test.tsx
+npm test -- tests/components/admin/admin-shell.test.tsx
 ```
 
 Expected: FAIL because `AdminShell` does not exist.
@@ -269,13 +269,13 @@ export function getAdminPageLabel(pathname: string) {
 
 - [ ] **Step 4: Create the sidebar**
 
-Create `components/admin/AdminSidebar.tsx`:
+Create `components/admin/admin-sidebar.tsx`:
 
 ```tsx
 import Link from "next/link"
 import { ArrowUpRight, X } from "lucide-react"
 
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { adminNavItems, isAdminNavItemActive } from "@/lib/admin/navigation"
 import { cn } from "@/lib/utils"
 
@@ -346,7 +346,7 @@ export function AdminSidebar({
 
 - [ ] **Step 5: Create the responsive shell**
 
-Create `components/admin/AdminShell.tsx`:
+Create `components/admin/admin-shell.tsx`:
 
 ```tsx
 "use client"
@@ -355,7 +355,7 @@ import { useEffect, useState } from "react"
 import { Menu } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-import { AdminSidebar } from "@/components/admin/AdminSidebar"
+import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { getAdminPageLabel } from "@/lib/admin/navigation"
 import { cn } from "@/lib/utils"
 
@@ -423,7 +423,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 Run:
 
 ```bash
-npm test -- tests/components/admin/AdminShell.test.tsx
+npm test -- tests/components/admin/admin-shell.test.tsx
 ```
 
 Expected: 3 tests pass.
@@ -431,7 +431,7 @@ Expected: 3 tests pass.
 - [ ] **Step 7: Commit**
 
 ```bash
-git add lib/admin/navigation.ts components/admin/AdminSidebar.tsx components/admin/AdminShell.tsx tests/components/admin/AdminShell.test.tsx
+git add lib/admin/navigation.ts components/admin/admin-sidebar.tsx components/admin/admin-shell.tsx tests/components/admin/admin-shell.test.tsx
 git commit -m "feat: add responsive admin shell"
 ```
 
@@ -440,12 +440,12 @@ git commit -m "feat: add responsive admin shell"
 ### Task 3: Shared CRUD Presentation Primitives
 
 **Files:**
-- Create: `components/admin/AdminPageHeader.tsx`
-- Create: `components/admin/EntityCard.tsx`
-- Create: `components/admin/CardGrid.tsx`
-- Create: `components/admin/Modal.tsx`
-- Create: `components/admin/ConfirmDialog.tsx`
-- Create: `tests/components/admin/AdminPrimitives.test.tsx`
+- Create: `components/admin/admin-page-header.tsx`
+- Create: `components/admin/entity-card.tsx`
+- Create: `components/admin/card-grid.tsx`
+- Create: `components/admin/modal.tsx`
+- Create: `components/admin/confirm-dialog.tsx`
+- Create: `tests/components/admin/admin-primitives.test.tsx`
 
 **Interfaces:**
 - Produces: `AdminPageHeader({ eyebrow, title, count, action })`.
@@ -456,18 +456,18 @@ git commit -m "feat: add responsive admin shell"
 
 - [ ] **Step 1: Write the failing primitive tests**
 
-Create `tests/components/admin/AdminPrimitives.test.tsx`:
+Create `tests/components/admin/admin-primitives.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader"
-import { CardGrid } from "@/components/admin/CardGrid"
-import { ConfirmDialog } from "@/components/admin/ConfirmDialog"
-import { EntityCard } from "@/components/admin/EntityCard"
-import { Modal } from "@/components/admin/Modal"
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
+import { CardGrid } from "@/components/admin/card-grid"
+import { ConfirmDialog } from "@/components/admin/confirm-dialog"
+import { EntityCard } from "@/components/admin/entity-card"
+import { Modal } from "@/components/admin/modal"
 
 describe("admin presentation primitives", () => {
   it("renders a page header and entity card", () => {
@@ -554,14 +554,14 @@ describe("admin presentation primitives", () => {
 Run:
 
 ```bash
-npm test -- tests/components/admin/AdminPrimitives.test.tsx
+npm test -- tests/components/admin/admin-primitives.test.tsx
 ```
 
 Expected: FAIL because the shared admin primitives do not exist.
 
 - [ ] **Step 3: Implement the page header**
 
-Create `components/admin/AdminPageHeader.tsx`:
+Create `components/admin/admin-page-header.tsx`:
 
 ```tsx
 export function AdminPageHeader({
@@ -596,7 +596,7 @@ export function AdminPageHeader({
 
 - [ ] **Step 4: Implement the entity card and card grid**
 
-Create `components/admin/EntityCard.tsx`:
+Create `components/admin/entity-card.tsx`:
 
 ```tsx
 export type EntityCardMeta = {
@@ -640,7 +640,7 @@ export function EntityCard({
 }
 ```
 
-Create `components/admin/CardGrid.tsx`:
+Create `components/admin/card-grid.tsx`:
 
 ```tsx
 export function CardGrid({
@@ -672,7 +672,7 @@ export function CardGrid({
 
 - [ ] **Step 5: Implement the controlled modal**
 
-Create `components/admin/Modal.tsx`:
+Create `components/admin/modal.tsx`:
 
 ```tsx
 "use client"
@@ -747,12 +747,12 @@ export function Modal({
 
 - [ ] **Step 6: Implement the confirmation dialog**
 
-Create `components/admin/ConfirmDialog.tsx`:
+Create `components/admin/confirm-dialog.tsx`:
 
 ```tsx
 "use client"
 
-import { Modal } from "@/components/admin/Modal"
+import { Modal } from "@/components/admin/modal"
 
 export function ConfirmDialog({
   open,
@@ -797,7 +797,7 @@ export function ConfirmDialog({
 Run:
 
 ```bash
-npm test -- tests/components/admin/AdminPrimitives.test.tsx
+npm test -- tests/components/admin/admin-primitives.test.tsx
 ```
 
 Expected: 4 tests pass.
@@ -805,7 +805,7 @@ Expected: 4 tests pass.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add components/admin/AdminPageHeader.tsx components/admin/EntityCard.tsx components/admin/CardGrid.tsx components/admin/Modal.tsx components/admin/ConfirmDialog.tsx tests/components/admin/AdminPrimitives.test.tsx
+git add components/admin/admin-page-header.tsx components/admin/entity-card.tsx components/admin/card-grid.tsx components/admin/modal.tsx components/admin/confirm-dialog.tsx tests/components/admin/admin-primitives.test.tsx
 git commit -m "feat: add admin CRUD presentation primitives"
 ```
 
@@ -816,7 +816,7 @@ git commit -m "feat: add admin CRUD presentation primitives"
 **Files:**
 - Create: `app/admin/layout.tsx`
 - Create: `app/admin/page.tsx`
-- Create: `tests/app/admin/AdminDashboard.test.tsx`
+- Create: `tests/app/admin/admin-dashboard.test.tsx`
 
 **Interfaces:**
 - Consumes: `AdminShell({ children })` and `AdminPageHeader`.
@@ -825,7 +825,7 @@ git commit -m "feat: add admin CRUD presentation primitives"
 
 - [ ] **Step 1: Write the failing dashboard test**
 
-Create `tests/app/admin/AdminDashboard.test.tsx`:
+Create `tests/app/admin/admin-dashboard.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
@@ -847,7 +847,7 @@ it("renders an intentionally empty dashboard", () => {
 Run:
 
 ```bash
-npm test -- tests/app/admin/AdminDashboard.test.tsx
+npm test -- tests/app/admin/admin-dashboard.test.tsx
 ```
 
 Expected: FAIL because `app/admin/page.tsx` does not exist.
@@ -859,7 +859,7 @@ Create `app/admin/layout.tsx`:
 ```tsx
 import type { Metadata } from "next"
 
-import { AdminShell } from "@/components/admin/AdminShell"
+import { AdminShell } from "@/components/admin/admin-shell"
 
 export const metadata: Metadata = {
   title: {
@@ -882,7 +882,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 Create `app/admin/page.tsx`:
 
 ```tsx
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader"
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
 
 export default function AdminDashboardPage() {
   return (
@@ -899,7 +899,7 @@ export default function AdminDashboardPage() {
 Run:
 
 ```bash
-npm test -- tests/app/admin/AdminDashboard.test.tsx tests/components/admin tests/components/layout/SiteChrome.test.tsx
+npm test -- tests/app/admin/admin-dashboard.test.tsx tests/components/admin tests/components/layout/site-chrome.test.tsx
 ```
 
 Expected: 4 test files and 13 tests pass.
@@ -907,7 +907,7 @@ Expected: 4 test files and 13 tests pass.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add app/admin/layout.tsx app/admin/page.tsx tests/app/admin/AdminDashboard.test.tsx
+git add app/admin/layout.tsx app/admin/page.tsx tests/app/admin/admin-dashboard.test.tsx
 git commit -m "feat: add empty admin dashboard"
 ```
 

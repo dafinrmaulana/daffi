@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-import type { CompanySchema } from "@/lib/form/company.schema";
+import type { CompanySchema } from "@/lib/form/company-schema";
 import type { Company } from "@/prisma/generated/prisma/client";
 
 export type CreateCompanyResponse = {

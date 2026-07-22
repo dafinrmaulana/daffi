@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-import type { SkillSchema, UpdateSkillSchema } from "@/lib/form/skill.schema";
+import type { SkillSchema, UpdateSkillSchema } from "@/lib/form/skill-schema";
 import type { Skill } from "@/prisma/generated/prisma/client";
 
 export type UpdateSkillPayload = {

@@ -24,11 +24,11 @@
 
 - `app/layout.tsx`: keeps the theme provider and delegates global portfolio chrome to `SiteChrome`.
 - `app/login/page.tsx`: server-rendered route metadata and responsive split-screen composition.
-- `components/layout/SiteChrome.tsx`: route-aware owner of the existing header, social rail, and footer.
-- `components/layout/SiteChrome.test.tsx`: verifies route-specific chrome rendering.
-- `components/login/LoginForm.tsx`: React Hook Form fields, validation, and password visibility state.
-- `components/login/LoginForm.test.tsx`: verifies form rendering, validation, visibility interaction, and inert valid submission.
-- `components/login/LoginPage.test.tsx`: verifies the route's editorial content and responsive layout classes.
+- `components/layout/site-chrome.tsx`: route-aware owner of the existing header, social rail, and footer.
+- `components/layout/site-chrome.test.tsx`: verifies route-specific chrome rendering.
+- `components/login/login-form.tsx`: React Hook Form fields, validation, and password visibility state.
+- `components/login/login-form.test.tsx`: verifies form rendering, validation, visibility interaction, and inert valid submission.
+- `components/login/login-page.test.tsx`: verifies the route's editorial content and responsive layout classes.
 - `vitest.config.ts`: jsdom test environment and `@/` path alias.
 - `vitest.setup.ts`: Testing Library DOM matchers and test cleanup.
 - `package.json` and `package-lock.json`: React Hook Form and test dependencies plus a `test` script.
@@ -40,8 +40,8 @@
 **Files:**
 - Create: `vitest.config.ts`
 - Create: `vitest.setup.ts`
-- Create: `components/layout/SiteChrome.test.tsx`
-- Create: `components/layout/SiteChrome.tsx`
+- Create: `components/layout/site-chrome.test.tsx`
+- Create: `components/layout/site-chrome.tsx`
 - Modify: `app/layout.tsx`
 - Modify: `package.json`
 - Modify: `package-lock.json`
@@ -103,13 +103,13 @@ afterEach(() => {
 
 - [ ] **Step 3: Write the failing site chrome tests**
 
-Create `components/layout/SiteChrome.test.tsx`:
+Create `components/layout/site-chrome.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { SiteChrome } from "@/components/layout/SiteChrome"
+import { SiteChrome } from "@/components/layout/site-chrome"
 
 const usePathname = vi.fn()
 
@@ -117,15 +117,15 @@ vi.mock("next/navigation", () => ({
   usePathname: () => usePathname(),
 }))
 
-vi.mock("@/components/layout/Header", () => ({
+vi.mock("@/components/layout/header", () => ({
   Header: () => <div>Portfolio header</div>,
 }))
 
-vi.mock("@/components/layout/SocialRail", () => ({
+vi.mock("@/components/layout/social-rail", () => ({
   SocialRail: () => <div>Portfolio social rail</div>,
 }))
 
-vi.mock("@/components/layout/Footer", () => ({
+vi.mock("@/components/layout/footer", () => ({
   Footer: () => <div>Portfolio footer</div>,
 }))
 
@@ -159,23 +159,23 @@ describe("SiteChrome", () => {
 Run:
 
 ```bash
-npm test -- components/layout/SiteChrome.test.tsx
+npm test -- components/layout/site-chrome.test.tsx
 ```
 
-Expected: FAIL because `@/components/layout/SiteChrome` does not exist.
+Expected: FAIL because `@/components/layout/site-chrome` does not exist.
 
 - [ ] **Step 5: Implement the route-aware site chrome**
 
-Create `components/layout/SiteChrome.tsx`:
+Create `components/layout/site-chrome.tsx`:
 
 ```tsx
 "use client"
 
 import { usePathname } from "next/navigation"
 
-import { Footer } from "@/components/layout/Footer"
-import { Header } from "@/components/layout/Header"
-import { SocialRail } from "@/components/layout/SocialRail"
+import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/header"
+import { SocialRail } from "@/components/layout/social-rail"
 
 export function SiteChrome() {
   const pathname = usePathname()
@@ -206,7 +206,7 @@ Update the theme-provider body in `app/layout.tsx`:
 Replace the direct `Header`, `SocialRail`, and `Footer` imports with:
 
 ```ts
-import { SiteChrome } from "@/components/layout/SiteChrome"
+import { SiteChrome } from "@/components/layout/site-chrome"
 ```
 
 - [ ] **Step 6: Run the site chrome tests and verify GREEN**
@@ -214,7 +214,7 @@ import { SiteChrome } from "@/components/layout/SiteChrome"
 Run:
 
 ```bash
-npm test -- components/layout/SiteChrome.test.tsx
+npm test -- components/layout/site-chrome.test.tsx
 ```
 
 Expected: 2 tests pass.
@@ -222,7 +222,7 @@ Expected: 2 tests pass.
 - [ ] **Step 7: Commit the route-aware chrome**
 
 ```bash
-git add package.json package-lock.json vitest.config.ts vitest.setup.ts app/layout.tsx components/layout/SiteChrome.tsx components/layout/SiteChrome.test.tsx
+git add package.json package-lock.json vitest.config.ts vitest.setup.ts app/layout.tsx components/layout/site-chrome.tsx components/layout/site-chrome.test.tsx
 git commit -m "test: add login page test harness"
 ```
 
@@ -231,8 +231,8 @@ git commit -m "test: add login page test harness"
 ### Task 2: React Hook Form Login Behavior
 
 **Files:**
-- Create: `components/login/LoginForm.test.tsx`
-- Create: `components/login/LoginForm.tsx`
+- Create: `components/login/login-form.test.tsx`
+- Create: `components/login/login-form.tsx`
 - Modify: `package.json`
 - Modify: `package-lock.json`
 
@@ -252,14 +252,14 @@ Expected: npm completes successfully and records `react-hook-form` in dependenci
 
 - [ ] **Step 2: Write the failing form behavior tests**
 
-Create `components/login/LoginForm.test.tsx`:
+Create `components/login/login-form.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
-import { LoginForm } from "@/components/login/LoginForm"
+import { LoginForm } from "@/components/login/login-form"
 
 describe("LoginForm", () => {
   it("renders labeled login controls", () => {
@@ -327,14 +327,14 @@ describe("LoginForm", () => {
 Run:
 
 ```bash
-npm test -- components/login/LoginForm.test.tsx
+npm test -- components/login/login-form.test.tsx
 ```
 
-Expected: FAIL because `@/components/login/LoginForm` does not exist.
+Expected: FAIL because `@/components/login/login-form` does not exist.
 
 - [ ] **Step 4: Implement the React Hook Form login component**
 
-Create `components/login/LoginForm.tsx`:
+Create `components/login/login-form.tsx`:
 
 ```tsx
 "use client"
@@ -458,7 +458,7 @@ export function LoginForm() {
 Run:
 
 ```bash
-npm test -- components/login/LoginForm.test.tsx
+npm test -- components/login/login-form.test.tsx
 ```
 
 Expected: 5 tests pass with no warnings.
@@ -466,7 +466,7 @@ Expected: 5 tests pass with no warnings.
 - [ ] **Step 6: Commit the form behavior**
 
 ```bash
-git add package.json package-lock.json components/login/LoginForm.tsx components/login/LoginForm.test.tsx
+git add package.json package-lock.json components/login/login-form.tsx components/login/login-form.test.tsx
 git commit -m "feat: add login form interactions"
 ```
 
@@ -475,7 +475,7 @@ git commit -m "feat: add login form interactions"
 ### Task 3: Responsive Editorial Login Route
 
 **Files:**
-- Create: `components/login/LoginPage.test.tsx`
+- Create: `components/login/login-page.test.tsx`
 - Modify: `app/login/page.tsx`
 
 **Interfaces:**
@@ -484,7 +484,7 @@ git commit -m "feat: add login form interactions"
 
 - [ ] **Step 1: Write the failing route composition test**
 
-Create `components/login/LoginPage.test.tsx`:
+Create `components/login/login-page.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
@@ -492,11 +492,11 @@ import { expect, it, vi } from "vitest"
 
 import LoginPage, { metadata } from "@/app/login/page"
 
-vi.mock("@/components/login/LoginForm", () => ({
+vi.mock("@/components/login/login-form", () => ({
   LoginForm: () => <div>Login form</div>,
 }))
 
-vi.mock("@/components/ui/ThemeToggle", () => ({
+vi.mock("@/components/ui/theme-toggle", () => ({
   ThemeToggle: () => <button type="button">Toggle theme</button>,
 }))
 
@@ -518,7 +518,7 @@ it("composes the responsive editorial login page", () => {
 Run:
 
 ```bash
-npm test -- components/login/LoginPage.test.tsx
+npm test -- components/login/login-page.test.tsx
 ```
 
 Expected: FAIL because `app/login/page.tsx` is empty and exports no page or metadata.
@@ -532,8 +532,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-import { LoginForm } from "@/components/login/LoginForm"
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { LoginForm } from "@/components/login/login-form"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export const metadata: Metadata = {
   title: "Login",
@@ -604,7 +604,7 @@ Expected: the route test and all login form tests pass.
 - [ ] **Step 5: Commit the responsive route**
 
 ```bash
-git add app/login/page.tsx components/login/LoginPage.test.tsx
+git add app/login/page.tsx components/login/login-page.test.tsx
 git commit -m "feat: build responsive editorial login page"
 ```
 

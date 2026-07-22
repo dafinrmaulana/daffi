@@ -1,4 +1,4 @@
-import { projectHighlightSchema } from "@/lib/form/project-highlight.schema";
+import { projectHighlightSchema } from "@/lib/form/project-highlight-schema";
 import prisma from "@/lib/providers/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";

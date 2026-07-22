@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { companySchema } from "@/lib/form/company.schema";
+import { companySchema } from "@/lib/form/company-schema";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import prisma from "@/lib/providers/prisma";
 

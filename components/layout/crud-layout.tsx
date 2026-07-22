@@ -1,8 +1,8 @@
 "use client";
 
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { simpleEntityConfigs, type SimpleEntityKind } from "@/lib/constants/simple-entities";
-import CreateButton from "../ui/CreateButton";
+import CreateButton from "../ui/create-button";
 
 type Props<Data> = {
   kind: SimpleEntityKind;

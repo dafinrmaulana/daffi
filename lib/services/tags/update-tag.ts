@@ -1,4 +1,4 @@
-import { TagSchema } from "@/lib/form/tag.schema";
+import { TagSchema } from "@/lib/form/tag-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 

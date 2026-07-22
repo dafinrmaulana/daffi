@@ -1,4 +1,4 @@
-import { userSchema } from "@/lib/form/user.schema";
+import { userSchema } from "@/lib/form/user-schema";
 import prisma from "@/lib/providers/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import { NextResponse } from "next/server";

@@ -1,16 +1,16 @@
 "use client";
 
-import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import EmptyContent from "@/components/admin/EmptyContent";
-import { EntityCard } from "@/components/admin/EntityCard";
-import { Modal } from "@/components/admin/Modal";
-import Input from "@/components/form/Input";
-import { CrudLayout } from "@/components/layout/CrudLayout";
+import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import EmptyContent from "@/components/admin/empty-content";
+import { EntityCard } from "@/components/admin/entity-card";
+import { Modal } from "@/components/admin/modal";
+import Input from "@/components/form/input";
+import { CrudLayout } from "@/components/layout/crud-layout";
 import GridLayout from "@/components/layout/grid-layout";
 import Alert from "@/components/ui/alert";
-import { Button } from "@/components/ui/Button";
-import CreateButton from "@/components/ui/CreateButton";
-import { UserSchema } from "@/lib/form/user.schema";
+import { Button } from "@/components/ui/button";
+import CreateButton from "@/components/ui/create-button";
+import { UserSchema } from "@/lib/form/user-schema";
 import { useCreateUser } from "@/lib/services/users/create-user";
 import { useDeleteUser } from "@/lib/services/users/delete-user";
 import { useGetUsers } from "@/lib/services/users/get-users";

@@ -38,9 +38,9 @@ The year is calculated dynamically with `new Date().getFullYear()` in the server
 
 All component tests live outside production component folders:
 
-- `tests/components/layout/SiteChrome.test.tsx`
-- `tests/components/login/LoginForm.test.tsx`
-- `tests/components/login/LoginPage.test.tsx`
+- `tests/components/layout/site-chrome.test.tsx`
+- `tests/components/login/login-form.test.tsx`
+- `tests/components/login/login-page.test.tsx`
 
 The three existing co-located test files will be moved to these paths. Future component tests should follow the same `tests/components/...` structure.
 

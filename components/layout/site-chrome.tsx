@@ -2,9 +2,9 @@
 
 import { usePathname } from "next/navigation"
 
-import { Footer } from "@/components/layout/Footer"
-import { Header } from "@/components/layout/Header"
-import { SocialRail } from "@/components/layout/SocialRail"
+import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/header"
+import { SocialRail } from "@/components/layout/social-rail"
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

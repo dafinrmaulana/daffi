@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { Section } from "@/components/layout/Section";
-import { ProjectCard } from "@/components/work/ProjectCard";
+import { Section } from "@/components/layout/section";
+import { ProjectCard } from "@/components/work/project-card";
 import { projects } from "@/lib/constants/main-contents";
 
 export const metadata: Metadata = {

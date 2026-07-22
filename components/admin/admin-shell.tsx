@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { getAdminPageLabel } from "@/lib/constants/admin-navigation";
 import { cn } from "@/lib/utils";
 import { QueryProvider } from "@/lib/providers/query-providers";

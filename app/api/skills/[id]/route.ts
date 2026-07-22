@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { updateSkillSchema } from "@/lib/form/skill.schema";
+import { updateSkillSchema } from "@/lib/form/skill-schema";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import prisma from "@/lib/providers/prisma";
 

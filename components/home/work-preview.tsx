@@ -1,7 +1,7 @@
-import { Section } from "@/components/layout/Section";
-import { SectionTitle } from "@/components/shared/SectionTitle";
-import { ProjectCard } from "@/components/work/ProjectCard";
-import { Button } from "@/components/ui/Button";
+import { Section } from "@/components/layout/section";
+import { SectionTitle } from "@/components/shared/section-title";
+import { ProjectCard } from "@/components/work/project-card";
+import { Button } from "@/components/ui/button";
 import { projects } from "@/lib/constants/main-contents";
 
 export function WorkPreview() {

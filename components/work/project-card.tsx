@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
 import { formatIndex } from "@/lib/utils";
 import type { Project } from "@/lib/constants/main-contents";
 

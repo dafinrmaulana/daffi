@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils"
 
 const nav = [

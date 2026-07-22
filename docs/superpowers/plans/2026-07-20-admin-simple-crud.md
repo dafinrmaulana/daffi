@@ -24,22 +24,22 @@
 ## File Structure
 
 - `lib/admin/simple-entities.ts`: entity types, field definitions, presentation metadata, and mock fixtures.
-- `components/admin/SimpleCrudPage.tsx`: reusable local-state CRUD UI for the five simple models.
-- `tests/components/admin/SimpleCrudPage.test.tsx`: add, edit, delete, cancel, and empty-state behavior.
-- `tests/lib/admin/SimpleEntities.test.ts`: configuration coverage for all models and Prisma-editable fields.
+- `components/admin/simple-crud-page.tsx`: reusable local-state CRUD UI for the five simple models.
+- `tests/components/admin/simple-crud-page.test.tsx`: add, edit, delete, cancel, and empty-state behavior.
+- `tests/lib/admin/simple-entities.test.ts`: configuration coverage for all models and Prisma-editable fields.
 - `app/admin/users/page.tsx`: Users index.
 - `app/admin/companies/page.tsx`: Companies index.
 - `app/admin/skills/page.tsx`: Skills index.
 - `app/admin/tags/page.tsx`: Tags index.
 - `app/admin/project-highlights/page.tsx`: Project Highlights index.
-- `tests/app/admin/SimpleCrudRoutes.test.tsx`: route composition for all five pages.
+- `tests/app/admin/simple-crud-routes.test.tsx`: route composition for all five pages.
 
 ---
 
 ### Task 1: Typed Simple Entity Configuration
 
 **Files:**
-- Create: `tests/lib/admin/SimpleEntities.test.ts`
+- Create: `tests/lib/admin/simple-entities.test.ts`
 - Create: `lib/admin/simple-entities.ts`
 
 **Interfaces:**
@@ -48,7 +48,7 @@
 
 - [ ] **Step 1: Write the failing configuration test**
 
-Create `tests/lib/admin/SimpleEntities.test.ts`:
+Create `tests/lib/admin/simple-entities.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest"
@@ -77,7 +77,7 @@ describe("simpleEntityConfigs", () => {
 Run:
 
 ```bash
-npm test -- tests/lib/admin/SimpleEntities.test.ts
+npm test -- tests/lib/admin/simple-entities.test.ts
 ```
 
 Expected: FAIL because `simple-entities.ts` does not exist.
@@ -204,7 +204,7 @@ export const simpleEntityConfigs: Record<SimpleEntityKind, SimpleEntityConfig> =
 Run:
 
 ```bash
-npm test -- tests/lib/admin/SimpleEntities.test.ts
+npm test -- tests/lib/admin/simple-entities.test.ts
 ```
 
 Expected: 5 cases pass.
@@ -212,7 +212,7 @@ Expected: 5 cases pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add lib/admin/simple-entities.ts tests/lib/admin/SimpleEntities.test.ts
+git add lib/admin/simple-entities.ts tests/lib/admin/simple-entities.test.ts
 git commit -m "feat: add simple admin entity fixtures"
 ```
 
@@ -221,8 +221,8 @@ git commit -m "feat: add simple admin entity fixtures"
 ### Task 2: Reusable Simple CRUD Page
 
 **Files:**
-- Create: `tests/components/admin/SimpleCrudPage.test.tsx`
-- Create: `components/admin/SimpleCrudPage.tsx`
+- Create: `tests/components/admin/simple-crud-page.test.tsx`
+- Create: `components/admin/simple-crud-page.tsx`
 
 **Interfaces:**
 - Consumes: `SimpleEntityKind` and `simpleEntityConfigs`.
@@ -230,14 +230,14 @@ git commit -m "feat: add simple admin entity fixtures"
 
 - [ ] **Step 1: Write the failing CRUD interaction tests**
 
-Create `tests/components/admin/SimpleCrudPage.test.tsx` with four tests:
+Create `tests/components/admin/simple-crud-page.test.tsx` with four tests:
 
 ```tsx
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 describe("SimpleCrudPage", () => {
   it("creates a user through the modal", async () => {
@@ -303,14 +303,14 @@ describe("SimpleCrudPage", () => {
 Run:
 
 ```bash
-npm test -- tests/components/admin/SimpleCrudPage.test.tsx
+npm test -- tests/components/admin/simple-crud-page.test.tsx
 ```
 
 Expected: FAIL because `SimpleCrudPage` does not exist.
 
 - [ ] **Step 3: Implement `SimpleCrudPage`**
 
-Create `components/admin/SimpleCrudPage.tsx` as a client component. It must:
+Create `components/admin/simple-crud-page.tsx` as a client component. It must:
 
 ```tsx
 "use client"
@@ -319,11 +319,11 @@ import { useState } from "react"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader"
-import { CardGrid } from "@/components/admin/CardGrid"
-import { ConfirmDialog } from "@/components/admin/ConfirmDialog"
-import { EntityCard } from "@/components/admin/EntityCard"
-import { Modal } from "@/components/admin/Modal"
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
+import { CardGrid } from "@/components/admin/card-grid"
+import { ConfirmDialog } from "@/components/admin/confirm-dialog"
+import { EntityCard } from "@/components/admin/entity-card"
+import { Modal } from "@/components/admin/modal"
 import {
   simpleEntityConfigs,
   type SimpleEntityKind,
@@ -493,7 +493,7 @@ export function SimpleCrudPage({ kind }: { kind: SimpleEntityKind }) {
 Run:
 
 ```bash
-npm test -- tests/components/admin/SimpleCrudPage.test.tsx
+npm test -- tests/components/admin/simple-crud-page.test.tsx
 ```
 
 Expected: 4 tests pass.
@@ -501,7 +501,7 @@ Expected: 4 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add components/admin/SimpleCrudPage.tsx tests/components/admin/SimpleCrudPage.test.tsx
+git add components/admin/simple-crud-page.tsx tests/components/admin/simple-crud-page.test.tsx
 git commit -m "feat: add reusable simple CRUD interactions"
 ```
 
@@ -515,7 +515,7 @@ git commit -m "feat: add reusable simple CRUD interactions"
 - Create: `app/admin/skills/page.tsx`
 - Create: `app/admin/tags/page.tsx`
 - Create: `app/admin/project-highlights/page.tsx`
-- Create: `tests/app/admin/SimpleCrudRoutes.test.tsx`
+- Create: `tests/app/admin/simple-crud-routes.test.tsx`
 
 **Interfaces:**
 - Consumes: `SimpleCrudPage({ kind })`.
@@ -523,7 +523,7 @@ git commit -m "feat: add reusable simple CRUD interactions"
 
 - [ ] **Step 1: Write the failing route composition test**
 
-Create `tests/app/admin/SimpleCrudRoutes.test.tsx`:
+Create `tests/app/admin/simple-crud-routes.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react"
@@ -554,7 +554,7 @@ describe("simple CRUD routes", () => {
 Run:
 
 ```bash
-npm test -- tests/app/admin/SimpleCrudRoutes.test.tsx
+npm test -- tests/app/admin/simple-crud-routes.test.tsx
 ```
 
 Expected: FAIL because the five route pages do not exist.
@@ -565,7 +565,7 @@ Create `app/admin/users/page.tsx`:
 
 ```tsx
 import type { Metadata } from "next"
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 export const metadata: Metadata = { title: "Users" }
 
@@ -578,7 +578,7 @@ Create `app/admin/companies/page.tsx`:
 
 ```tsx
 import type { Metadata } from "next"
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 export const metadata: Metadata = { title: "Companies" }
 
@@ -591,7 +591,7 @@ Create `app/admin/skills/page.tsx`:
 
 ```tsx
 import type { Metadata } from "next"
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 export const metadata: Metadata = { title: "Skills" }
 
@@ -604,7 +604,7 @@ Create `app/admin/tags/page.tsx`:
 
 ```tsx
 import type { Metadata } from "next"
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 export const metadata: Metadata = { title: "Tags" }
 
@@ -617,7 +617,7 @@ Create `app/admin/project-highlights/page.tsx`:
 
 ```tsx
 import type { Metadata } from "next"
-import { SimpleCrudPage } from "@/components/admin/SimpleCrudPage"
+import { SimpleCrudPage } from "@/components/admin/simple-crud-page"
 
 export const metadata: Metadata = { title: "Project Highlights" }
 
@@ -631,7 +631,7 @@ export default function ProjectHighlightsPage() {
 Run:
 
 ```bash
-npm test -- tests/app/admin/SimpleCrudRoutes.test.tsx tests/components/admin/SimpleCrudPage.test.tsx tests/lib/admin/SimpleEntities.test.ts
+npm test -- tests/app/admin/simple-crud-routes.test.tsx tests/components/admin/simple-crud-page.test.tsx tests/lib/admin/simple-entities.test.ts
 ```
 
 Expected: 3 test files and 14 cases pass.
@@ -639,7 +639,7 @@ Expected: 3 test files and 14 cases pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add app/admin/users/page.tsx app/admin/companies/page.tsx app/admin/skills/page.tsx app/admin/tags/page.tsx app/admin/project-highlights/page.tsx tests/app/admin/SimpleCrudRoutes.test.tsx
+git add app/admin/users/page.tsx app/admin/companies/page.tsx app/admin/skills/page.tsx app/admin/tags/page.tsx app/admin/project-highlights/page.tsx tests/app/admin/simple-crud-routes.test.tsx
 git commit -m "feat: add simple admin CRUD routes"
 ```
 

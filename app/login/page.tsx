@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-import { LoginForm } from "@/components/login/LoginForm"
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { LoginForm } from "@/components/login/login-form"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export const metadata: Metadata = {
   title: "Login",

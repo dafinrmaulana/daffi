@@ -1,4 +1,4 @@
-import { tagSchema } from "@/lib/form/tag.schema";
+import { tagSchema } from "@/lib/form/tag-schema";
 import prisma from "@/lib/providers/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import { NextResponse } from "next/server";
