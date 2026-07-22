@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { Section } from "@/components/layout/section";
 import { ExperienceSection } from "@/components/shared/experience-section";
+import { PageIntro } from "@/components/shared/page-intro";
 import { Badge } from "@/components/ui/badge";
 import { skills } from "@/lib/constants/main-contents";
 
@@ -14,13 +15,10 @@ export default function AboutPage() {
   return (
     <>
       <Section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="h-px w-12 bg-fg" />
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Profile</p>
-        </div>
-        <h1 className="max-w-5xl font-serif text-6xl leading-[0.92] sm:text-8xl">
-          Working on web and mobile applications with experience across modern and legacy systems.
-        </h1>
+        <PageIntro
+          eyebrow="Profile"
+          title="Working on web and mobile applications with experience across modern and legacy systems."
+        />
         <div className="mt-12 grid gap-10 md:grid-cols-[1fr_1fr]">
           <div className="flex items-start gap-5">
             <div className="relative h-20 w-20 shrink-0 rounded-full overflow-hidden border border-border bg-muted/10">
