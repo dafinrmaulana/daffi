@@ -1,10 +1,14 @@
-# UI Primitive Reuse Design
+# UI Component Reuse Design
 
 ## Goal
 
-Replace manually styled form inputs and visual buttons with the existing `Input` and `Button` primitives wherever their semantics match, while preserving the current appearance and behavior.
+Replace manually styled UI with existing components wherever semantics and appearance match, and extract small components for genuinely repeated visual patterns. Preserve the current appearance and behavior without generalizing unrelated application workflows.
 
 ## Audit Findings
+
+The audit covers all files under `app/` and `components/`. It found both primitive-level reuse opportunities and repeated visual structures.
+
+### Primitive Controls
 
 The UI currently contains twelve native `<button>` elements outside the `Button` primitive and three native `<input>` elements in the login form.
 
@@ -24,6 +28,29 @@ Two full-screen overlay controls remain native buttons because they provide an i
 - Modal overlay
 
 The login email and password fields are compatible with the shared `Input` primitive. The `Remember me` checkbox remains native because the project has no checkbox primitive.
+
+### Repeated Visual Structures
+
+The About and Work pages contain nearly identical page-introduction markup: an eyebrow with a horizontal rule followed by a large `h1`. This becomes a shared `PageIntro` component.
+
+`SocialRail` repeats the animated Online indicator in its desktop and mobile layouts. This becomes a small `AvailabilityStatus` component used by both layouts.
+
+### Existing Components Already Used Correctly
+
+The following components are already reused in the appropriate places and do not require further abstraction:
+
+- `Section`
+- `SectionTitle`
+- `ProjectCard`
+- `Badge`
+- `AdminPageHeader`
+- `EntityCard`
+- `EmptyContent`
+- `Modal`
+- `Alert`
+- `CrudLayout`
+
+The refactor will not replace these with broader configurable components.
 
 ## Primitive Changes
 
@@ -65,6 +92,27 @@ The following components will replace compatible native visual buttons with `But
 
 Existing click handlers, accessibility attributes, responsive visibility, icons, and visual dimensions remain unchanged. Component-specific classes may be supplied through `className`, which is already merged by the Button primitive.
 
+### Page Introductions
+
+Create `components/shared/page-intro.tsx` with these responsibilities:
+
+- Render the horizontal rule and eyebrow label.
+- Render the page title as an `h1` using the existing About and Work typography.
+- Accept optional wrapper and title classes only where needed to preserve existing spacing.
+
+Use `PageIntro` in:
+
+- `app/about/page.tsx`
+- `app/work/page.tsx`
+
+This component remains distinct from `SectionTitle`, whose section-level `h2`, top border, typography, and spacing have different semantics.
+
+### Availability Status
+
+Create `components/shared/availability-status.tsx` to render the animated green status dot and label. It accepts a compact visual mode so the existing desktop and mobile dot dimensions can be preserved without duplicating markup.
+
+Use `AvailabilityStatus` for both status displays in `components/layout/social-rail.tsx`. Social link rendering remains local because its desktop and mobile structures differ materially.
+
 ## Explicit Exclusions
 
 - Do not replace the admin drawer or modal overlay buttons.
@@ -72,10 +120,14 @@ Existing click handlers, accessibility attributes, responsive visibility, icons,
 - Do not convert ordinary navigation links to Button links.
 - Do not change authentication behavior; the login submit handler remains as currently implemented.
 - Do not refactor CRUD state, API routes, or React Query services.
+- Do not merge `PageIntro` with `SectionTitle`; their heading semantics and layouts differ.
+- Do not generalize the Hero, login editorial panel, Contact CTA, footer, or social navigation solely because they share individual utility classes.
 
 ## Verification
 
 - Audit native buttons after migration: only the `Button` primitive, two overlay buttons, and intentional native controls may remain.
 - Confirm the login form contains no native text or password input outside the `Input` primitive; its checkbox remains native.
+- Confirm About and Work use `PageIntro` without changing heading levels or visible layout.
+- Confirm both SocialRail status displays use `AvailabilityStatus` and preserve their desktop/mobile dimensions.
 - Run ESLint, TypeScript checking, and a production build.
 - Do not create or run tests during the current refactor.
