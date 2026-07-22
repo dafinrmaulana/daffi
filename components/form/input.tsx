@@ -57,8 +57,6 @@ export default function Input({
         <input
           id={id}
           type={type}
-          inputMode="email"
-          autoComplete="email"
           className={cn("min-w-0 flex-1 bg-transparent p-3 outline-none placeholder:text-muted", className)}
           placeholder={placeholder}
           {...props}
