@@ -3,17 +3,32 @@
 import { useState } from "react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import EmptyContent from "@/components/admin/empty-content";
 import { PostCard } from "@/components/admin/post-card";
 import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { useDeletePost } from "@/lib/services/posts/delete-post";
 import { useGetPosts } from "@/lib/services/posts/get-posts";
 import type { EventMessage } from "@/types/admin";
 
 export default function PostsClientPage() {
-  const { data, isLoading, isError } = useGetPosts({ limit: 100 });
+  const pagination = useAdminPagination();
+  const { data, isLoading, isError, isFetching } = useGetPosts({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: data?.meta,
+    replacePage: pagination.replacePage,
+  });
   const deleteMutation = useDeletePost();
   const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
@@ -41,7 +56,7 @@ export default function PostsClientPage() {
       <AdminPageHeader
         eyebrow="Writing"
         title="Posts"
-        count={posts.length}
+        count={data?.meta.total ?? 0}
         action={
           <Button href="/admin/posts/create" variant="primary" externalIcon={false}>
             Create Post
@@ -81,6 +96,14 @@ export default function PostsClientPage() {
             <PostCard key={post.slug} post={post} onDelete={() => setDeleteSlug(post.slug)} />
           ))}
         </div>
+      )}
+      {data?.meta && (
+        <AdminPagination
+          meta={data.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
       <ConfirmDialog
         open={Boolean(deleteSlug)}
