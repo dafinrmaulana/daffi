@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { passwordSchema } from "@/lib/auth/password";
 
-const userFieldsSchema = z.object({
+export const userFieldsSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
   username: z
     .string()

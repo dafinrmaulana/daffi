@@ -4,6 +4,7 @@ import { z } from "zod";
 import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { hashPassword } from "@/lib/auth/password";
 import { userPublicSelect } from "@/lib/auth/user-dto";
+import { USER_MANAGEMENT_LOCK_KEY } from "@/lib/auth/user-management";
 import { updateUserSchema } from "@/lib/form/user-schema";
 import prisma from "@/lib/providers/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
@@ -173,7 +174,7 @@ export async function DELETE(request: Request, { params }: RouteContext<{ userna
       async (transaction) => {
         await transaction.$queryRaw`
           SELECT pg_advisory_xact_lock(
-            hashtext('user-deletion-guard')
+            hashtext(${USER_MANAGEMENT_LOCK_KEY})
           )
         `;
 
