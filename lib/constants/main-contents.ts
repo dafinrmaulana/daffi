@@ -14,17 +14,6 @@ export type Project = {
   body: string[];
 };
 
-export type Post = {
-  slug: string;
-  title: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-  thumbnail: string;
-  excerpt: string;
-  body: string[];
-};
-
 export type Experience = {
   company: string;
   role: string;
@@ -279,35 +268,6 @@ export const projects: Project[] = [
     ],
   },
 ];
-export const posts: Post[] = [
-  {
-    slug: "designing-dense-interfaces",
-    title: "Designing dense interfaces without visual noise",
-    date: "2026-04-18",
-    readTime: "4 min",
-    tags: ["Design", "Frontend"],
-    thumbnail: "/images/blog-dense-interfaces.svg",
-    excerpt: "Notes on hierarchy, rhythm, and restraint for tools that users keep open all day.",
-    body: [
-      "Dense interfaces work when every visible element earns its place. The goal is not to remove information, but to make scanning cheaper.",
-      "Start with the user rhythm: what they check first, what changes often, and what decisions the page should accelerate.",
-    ],
-  },
-  {
-    slug: "portfolio-as-product",
-    title: "Treating a portfolio like a product surface",
-    date: "2026-03-02",
-    readTime: "3 min",
-    tags: ["Portfolio", "Writing"],
-    thumbnail: "/images/blog-portfolio-product.svg",
-    excerpt: "A portfolio can do more than display work; it can demonstrate judgment in the way it is structured.",
-    body: [
-      "A strong portfolio does not need to explain every capability at once. It should give readers enough signal to understand taste, range, and process.",
-      "Case studies are most useful when they show constraints, decisions, and measurable change.",
-    ],
-  },
-];
-
 export const experiences: Experience[] = [
   {
     company: "PT. Herca Cipta Dermal Perdana",
@@ -374,8 +334,4 @@ export const experiences: Experience[] = [
 
 export function getProject(slug: string) {
   return projects.find((project) => project.demo_url === slug);
-}
-
-export function getPost(slug: string) {
-  return posts.find((post) => post.slug === slug);
 }
