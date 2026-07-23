@@ -30,9 +30,19 @@ type Props = {
   errorMessage?: string;
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string;
 };
 
-export function RichTextEditor({ id, label, value, onChange, errorMessage, required, disabled }: Props) {
+export function RichTextEditor({
+  id,
+  label,
+  value,
+  onChange,
+  errorMessage,
+  required,
+  disabled,
+  placeholder = "Describe the role, responsibilities, and impact…",
+}: Props) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [linkValue, setLinkValue] = useState("");
   const [linkError, setLinkError] = useState("");
@@ -48,7 +58,7 @@ export function RichTextEditor({ id, label, value, onChange, errorMessage, requi
         horizontalRule: false,
         strike: false,
       }),
-      Placeholder.configure({ placeholder: "Describe the role, responsibilities, and impact…" }),
+      Placeholder.configure({ placeholder }),
     ],
     onUpdate: ({ editor: currentEditor }) => onChange(currentEditor.getHTML()),
   });
