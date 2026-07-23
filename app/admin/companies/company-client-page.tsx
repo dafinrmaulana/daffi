@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import EmptyContent from "@/components/admin/empty-content";
 import { EntityCard } from "@/components/admin/entity-card";
 import { Modal } from "@/components/admin/modal";
@@ -16,6 +17,10 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import type { CompanySchema } from "@/lib/form/company-schema";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { normalizeSlug } from "@/lib/slug";
 import { useCreateCompany } from "@/lib/services/companies/create-company";
 import { useDeleteCompany } from "@/lib/services/companies/delete-company";
@@ -26,11 +31,25 @@ import type { EventMessage, FormModalState } from "@/types/admin";
 import type { ValidationErrorResponse } from "@/types/api";
 
 export default function CompaniesClientPage() {
+  const pagination = useAdminPagination();
   const createCompanyMutation = useCreateCompany();
   const updateCompanyMutation = useUpdateCompany();
   const deleteCompanyMutation = useDeleteCompany();
 
-  const { data: companies, isLoading } = useGetCompanies();
+  const {
+    data: companies,
+    isLoading,
+    isFetching,
+  } = useGetCompanies({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: companies?.meta,
+    replacePage: pagination.replacePage,
+  });
 
   const [formModal, setFormModal] = useState<FormModalState>({
     open: false,
@@ -217,7 +236,12 @@ export default function CompaniesClientPage() {
   };
 
   return (
-    <CrudLayout kind="companies" data={companies?.data ?? []} onCreate={handleOpenCreate}>
+    <CrudLayout
+      kind="companies"
+      data={companies?.data ?? []}
+      total={companies?.meta.total}
+      onCreate={handleOpenCreate}
+    >
       {eventMessage && (
         <Alert
           className="mb-4"
@@ -267,6 +291,15 @@ export default function CompaniesClientPage() {
             />
           ))}
         </GridLayout>
+      )}
+
+      {companies?.meta && (
+        <AdminPagination
+          meta={companies.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
 
       <Modal

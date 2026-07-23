@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import EmptyContent from "@/components/admin/empty-content";
 import { EntityCard } from "@/components/admin/entity-card";
 import { Modal } from "@/components/admin/modal";
@@ -11,6 +12,10 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import type { PublicUser } from "@/lib/auth/user-dto";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { useCreateUser } from "@/lib/services/users/create-user";
 import { useDeleteUser } from "@/lib/services/users/delete-user";
 import { useGetUsers } from "@/lib/services/users/get-users";
@@ -32,6 +37,7 @@ type UserFormValues = {
 };
 
 export default function UsersClientPage() {
+  const pagination = useAdminPagination();
   const router = useRouter();
   const formMutation = useCreateUser();
   const deleteMutation = useDeleteUser();
@@ -44,7 +50,16 @@ export default function UsersClientPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  const { data: users, isLoading } = useGetUsers();
+  const { data: users, isLoading, isFetching } = useGetUsers({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: users?.meta,
+    replacePage: pagination.replacePage,
+  });
 
   const {
     register,
@@ -180,7 +195,12 @@ export default function UsersClientPage() {
   const isCreateMode = isFormOpen?.mode === "create";
 
   return (
-    <CrudLayout kind="users" onCreate={handleOpenCreate} data={users?.data ?? []}>
+    <CrudLayout
+      kind="users"
+      onCreate={handleOpenCreate}
+      data={users?.data ?? []}
+      total={users?.meta.total}
+    >
       {eventMessage?.message && (
         <Alert
           className="mb-4"
@@ -236,6 +256,15 @@ export default function UsersClientPage() {
             />
           ))}
         </GridLayout>
+      )}
+
+      {users?.meta && (
+        <AdminPagination
+          meta={users.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
 
       <Modal

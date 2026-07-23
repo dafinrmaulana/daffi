@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import EmptyContent from "@/components/admin/empty-content";
 import { EntityCard } from "@/components/admin/entity-card";
 import { Modal } from "@/components/admin/modal";
@@ -16,6 +17,10 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import type { SkillSchema } from "@/lib/form/skill-schema";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { normalizeSlug } from "@/lib/slug";
 import { useCreateSkill } from "@/lib/services/skills/create-skill";
 import { useDeleteSkill } from "@/lib/services/skills/delete-skill";
@@ -26,11 +31,25 @@ import type { EventMessage, FormModalState } from "@/types/admin";
 import type { ValidationErrorResponse } from "@/types/api";
 
 export default function SkillsClientPage() {
+  const pagination = useAdminPagination();
   const createSkillMutation = useCreateSkill();
   const updateSkillMutation = useUpdateSkill();
   const deleteSkillMutation = useDeleteSkill();
 
-  const { data: skills, isLoading } = useGetSkills();
+  const {
+    data: skills,
+    isLoading,
+    isFetching,
+  } = useGetSkills({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: skills?.meta,
+    replacePage: pagination.replacePage,
+  });
 
   const [formModal, setFormModal] = useState<FormModalState>({
     open: false,
@@ -217,7 +236,12 @@ export default function SkillsClientPage() {
   };
 
   return (
-    <CrudLayout kind="skills" data={skills?.data ?? []} onCreate={handleOpenCreate}>
+    <CrudLayout
+      kind="skills"
+      data={skills?.data ?? []}
+      total={skills?.meta.total}
+      onCreate={handleOpenCreate}
+    >
       {eventMessage && (
         <Alert
           className="mb-4"
@@ -265,6 +289,15 @@ export default function SkillsClientPage() {
             />
           ))}
         </GridLayout>
+      )}
+
+      {skills?.meta && (
+        <AdminPagination
+          meta={skills.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
 
       <Modal

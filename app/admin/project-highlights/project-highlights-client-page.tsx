@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import EmptyContent from "@/components/admin/empty-content";
 import { EntityCard } from "@/components/admin/entity-card";
 import { Modal } from "@/components/admin/modal";
@@ -11,6 +12,10 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import { ProjectHighlightSchema } from "@/lib/form/project-highlight-schema";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { useCreateProjectHighlight } from "@/lib/services/project-highlights/create-project-highlight";
 import { useDeleteProjectHighlight } from "@/lib/services/project-highlights/delete-project-highlight";
 import { useGetProjectHighlights } from "@/lib/services/project-highlights/get-project-highlights";
@@ -25,6 +30,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 export default function ProjectHighlightsClientPage() {
+  const pagination = useAdminPagination();
   const createMutation = useCreateProjectHighlight();
   const deleteMutation = useDeleteProjectHighlight();
   const updateMutation = useUpdateProjectHighlight();
@@ -38,7 +44,20 @@ export default function ProjectHighlightsClientPage() {
 
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
 
-  const { data: projectHighlights, isLoading } = useGetProjectHighlights();
+  const {
+    data: projectHighlights,
+    isLoading,
+    isFetching,
+  } = useGetProjectHighlights({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: projectHighlights?.meta,
+    replacePage: pagination.replacePage,
+  });
 
   const {
     register,
@@ -180,6 +199,7 @@ export default function ProjectHighlightsClientPage() {
       createLabel="Create Project Highlight"
       onCreate={handleOpenCreate}
       data={projectHighlights?.data ?? []}
+      total={projectHighlights?.meta.total}
     >
       {eventMessage && (
         <Alert
@@ -228,6 +248,15 @@ export default function ProjectHighlightsClientPage() {
             />
           ))}
         </GridLayout>
+      )}
+
+      {projectHighlights?.meta && (
+        <AdminPagination
+          meta={projectHighlights.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
 
       <Modal

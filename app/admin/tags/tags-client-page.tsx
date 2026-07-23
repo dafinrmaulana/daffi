@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import EmptyContent from "@/components/admin/empty-content";
 import { EntityCard } from "@/components/admin/entity-card";
 import { Modal } from "@/components/admin/modal";
@@ -11,6 +12,10 @@ import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
 import { TagSchema } from "@/lib/form/tag-schema";
+import {
+  useAdminPagination,
+  useAdminPaginationBounds,
+} from "@/lib/hooks/use-admin-pagination";
 import { useCreateTag } from "@/lib/services/tags/create-tag";
 import { useDeleteTag } from "@/lib/services/tags/delete-tag";
 import { useGetTags } from "@/lib/services/tags/get-tags";
@@ -25,6 +30,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 export default function TagsClientPage() {
+  const pagination = useAdminPagination();
   const createMutation = useCreateTag();
   const deleteMutation = useDeleteTag();
   const updateMutation = useUpdateTag();
@@ -41,7 +47,16 @@ export default function TagsClientPage() {
 
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
 
-  const { data: tags, isLoading } = useGetTags();
+  const { data: tags, isLoading, isFetching } = useGetTags({
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  useAdminPaginationBounds({
+    page: pagination.page,
+    meta: tags?.meta,
+    replacePage: pagination.replacePage,
+  });
 
   const {
     register,
@@ -201,7 +216,12 @@ export default function TagsClientPage() {
   };
 
   return (
-    <CrudLayout kind="tags" onCreate={handleOpenCreate} data={tags?.data ?? []}>
+    <CrudLayout
+      kind="tags"
+      onCreate={handleOpenCreate}
+      data={tags?.data ?? []}
+      total={tags?.meta.total}
+    >
       {eventMessage && (
         <Alert
           className="mb-4"
@@ -249,6 +269,15 @@ export default function TagsClientPage() {
             />
           ))}
         </GridLayout>
+      )}
+
+      {tags?.meta && (
+        <AdminPagination
+          meta={tags.meta}
+          disabled={pagination.isNavigating || isFetching}
+          onPageChange={pagination.setPage}
+          onLimitChange={pagination.setLimit}
+        />
       )}
 
       <Modal
