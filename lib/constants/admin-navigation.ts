@@ -5,7 +5,6 @@ import {
   Building2,
   FileText,
   FolderKanban,
-  LayoutDashboard,
   Tags,
   UserRound,
   UsersRound,
@@ -19,7 +18,6 @@ export type AdminNavItem = {
 }
 
 export const adminNavItems: AdminNavItem[] = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/posts", label: "Posts", icon: FileText },
   { href: "/admin/experiences", label: "Experiences", icon: BriefcaseBusiness },

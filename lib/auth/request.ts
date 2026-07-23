@@ -1,5 +1,6 @@
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
 const MAX_CLIENT_ADDRESS_LENGTH = 256;
+const DEFAULT_ADMIN_REDIRECT = "/admin/projects";
 
 export function getSafeRedirectPath(value: unknown) {
   const baseUrl = new URL("http://localhost");
@@ -9,19 +10,19 @@ export function getSafeRedirectPath(value: unknown) {
     !value.startsWith("/") ||
     value.startsWith("//")
   ) {
-    return "/admin";
+    return DEFAULT_ADMIN_REDIRECT;
   }
 
   try {
     const redirectUrl = new URL(value, baseUrl);
 
     if (redirectUrl.origin !== baseUrl.origin) {
-      return "/admin";
+      return DEFAULT_ADMIN_REDIRECT;
     }
 
     return `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`;
   } catch {
-    return "/admin";
+    return DEFAULT_ADMIN_REDIRECT;
   }
 }
 

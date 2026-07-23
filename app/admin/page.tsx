@@ -1,10 +1,5 @@
-import { AdminPageHeader } from "@/components/admin/admin-page-header"
+import { redirect } from "next/navigation";
 
-export default function AdminDashboardPage() {
-  return (
-    <>
-      <AdminPageHeader eyebrow="Admin" title="Dashboard" />
-      <div data-testid="dashboard-empty" className="min-h-[55vh] border border-border" />
-    </>
-  )
+export default function AdminPage() {
+  redirect("/admin/projects");
 }
