@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { isPostRelationValidationError, resolvePostRelations } from "@/lib/api/post-relations";
 import { postSchema } from "@/lib/form/post-schema";
 import { richTextToPlainText, sanitizeRichText } from "@/lib/html/rich-text";
@@ -10,6 +11,9 @@ import { normalizeSlug } from "@/lib/slug";
 import { Prisma } from "@/prisma/generated/prisma/client";
 
 export async function GET(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get("page")) || 1);
@@ -58,6 +62,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const validatedData = postSchema.parse(await request.json());
     const relations = await resolvePostRelations(validatedData);

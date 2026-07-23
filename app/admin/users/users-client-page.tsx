@@ -10,7 +10,7 @@ import GridLayout from "@/components/layout/grid-layout";
 import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import CreateButton from "@/components/ui/create-button";
-import { UserSchema } from "@/lib/form/user-schema";
+import type { PublicUser } from "@/lib/auth/user-dto";
 import { useCreateUser } from "@/lib/services/users/create-user";
 import { useDeleteUser } from "@/lib/services/users/delete-user";
 import { useGetUsers } from "@/lib/services/users/get-users";
@@ -18,22 +18,31 @@ import { useUpdateUser } from "@/lib/services/users/update-user";
 import type { EventMessage, OptionalModeFormModalState } from "@/types/admin";
 import type { ValidationErrorResponse } from "@/types/api";
 import { AxiosError } from "axios";
-import { Mail, User, UserCog } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, User, UserCog } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-// Bentuk data user dari API — sesuaikan kalau shape aslinya beda
-type UserData = UserSchema & { id: number };
+type UserFormValues = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
 
 export default function UsersClientPage() {
+  const router = useRouter();
   const formMutation = useCreateUser();
   const deleteMutation = useDeleteUser();
   const updateMutation = useUpdateUser();
 
   const [usernameToDelete, setUsernameToDelete] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState<OptionalModeFormModalState | null>(null);
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
   const [eventMessage, setEventMessage] = useState<EventMessage | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
   const { data: users, isLoading } = useGetUsers();
 
@@ -43,75 +52,119 @@ export default function UsersClientPage() {
     reset,
     setError,
     formState: { errors },
-  } = useForm<UserSchema>({
+  } = useForm<UserFormValues>({
     defaultValues: {
       name: "",
       username: "",
       email: "",
+      password: "",
+      passwordConfirmation: "",
     },
   });
 
   const isMutating = formMutation.isPending || updateMutation.isPending;
 
   const handleOpenCreate = () => {
-    reset({ name: "", username: "", email: "" });
+    reset({
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    });
+    setShowPassword(false);
+    setShowPasswordConfirmation(false);
     setSelectedUser(null);
     setIsFormOpen({ open: true, mode: "create" });
   };
 
-  const handleOpenEdit = (user: UserData) => {
+  const handleOpenEdit = (user: PublicUser) => {
     reset({
       name: user.name,
       username: user.username,
       email: user.email,
+      password: "",
+      passwordConfirmation: "",
     });
 
+    setShowPassword(false);
+    setShowPasswordConfirmation(false);
     setSelectedUser(user);
     setIsFormOpen({ open: true, mode: "edit" });
   };
 
-  const onSubmit = (formData: UserSchema) => {
-    const onSettled = {
-      onSuccess: () => {
-        setEventMessage({
-          type: "success",
-          message: isFormOpen?.mode === "create" ? "User created successfully" : "User updated successfully",
-        });
+  const handleMutationError = (err: unknown) => {
+    const error = err as AxiosError<
+      ValidationErrorResponse<keyof UserFormValues>
+    >;
+    const validationErrors = error.response?.data.errors;
 
-        reset();
-        setSelectedUser(null);
-        setIsFormOpen({
-          open: false,
-          mode: "create",
-        });
-      },
-
-      onError: (err: unknown) => {
-        const error = err as AxiosError<ValidationErrorResponse<keyof UserSchema>>;
-        const validationErrors = error.response?.data.errors;
-        if (!validationErrors) return;
-
-        Object.entries(validationErrors).forEach(([field, messages]) => {
-          const message = (messages as string[] | undefined)?.[0];
-
-          if (!message) return;
-
-          setError(field as keyof UserSchema, {
-            type: "server",
-            message,
-          });
-        });
-      },
-    };
-
-    if (isFormOpen?.mode === "edit") {
-      if (!selectedUser) return;
-
-      updateMutation.mutate({ username: selectedUser.username, payload: formData }, onSettled);
+    if (!validationErrors) {
+      setEventMessage({
+        type: "failed",
+        message:
+          error.response?.data.message ??
+          "Failed to save User.",
+      });
       return;
     }
 
-    formMutation.mutate(formData, onSettled);
+    Object.entries(validationErrors).forEach(([field, messages]) => {
+      const message = (messages as string[] | undefined)?.[0];
+
+      if (!message) return;
+
+      setError(field as keyof UserFormValues, {
+        type: "server",
+        message,
+      });
+    });
+  };
+
+  const closeFormAfterSuccess = (message: string) => {
+    setEventMessage({
+      type: "success",
+      message,
+    });
+    reset();
+    setSelectedUser(null);
+    setIsFormOpen({
+      open: false,
+      mode: "create",
+    });
+  };
+
+  const onSubmit = (formData: UserFormValues) => {
+    if (isFormOpen?.mode === "edit") {
+      if (!selectedUser) return;
+
+      updateMutation.mutate(
+        {
+          username: selectedUser.username,
+          payload: formData,
+        },
+        {
+          onSuccess: (response) => {
+            if (response.sessionRevoked) {
+              router.replace("/login");
+              router.refresh();
+              return;
+            }
+
+            closeFormAfterSuccess("User updated successfully");
+          },
+          onError: handleMutationError,
+        },
+      );
+      return;
+    }
+
+    formMutation.mutate(formData, {
+      onSuccess: () => {
+        closeFormAfterSuccess("User created successfully");
+      },
+      onError: handleMutationError,
+    });
   };
 
   const handleCancel = () => {
@@ -123,6 +176,8 @@ export default function UsersClientPage() {
       open: false,
     }));
   };
+
+  const isCreateMode = isFormOpen?.mode === "create";
 
   return (
     <CrudLayout kind="users" onCreate={handleOpenCreate} data={users?.data ?? []}>
@@ -241,6 +296,112 @@ export default function UsersClientPage() {
               icon: Mail,
             }}
           />
+          <Input
+            required={isCreateMode}
+            label={isCreateMode ? "Password" : "Password (optional)"}
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="new-password"
+            placeholder={
+              isCreateMode
+                ? "At least 15 characters"
+                : "Leave blank to keep current password"
+            }
+            errorMessage={errors.password?.message}
+            prefixIcon={{ icon: LockKeyhole }}
+            suffix={
+              <Button
+                type="button"
+                size="icon"
+                variant="secondary"
+                className="mr-1 border-0 hover:bg-transparent"
+                aria-label={
+                  showPassword ? "Hide password" : "Show password"
+                }
+                aria-pressed={showPassword}
+                onClick={() =>
+                  setShowPassword((visible) => !visible)
+                }
+              >
+                {showPassword ? (
+                  <EyeOff size={17} aria-hidden="true" />
+                ) : (
+                  <Eye size={17} aria-hidden="true" />
+                )}
+              </Button>
+            }
+            {...register("password", {
+              validate: (value) => {
+                if (isCreateMode && !value) {
+                  return "Password is required.";
+                }
+                if (value && value.length < 15) {
+                  return "Password must be at least 15 characters.";
+                }
+                if (value.length > 128) {
+                  return "Password may not be greater than 128 characters.";
+                }
+                return true;
+              },
+            })}
+          />
+          <Input
+            required={isCreateMode}
+            label={
+              isCreateMode
+                ? "Confirm Password"
+                : "Confirm Password (optional)"
+            }
+            id="passwordConfirmation"
+            type={showPasswordConfirmation ? "text" : "password"}
+            autoComplete="new-password"
+            placeholder="Repeat the password"
+            errorMessage={errors.passwordConfirmation?.message}
+            prefixIcon={{ icon: LockKeyhole }}
+            suffix={
+              <Button
+                type="button"
+                size="icon"
+                variant="secondary"
+                className="mr-1 border-0 hover:bg-transparent"
+                aria-label={
+                  showPasswordConfirmation
+                    ? "Hide password confirmation"
+                    : "Show password confirmation"
+                }
+                aria-pressed={showPasswordConfirmation}
+                onClick={() =>
+                  setShowPasswordConfirmation((visible) => !visible)
+                }
+              >
+                {showPasswordConfirmation ? (
+                  <EyeOff size={17} aria-hidden="true" />
+                ) : (
+                  <Eye size={17} aria-hidden="true" />
+                )}
+              </Button>
+            }
+            {...register("passwordConfirmation", {
+              validate: (value, values) => {
+                if (isCreateMode && !value) {
+                  return "Password confirmation is required.";
+                }
+                if (
+                  (values.password || value) &&
+                  values.password !== value
+                ) {
+                  return "Password confirmation does not match.";
+                }
+                return true;
+              },
+            })}
+          />
+          {!isCreateMode && (
+            <p className="font-mono text-[11px] leading-relaxed text-muted">
+              Leave both Password fields blank to preserve the current
+              password.
+            </p>
+          )}
         </div>
       </Modal>
 
@@ -263,12 +424,14 @@ export default function UsersClientPage() {
             },
 
             onError: (error) => {
-              console.error(error);
-
               setUsernameToDelete(null);
               setEventMessage({
                 type: "failed",
-                message: "Failed to delete user",
+                message:
+                  (
+                    error as AxiosError<{ message: string }>
+                  ).response?.data.message ??
+                  "Failed to delete User",
               });
             },
           });

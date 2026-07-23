@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { isProjectRelationValidationError, resolveProjectRelations } from "@/lib/api/project-relations";
 import { projectSchema } from "@/lib/form/project-schema";
 import { richTextToPlainText, sanitizeRichText } from "@/lib/html/rich-text";
@@ -22,6 +23,9 @@ function serializeProject(project: ProjectWithPrismaRelations): ProjectWithRelat
 }
 
 export async function GET(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get("page")) || 1);
@@ -71,6 +75,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const validatedData = projectSchema.parse(await request.json());
     const relations = await resolveProjectRelations(validatedData);

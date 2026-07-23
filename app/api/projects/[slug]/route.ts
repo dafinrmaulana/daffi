@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { isProjectRelationValidationError, resolveProjectRelations } from "@/lib/api/project-relations";
 import { projectSchema, updateProjectSchema } from "@/lib/form/project-schema";
 import { richTextToPlainText, sanitizeRichText } from "@/lib/html/rich-text";
@@ -22,7 +23,10 @@ function serializeProject(project: ProjectWithPrismaRelations): ProjectWithRelat
   return { ...project, metrics: parseProjectMetrics(project.metrics) };
 }
 
-export async function GET(_request: Request, { params }: RouteContext<{ slug: string }>) {
+export async function GET(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug } = await params;
     if (!slug.trim()) return NextResponse.json({ message: "Invalid project slug" }, { status: 400 });
@@ -38,6 +42,9 @@ export async function GET(_request: Request, { params }: RouteContext<{ slug: st
 }
 
 export async function PATCH(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug: currentSlug } = await params;
     if (!currentSlug.trim()) return NextResponse.json({ message: "Invalid project slug" }, { status: 400 });
@@ -137,7 +144,10 @@ export async function PATCH(request: Request, { params }: RouteContext<{ slug: s
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteContext<{ slug: string }>) {
+export async function DELETE(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug } = await params;
     if (!slug.trim()) return NextResponse.json({ message: "Invalid project slug" }, { status: 400 });

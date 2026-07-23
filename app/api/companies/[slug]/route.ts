@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { updateCompanySchema } from "@/lib/form/company-schema";
 import prisma from "@/lib/providers/prisma";
 import { normalizeSlug } from "@/lib/slug";
@@ -8,6 +9,9 @@ import { Prisma } from "@/prisma/generated/prisma/client";
 import type { RouteContext } from "@/types/api";
 
 export async function PATCH(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug: currentSlug } = await params;
 
@@ -88,7 +92,10 @@ export async function PATCH(request: Request, { params }: RouteContext<{ slug: s
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteContext<{ slug: string }>) {
+export async function DELETE(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug } = await params;
 

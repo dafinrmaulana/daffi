@@ -1,4 +1,5 @@
 import { tagSchema } from "@/lib/form/tag-schema";
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import prisma from "@/lib/providers/prisma";
 import { normalizeSlug } from "@/lib/slug";
 import { Prisma } from "@/prisma/generated/prisma/client";
@@ -6,6 +7,9 @@ import { NextResponse } from "next/server";
 import z from "zod";
 
 export async function GET(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { searchParams } = new URL(request.url);
 
@@ -82,6 +86,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const body = await request.json();
     const validatedData = tagSchema.parse(body);

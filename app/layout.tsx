@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { ThemeProvider } from "@/components/theme-provider";
 import { mono, sans, serif } from "@/lib/constants/fonts";
+import { QueryProvider } from "@/lib/providers/query-providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,7 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} ${mono.variable}`}>
         <ThemeProvider>
-          <SiteChrome>{children}</SiteChrome>
+          <QueryProvider>
+            <SiteChrome>{children}</SiteChrome>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,16 +1,33 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
+import { redirect } from "next/navigation"
 
 import { LoginForm } from "@/components/login/login-form"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { getSafeRedirectPath } from "@/lib/auth/request"
+import { getSessionUser } from "@/lib/auth/session"
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Sign in to Dafi's portfolio workspace.",
 }
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{ next?: string | string[] }>
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const user = await getSessionUser()
+
+  if (user) {
+    redirect("/admin")
+  }
+
+  const params = await searchParams
+  const safeNext = getSafeRedirectPath(
+    Array.isArray(params.next) ? params.next[0] : params.next,
+  )
   const year = new Date().getFullYear()
 
   return (
@@ -33,7 +50,7 @@ export default function LoginPage() {
           <p className="mt-5 max-w-sm leading-relaxed text-muted">
             Enter your details to continue to your workspace.
           </p>
-          <LoginForm />
+          <LoginForm next={safeNext} />
         </div>
 
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">

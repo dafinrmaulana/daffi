@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { userSchema } from "@/lib/form/user-schema";
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
+import { hashPassword } from "@/lib/auth/password";
+import { userPublicSelect } from "@/lib/auth/user-dto";
+import { updateUserSchema } from "@/lib/form/user-schema";
 import prisma from "@/lib/providers/prisma";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import type { RouteContext } from "@/types/api";
 
-export const updateUserSchema = userSchema.partial().refine((data) => Object.keys(data).length > 0, {
-  message: "At least one field must be provided.",
-});
-
 export async function PATCH(request: Request, { params }: RouteContext<{ username: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { username } = await params;
 
@@ -21,11 +23,12 @@ export async function PATCH(request: Request, { params }: RouteContext<{ usernam
     const body = await request.json();
     const validatedData = updateUserSchema.parse(body);
 
-    const currentUser = await prisma.user.findUnique({
+    const targetUser = await prisma.user.findUnique({
       where: { username },
+      select: { id: true },
     });
 
-    if (!currentUser) {
+    if (!targetUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
@@ -68,14 +71,40 @@ export async function PATCH(request: Request, { params }: RouteContext<{ usernam
       }
     }
 
-    const user = await prisma.user.update({
-      where: { username },
-      data: validatedData,
-    });
+    const password = validatedData.password
+      ? await hashPassword(validatedData.password)
+      : undefined;
+    const data = {
+      name: validatedData.name,
+      username: validatedData.username,
+      email: validatedData.email,
+      ...(password ? { password } : {}),
+    };
+    const sessionRevoked =
+      Boolean(password) && authorization.id === targetUser.id;
+    const user = password
+      ? (
+          await prisma.$transaction([
+            prisma.user.update({
+              where: { username },
+              data,
+              select: userPublicSelect,
+            }),
+            prisma.session.deleteMany({
+              where: { userId: targetUser.id },
+            }),
+          ])
+        )[0]
+      : await prisma.user.update({
+          where: { username },
+          data,
+          select: userPublicSelect,
+        });
 
     return NextResponse.json({
       message: "User updated successfully",
       data: user,
+      ...(sessionRevoked ? { sessionRevoked: true } : {}),
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -119,7 +148,10 @@ export async function PATCH(request: Request, { params }: RouteContext<{ usernam
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteContext<{ username: string }>) {
+export async function DELETE(request: Request, { params }: RouteContext<{ username: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { username } = await params;
 
@@ -127,9 +159,42 @@ export async function DELETE(_request: Request, { params }: RouteContext<{ usern
       return NextResponse.json({ message: "Invalid username" }, { status: 400 });
     }
 
-    await prisma.user.delete({
-      where: { username },
-    });
+    if (authorization.username === username) {
+      return NextResponse.json(
+        {
+          message:
+            "You cannot delete the account currently in use.",
+        },
+        { status: 422 },
+      );
+    }
+
+    const deleted = await prisma.$transaction(
+      async (transaction) => {
+        await transaction.$queryRaw`
+          SELECT pg_advisory_xact_lock(
+            hashtext('user-deletion-guard')
+          )
+        `;
+
+        if ((await transaction.user.count()) <= 1) {
+          return false;
+        }
+
+        await transaction.user.delete({
+          where: { username },
+        });
+
+        return true;
+      },
+    );
+
+    if (!deleted) {
+      return NextResponse.json(
+        { message: "The final User cannot be deleted." },
+        { status: 422 },
+      );
+    }
 
     return NextResponse.json({
       message: "User deleted successfully",

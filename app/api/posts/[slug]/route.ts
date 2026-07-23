@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import { isPostRelationValidationError, resolvePostRelations } from "@/lib/api/post-relations";
 import { postSchema, updatePostSchema } from "@/lib/form/post-schema";
 import { richTextToPlainText, sanitizeRichText } from "@/lib/html/rich-text";
@@ -15,7 +16,10 @@ import { normalizeSlug } from "@/lib/slug";
 import { Prisma } from "@/prisma/generated/prisma/client";
 import type { RouteContext } from "@/types/api";
 
-export async function GET(_request: Request, { params }: RouteContext<{ slug: string }>) {
+export async function GET(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug } = await params;
     if (!slug.trim()) return NextResponse.json({ message: "Invalid Post slug" }, { status: 400 });
@@ -31,6 +35,9 @@ export async function GET(_request: Request, { params }: RouteContext<{ slug: st
 }
 
 export async function PATCH(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug: currentSlug } = await params;
     if (!currentSlug.trim()) return NextResponse.json({ message: "Invalid Post slug" }, { status: 400 });
@@ -123,7 +130,10 @@ export async function PATCH(request: Request, { params }: RouteContext<{ slug: s
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteContext<{ slug: string }>) {
+export async function DELETE(request: Request, { params }: RouteContext<{ slug: string }>) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { slug } = await params;
     if (!slug.trim()) return NextResponse.json({ message: "Invalid Post slug" }, { status: 400 });

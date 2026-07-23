@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
 import {
   isExperienceRelationValidationError,
   resolveExperienceRelations,
@@ -22,6 +23,9 @@ function toDate(value: string) {
 }
 
 export async function GET(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, Number(searchParams.get("page")) || 1);
@@ -73,6 +77,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const validatedData = experienceSchema.parse(await request.json());
     const relations = await resolveExperienceRelations(validatedData);

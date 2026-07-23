@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "auth:bootstrap": "tsx scripts/bootstrap-user-password.ts",
     "test": "vitest run"
   },
   "dependencies": {
+    "@node-rs/argon2": "^2.0.2",
     "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.8.0",
     "@tanstack/react-query": "^5.101.3",

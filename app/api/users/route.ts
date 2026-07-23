@@ -1,9 +1,15 @@
-import { userSchema } from "@/lib/form/user-schema";
+import { isAuthErrorResponse, requireApiUser } from "@/lib/auth/authorize";
+import { hashPassword } from "@/lib/auth/password";
+import { userPublicSelect } from "@/lib/auth/user-dto";
+import { createUserSchema } from "@/lib/form/user-schema";
 import prisma from "@/lib/providers/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
 export async function GET(request: NextRequest) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const { searchParams } = new URL(request.url);
 
@@ -26,6 +32,7 @@ export async function GET(request: NextRequest) {
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         where,
+        select: userPublicSelect,
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
@@ -53,9 +60,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: Request) {
+  const authorization = await requireApiUser(request);
+  if (isAuthErrorResponse(authorization)) return authorization;
+
   try {
     const body = await request.json();
-    const validatedData = userSchema.parse(body);
+    const validatedData = createUserSchema.parse(body);
 
     // unique validation
     const existingUser = await prisma.user.findFirst({
@@ -85,8 +95,24 @@ export async function POST(request: Request) {
     }
     // unique validation end
 
-    const user = await prisma.user.create({ data: validatedData });
-    return NextResponse.json(user, { status: 201 });
+    const password = await hashPassword(validatedData.password);
+    const user = await prisma.user.create({
+      data: {
+        name: validatedData.name,
+        username: validatedData.username,
+        email: validatedData.email,
+        password,
+      },
+      select: userPublicSelect,
+    });
+
+    return NextResponse.json(
+      {
+        message: "User created successfully",
+        data: user,
+      },
+      { status: 201 },
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return Response.json(

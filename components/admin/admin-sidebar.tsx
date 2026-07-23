@@ -3,14 +3,18 @@ import { ArrowUpRight, X } from "lucide-react"
 
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { Button } from "@/components/ui/button"
+import { AdminAccount } from "@/components/admin/admin-account"
 import { adminNavItems, isAdminNavItemActive } from "@/lib/constants/admin-navigation"
 import { cn } from "@/lib/utils"
+import type { AuthUser } from "@/types/auth"
 
 export function AdminSidebar({
   pathname,
+  user,
   onNavigate,
 }: {
   pathname: string
+  user: AuthUser
   onNavigate: () => void
 }) {
   return (
@@ -55,6 +59,7 @@ export function AdminSidebar({
       </nav>
 
       <div className="space-y-3 border-t border-border p-4">
+        <AdminAccount user={user} />
         <div className="flex items-center justify-between">
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Theme</span>
           <ThemeToggle />
