@@ -15,6 +15,7 @@ import {
 } from "@/lib/hooks/use-admin-pagination";
 import { useDeleteExperience } from "@/lib/services/experiences/delete-experience";
 import { useGetExperiences } from "@/lib/services/experiences/get-experiences";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { EventMessage } from "@/types/admin";
 
 export default function ExperiencesClientPage() {
@@ -26,6 +27,7 @@ export default function ExperiencesClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: data?.meta,
     replacePage: pagination.replacePage,
   });
@@ -50,12 +52,12 @@ export default function ExperiencesClientPage() {
 
   return (
     <>
-      <AdminPageHeader eyebrow="Career" title="Experiences" count={data?.meta.total ?? 0} action={<Button href="/admin/experiences/create" variant="primary" externalIcon={false}>Create Experience</Button>} />
+      <AdminPageHeader eyebrow="Career" title="Experiences" count={data?.meta.total ?? 0} action={<Button href={getAdminPaginationUrl("/admin/experiences/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>Create Experience</Button>} />
       {eventMessage && <Alert className="mb-5" color={eventMessage.type === "success" ? "success" : "error"} message={eventMessage.message} onClose={() => setEventMessage(null)} />}
       {isError && <Alert className="mb-5" color="error" message="Failed to load experiences." />}
       {isLoading && <div className="grid grid-cols-1 gap-4">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-64 animate-pulse border border-border bg-muted/10" />)}</div>}
-      {!isLoading && !isError && experiences.length === 0 && <EmptyContent title="No experiences yet" description="Create the first experience to populate this index." action={<Button href="/admin/experiences/create" variant="primary" externalIcon={false}>Create Experience</Button>} />}
-      {!isLoading && experiences.length > 0 && <div className="grid grid-cols-1 gap-4">{experiences.map((experience) => <ExperienceCard key={experience.slug} experience={experience} onDelete={() => setDeleteSlug(experience.slug)} />)}</div>}
+      {!isLoading && !isError && data?.meta.total === 0 && <EmptyContent title="No experiences yet" description="Create the first experience to populate this index." action={<Button href={getAdminPaginationUrl("/admin/experiences/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>Create Experience</Button>} />}
+      {!isLoading && experiences.length > 0 && <div className="grid grid-cols-1 gap-4">{experiences.map((experience) => <ExperienceCard key={experience.slug} experience={experience} page={pagination.page} limit={pagination.limit} onDelete={() => setDeleteSlug(experience.slug)} />)}</div>}
       {data?.meta && (
         <AdminPagination
           meta={data.meta}

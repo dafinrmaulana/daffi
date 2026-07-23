@@ -54,6 +54,7 @@ export default function TagsClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: tags?.meta,
     replacePage: pagination.replacePage,
   });
@@ -239,7 +240,7 @@ export default function TagsClientPage() {
         </GridLayout>
       )}
 
-      {!isLoading && tags?.data.length === 0 && (
+      {!isLoading && tags?.meta.total === 0 && (
         <EmptyContent
           title="No tags yet"
           description="Create the first tag to populate this index."

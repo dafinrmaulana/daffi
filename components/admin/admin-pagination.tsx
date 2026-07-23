@@ -21,7 +21,10 @@ export function AdminPagination({
   onPageChange,
   onLimitChange,
 }: Props) {
-  if (meta.total === 0) {
+  if (
+    meta.total === 0 ||
+    meta.page > Math.max(1, meta.totalPages)
+  ) {
     return null;
   }
 

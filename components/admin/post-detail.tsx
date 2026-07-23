@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { formatPostDate } from "@/lib/post";
 import type { PostWithRelations } from "@/types/post";
 
-export function PostDetail({ post, onDelete }: { post: PostWithRelations; onDelete: () => void }) {
+export function PostDetail({ post, listUrl, editUrl, onDelete }: { post: PostWithRelations; listUrl: string; editUrl: string; onDelete: () => void }) {
   return (
     <article>
-      <Button href="/admin/posts" externalIcon={false} size="sm" variant="secondary">
+      <Button href={listUrl} externalIcon={false} size="sm" variant="secondary">
         <ArrowLeft size={14} />
         Back
       </Button>
@@ -38,7 +38,7 @@ export function PostDetail({ post, onDelete }: { post: PostWithRelations; onDele
           </div>
         )}
         <div className="mt-7 flex flex-wrap gap-2">
-          <Button href={`/admin/posts/${post.slug}/edit`} externalIcon={false}>
+          <Button href={editUrl} externalIcon={false}>
             <Pencil size={15} />
             Edit Post
           </Button>

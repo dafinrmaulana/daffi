@@ -47,6 +47,7 @@ export default function SkillsClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: skills?.meta,
     replacePage: pagination.replacePage,
   });
@@ -259,7 +260,7 @@ export default function SkillsClientPage() {
         </GridLayout>
       )}
 
-      {!isLoading && skills?.data.length === 0 && (
+      {!isLoading && skills?.meta.total === 0 && (
         <EmptyContent
           title="No skills yet"
           description="Create the first skill to populate this index."

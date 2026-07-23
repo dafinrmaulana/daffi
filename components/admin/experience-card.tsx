@@ -3,9 +3,10 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatExperiencePeriod } from "@/lib/experience";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { ExperienceListItem } from "@/types/experience";
 
-export function ExperienceCard({ experience, onDelete }: { experience: ExperienceListItem; onDelete: () => void }) {
+export function ExperienceCard({ experience, page, limit, onDelete }: { experience: ExperienceListItem; page: number; limit: number; onDelete: () => void }) {
   return (
     <article className="flex min-h-64 flex-col border border-border bg-bg p-5 sm:p-6 lg:flex-row lg:gap-10">
       <div className="min-w-0 flex-1">
@@ -27,8 +28,8 @@ export function ExperienceCard({ experience, onDelete }: { experience: Experienc
           {experience.projectHighlight && <div><dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">Project Highlight</dt><dd className="mt-1 text-sm">{experience.projectHighlight.name}</dd></div>}
         </dl>
         <div className="mt-auto flex flex-wrap gap-2 pt-6">
-          <Button href={`/admin/experiences/${experience.slug}`} externalIcon={false} size="sm"><Eye size={14} />View</Button>
-          <Button href={`/admin/experiences/${experience.slug}/edit`} externalIcon={false} size="sm"><Pencil size={14} />Edit</Button>
+          <Button href={getAdminPaginationUrl(`/admin/experiences/${experience.slug}`, page, limit)} externalIcon={false} size="sm"><Eye size={14} />View</Button>
+          <Button href={getAdminPaginationUrl(`/admin/experiences/${experience.slug}/edit`, page, limit)} externalIcon={false} size="sm"><Pencil size={14} />Edit</Button>
           <Button type="button" size="sm" variant="secondary" onClick={onDelete}><Trash2 size={14} />Delete</Button>
         </div>
       </div>

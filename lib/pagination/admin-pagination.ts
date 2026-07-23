@@ -7,6 +7,19 @@ export type AdminPageItem =
   | "ellipsis-left"
   | "ellipsis-right";
 
+export function getAdminPaginationUrl(
+  pathname: string,
+  page: number,
+  limit: number,
+) {
+  const parameters = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  return `${pathname}?${parameters.toString()}`;
+}
+
 export function getAdminPageItems(
   page: number,
   totalPages: number,

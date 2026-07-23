@@ -15,6 +15,7 @@ import {
 } from "@/lib/hooks/use-admin-pagination";
 import { useDeleteProject } from "@/lib/services/projects/delete-project";
 import { useGetProjects } from "@/lib/services/projects/get-projects";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { EventMessage } from "@/types/admin";
 
 export default function ProjectsClientPage() {
@@ -26,6 +27,7 @@ export default function ProjectsClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: data?.meta,
     replacePage: pagination.replacePage,
   });
@@ -50,12 +52,12 @@ export default function ProjectsClientPage() {
 
   return (
     <>
-      <AdminPageHeader eyebrow="Portfolio" title="Projects" count={data?.meta.total ?? 0} action={<Button href="/admin/projects/create" variant="primary" externalIcon={false}>Create Project</Button>} />
+      <AdminPageHeader eyebrow="Portfolio" title="Projects" count={data?.meta.total ?? 0} action={<Button href={getAdminPaginationUrl("/admin/projects/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>Create Project</Button>} />
       {eventMessage && <Alert className="mb-5" color={eventMessage.type === "success" ? "success" : "error"} message={eventMessage.message} onClose={() => setEventMessage(null)} />}
       {isError && <Alert className="mb-5" color="error" message="Failed to load projects." />}
       {isLoading && <div className="grid grid-cols-1 gap-4">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-72 animate-pulse border border-border bg-muted/10" />)}</div>}
-      {!isLoading && !isError && projects.length === 0 && <EmptyContent title="No projects yet" description="Create the first Project to populate this index." action={<Button href="/admin/projects/create" variant="primary" externalIcon={false}>Create Project</Button>} />}
-      {!isLoading && projects.length > 0 && <div className="grid grid-cols-1 gap-4">{projects.map((project) => <ProjectCard key={project.slug} project={project} onDelete={() => setDeleteSlug(project.slug)} />)}</div>}
+      {!isLoading && !isError && data?.meta.total === 0 && <EmptyContent title="No projects yet" description="Create the first Project to populate this index." action={<Button href={getAdminPaginationUrl("/admin/projects/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>Create Project</Button>} />}
+      {!isLoading && projects.length > 0 && <div className="grid grid-cols-1 gap-4">{projects.map((project) => <ProjectCard key={project.slug} project={project} page={pagination.page} limit={pagination.limit} onDelete={() => setDeleteSlug(project.slug)} />)}</div>}
       {data?.meta && (
         <AdminPagination
           meta={data.meta}

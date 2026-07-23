@@ -15,6 +15,7 @@ import {
 } from "@/lib/hooks/use-admin-pagination";
 import { useDeletePost } from "@/lib/services/posts/delete-post";
 import { useGetPosts } from "@/lib/services/posts/get-posts";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { EventMessage } from "@/types/admin";
 
 export default function PostsClientPage() {
@@ -26,6 +27,7 @@ export default function PostsClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: data?.meta,
     replacePage: pagination.replacePage,
   });
@@ -58,7 +60,7 @@ export default function PostsClientPage() {
         title="Posts"
         count={data?.meta.total ?? 0}
         action={
-          <Button href="/admin/posts/create" variant="primary" externalIcon={false}>
+          <Button href={getAdminPaginationUrl("/admin/posts/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>
             Create Post
           </Button>
         }
@@ -79,12 +81,12 @@ export default function PostsClientPage() {
           ))}
         </div>
       )}
-      {!isLoading && !isError && posts.length === 0 && (
+      {!isLoading && !isError && data?.meta.total === 0 && (
         <EmptyContent
           title="No Posts yet"
           description="Create the first Post to populate this index."
           action={
-            <Button href="/admin/posts/create" variant="primary" externalIcon={false}>
+            <Button href={getAdminPaginationUrl("/admin/posts/create", pagination.page, pagination.limit)} variant="primary" externalIcon={false}>
               Create Post
             </Button>
           }
@@ -93,7 +95,7 @@ export default function PostsClientPage() {
       {!isLoading && posts.length > 0 && (
         <div className="grid grid-cols-1 gap-4">
           {posts.map((post) => (
-            <PostCard key={post.slug} post={post} onDelete={() => setDeleteSlug(post.slug)} />
+            <PostCard key={post.slug} post={post} page={pagination.page} limit={pagination.limit} onDelete={() => setDeleteSlug(post.slug)} />
           ))}
         </div>
       )}

@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { formatProjectYear } from "@/lib/project";
 import type { ProjectWithRelations } from "@/types/project";
 
-export function ProjectDetail({ project, onDelete }: { project: ProjectWithRelations; onDelete: () => void }) {
+export function ProjectDetail({ project, listUrl, editUrl, onDelete }: { project: ProjectWithRelations; listUrl: string; editUrl: string; onDelete: () => void }) {
   return (
     <article>
-      <Button href="/admin/projects" externalIcon={false} size="sm" variant="secondary"><ArrowLeft size={14} />Back</Button>
+      <Button href={listUrl} externalIcon={false} size="sm" variant="secondary"><ArrowLeft size={14} />Back</Button>
       <div className="mt-8 overflow-hidden border border-border">
         <div className="aspect-[16/7] bg-muted/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,7 +27,7 @@ export function ProjectDetail({ project, onDelete }: { project: ProjectWithRelat
         {project.tags.length > 0 && <div className="mt-5 flex flex-wrap gap-2">{project.tags.map((tag) => <Badge key={tag.slug}>{tag.name}</Badge>)}</div>}
         <div className="mt-7 flex flex-wrap gap-2">
           {project.demoUrl && <Button href={project.demoUrl} target="_blank" rel="noopener noreferrer" variant="primary">View Demo</Button>}
-          <Button href={`/admin/projects/${project.slug}/edit`} externalIcon={false}><Pencil size={15} />Edit Project</Button>
+          <Button href={editUrl} externalIcon={false}><Pencil size={15} />Edit Project</Button>
           <Button type="button" variant="secondary" onClick={onDelete}><Trash2 size={15} />Delete</Button>
         </div>
       </div>

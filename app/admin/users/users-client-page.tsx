@@ -57,6 +57,7 @@ export default function UsersClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: users?.meta,
     replacePage: pagination.replacePage,
   });
@@ -218,7 +219,7 @@ export default function UsersClientPage() {
         </GridLayout>
       )}
 
-      {!isLoading && users?.data?.length === 0 && (
+      {!isLoading && users?.meta.total === 0 && (
         <EmptyContent
           title={`No users yet`}
           description={`Create the first User to populate this index.`}

@@ -55,6 +55,7 @@ export default function ProjectHighlightsClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: projectHighlights?.meta,
     replacePage: pagination.replacePage,
   });
@@ -218,7 +219,7 @@ export default function ProjectHighlightsClientPage() {
         </GridLayout>
       )}
 
-      {!isLoading && projectHighlights?.data.length === 0 && (
+      {!isLoading && projectHighlights?.meta.total === 0 && (
         <EmptyContent
           title="No project highlights yet"
           description="Create the first project highlight to populate this index."

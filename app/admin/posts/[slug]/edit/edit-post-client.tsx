@@ -9,11 +9,20 @@ import { PostForm } from "@/components/admin/post-form";
 import Alert from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import type { PostSchema } from "@/lib/form/post-schema";
+import { useAdminPagination } from "@/lib/hooks/use-admin-pagination";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import { useGetPost } from "@/lib/services/posts/get-post";
 import { useUpdatePost } from "@/lib/services/posts/update-post";
 
 export default function EditPostClient({ slug }: { slug: string }) {
   const router = useRouter();
+  const pagination = useAdminPagination();
+  const listUrl = getAdminPaginationUrl("/admin/posts", pagination.page, pagination.limit);
+  const detailUrl = getAdminPaginationUrl(
+    `/admin/posts/${slug}`,
+    pagination.page,
+    pagination.limit,
+  );
   const query = useGetPost(slug);
   const mutation = useUpdatePost();
   const [submitError, setSubmitError] = useState<string>();
@@ -23,7 +32,7 @@ export default function EditPostClient({ slug }: { slug: string }) {
     return (
       <div className="border border-border p-8">
         <h1 className="font-serif text-4xl">Post not found</h1>
-        <Button className="mt-6" href="/admin/posts" externalIcon={false}>
+        <Button className="mt-6" href={listUrl} externalIcon={false}>
           Back to Posts
         </Button>
       </div>
@@ -36,7 +45,14 @@ export default function EditPostClient({ slug }: { slug: string }) {
     mutation.mutate(
       { slug, payload: values },
       {
-        onSuccess: (response) => router.push(`/admin/posts/${response.data.slug}`),
+        onSuccess: (response) =>
+          router.push(
+            getAdminPaginationUrl(
+              `/admin/posts/${response.data.slug}`,
+              pagination.page,
+              pagination.limit,
+            ),
+          ),
         onError: (error) => {
           applyServerErrors(error);
           setSubmitError(error.response?.data.message ?? "Failed to update Post");
@@ -54,7 +70,7 @@ export default function EditPostClient({ slug }: { slug: string }) {
         isSubmitting={mutation.isPending}
         submitError={submitError}
         onSubmit={onSubmit}
-        onCancel={() => router.push(`/admin/posts/${slug}`)}
+        onCancel={() => router.push(detailUrl)}
       />
     </>
   );

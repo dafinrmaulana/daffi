@@ -3,9 +3,10 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPostDate } from "@/lib/post";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { PostWithRelations } from "@/types/post";
 
-export function PostCard({ post, onDelete }: { post: PostWithRelations; onDelete: () => void }) {
+export function PostCard({ post, page, limit, onDelete }: { post: PostWithRelations; page: number; limit: number; onDelete: () => void }) {
   return (
     <article className="grid overflow-hidden border border-border bg-bg lg:grid-cols-[22rem_minmax(0,1fr)_18rem]">
       <div className="aspect-video bg-muted/10 lg:aspect-auto">
@@ -33,11 +34,11 @@ export function PostCard({ post, onDelete }: { post: PostWithRelations; onDelete
       </div>
       <div className="flex items-end border-t border-border p-5 lg:border-l lg:border-t-0">
         <div className="flex flex-wrap gap-2">
-          <Button href={`/admin/posts/${post.slug}`} externalIcon={false} size="sm">
+          <Button href={getAdminPaginationUrl(`/admin/posts/${post.slug}`, page, limit)} externalIcon={false} size="sm">
             <Eye size={14} />
             View
           </Button>
-          <Button href={`/admin/posts/${post.slug}/edit`} externalIcon={false} size="sm">
+          <Button href={getAdminPaginationUrl(`/admin/posts/${post.slug}/edit`, page, limit)} externalIcon={false} size="sm">
             <Pencil size={14} />
             Edit
           </Button>

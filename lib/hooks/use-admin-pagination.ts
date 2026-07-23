@@ -142,17 +142,23 @@ export function useAdminPagination() {
 
 type PaginationBoundsInput = {
   page: number;
+  limit: number;
   meta?: MetaPagination;
   replacePage: (page: number) => void;
 };
 
 export function useAdminPaginationBounds({
   page,
+  limit,
   meta,
   replacePage,
 }: PaginationBoundsInput) {
   useEffect(() => {
-    if (!meta) {
+    if (
+      !meta ||
+      meta.page !== page ||
+      meta.limit !== limit
+    ) {
       return;
     }
 
@@ -161,5 +167,5 @@ export function useAdminPaginationBounds({
     if (page > lastPage) {
       replacePage(lastPage);
     }
-  }, [meta, page, replacePage]);
+  }, [limit, meta, page, replacePage]);
 }

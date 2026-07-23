@@ -3,9 +3,10 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatProjectYear } from "@/lib/project";
+import { getAdminPaginationUrl } from "@/lib/pagination/admin-pagination";
 import type { ProjectWithRelations } from "@/types/project";
 
-export function ProjectCard({ project, onDelete }: { project: ProjectWithRelations; onDelete: () => void }) {
+export function ProjectCard({ project, page, limit, onDelete }: { project: ProjectWithRelations; page: number; limit: number; onDelete: () => void }) {
   return (
     <article className="grid overflow-hidden border border-border bg-bg lg:grid-cols-[22rem_minmax(0,1fr)_18rem]">
       <div className="aspect-video bg-muted/10 lg:aspect-auto">
@@ -27,8 +28,8 @@ export function ProjectCard({ project, onDelete }: { project: ProjectWithRelatio
       <div className="flex flex-col border-t border-border p-5 lg:border-l lg:border-t-0">
         {project.metric && <div><p className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">Headline Metric</p><p className="mt-2 font-serif text-2xl">{project.metric}</p></div>}
         <div className="mt-auto flex flex-wrap gap-2 pt-6">
-          <Button href={`/admin/projects/${project.slug}`} externalIcon={false} size="sm"><Eye size={14} />View</Button>
-          <Button href={`/admin/projects/${project.slug}/edit`} externalIcon={false} size="sm"><Pencil size={14} />Edit</Button>
+          <Button href={getAdminPaginationUrl(`/admin/projects/${project.slug}`, page, limit)} externalIcon={false} size="sm"><Eye size={14} />View</Button>
+          <Button href={getAdminPaginationUrl(`/admin/projects/${project.slug}/edit`, page, limit)} externalIcon={false} size="sm"><Pencil size={14} />Edit</Button>
           <Button type="button" size="sm" variant="secondary" onClick={onDelete}><Trash2 size={14} />Delete</Button>
         </div>
       </div>

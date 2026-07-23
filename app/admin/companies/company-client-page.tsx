@@ -47,6 +47,7 @@ export default function CompaniesClientPage() {
 
   useAdminPaginationBounds({
     page: pagination.page,
+    limit: pagination.limit,
     meta: companies?.meta,
     replacePage: pagination.replacePage,
   });
@@ -261,7 +262,7 @@ export default function CompaniesClientPage() {
         </GridLayout>
       )}
 
-      {!isLoading && companies?.data.length === 0 && (
+      {!isLoading && companies?.meta.total === 0 && (
         <EmptyContent
           title="No companies yet"
           description="Create the first company to populate this index."
