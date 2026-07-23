@@ -1,36 +1,36 @@
 import Link from "next/link"
-import Image from "next/image"
 
 import { Badge } from "@/components/ui/badge"
-import type { Post } from "@/lib/constants/main-contents"
+import { formatPostDate } from "@/lib/post"
+import type { PostWithRelations } from "@/types/post"
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ post }: { post: PostWithRelations }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex min-h-full flex-col border border-border transition-colors hover:border-fg"
+      className="group grid overflow-hidden border border-border bg-bg transition-colors hover:border-fg lg:grid-cols-[22rem_minmax(0,1fr)]"
     >
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-muted/10">
-        <Image
+      <div className="aspect-video overflow-hidden border-b border-border bg-muted/10 lg:aspect-auto lg:border-b-0 lg:border-r">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={post.thumbnail}
           alt=""
-          fill
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <div className="mb-3 flex flex-wrap gap-3 font-mono text-xs uppercase text-muted">
-          <span>{post.date}</span>
-          <span>{post.readTime}</span>
-        </div>
-        <h2 className="font-serif text-3xl leading-tight sm:text-4xl">{post.title}</h2>
-        <p className="mt-4 text-muted">{post.excerpt}</p>
-        <div className="mt-auto flex flex-wrap gap-2 pt-6">
-          {post.tags.map((tag) => (
-            <Badge key={tag}>{tag}</Badge>
-          ))}
-        </div>
+      <div className="p-5 sm:p-7">
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+          {formatPostDate(post.date)} · {post.readTime ?? 1} min read
+        </p>
+        <h2 className="mt-3 font-serif text-3xl leading-tight sm:text-4xl">{post.title}</h2>
+        <p className="mt-4 max-w-3xl leading-relaxed text-muted">{post.excerpt}</p>
+        {post.tags.length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <Badge key={tag.slug}>{tag.name}</Badge>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   )

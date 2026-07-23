@@ -7,6 +7,7 @@ export function Footer() {
         <p>© 2026 Dafi. Built with Passion.</p>
         <div className="flex gap-4">
           <Link href="/work" className="hover:text-fg">Work</Link>
+          <Link href="/blog" className="hover:text-fg">Blog</Link>
           <a href="mailto:dafinmaulana18@gmail.com" className="hover:text-fg">Email</a>
         </div>
       </div>
