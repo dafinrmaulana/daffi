@@ -60,12 +60,12 @@ export async function GET(request: Request) {
     return NextResponse.json({
       data: projects.map(serializeProject),
       meta: {
-        currentPage: page,
-        perPage: limit,
+        page,
+        limit,
         total,
         totalPages,
         hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1,
+        hasPrevPage: page > 1,
       },
     });
   } catch (error) {

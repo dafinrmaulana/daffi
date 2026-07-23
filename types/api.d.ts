@@ -7,15 +7,6 @@ export type MetaPagination = {
   hasPrevPage: boolean;
 };
 
-export type LegacyMetaPagination = {
-  currentPage: number;
-  perPage: number;
-  total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
 export type QueryParams = {
   page?: number;
   limit?: number;

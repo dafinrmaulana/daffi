@@ -62,12 +62,12 @@ export async function GET(request: Request) {
         descriptionText: richTextToPlainText(experience.description),
       })),
       meta: {
-        currentPage: page,
-        perPage: limit,
+        page,
+        limit,
         total,
         totalPages,
         hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1,
+        hasPrevPage: page > 1,
       },
     });
   } catch (error) {
