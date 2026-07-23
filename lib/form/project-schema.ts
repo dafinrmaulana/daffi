@@ -43,6 +43,7 @@ const optionalHttpUrlSchema = z
   .trim()
   .max(2048, "The demo URL may not be greater than 2048 characters.")
   .refine((value) => !value || /^https?:\/\/[^\s]+$/i.test(value), "The demo URL must use http or https.")
+  .optional()
   .transform((value) => value || null);
 
 const projectFieldsSchema = z.object({
@@ -77,6 +78,7 @@ const projectFieldsSchema = z.object({
     .string()
     .trim()
     .max(255, "The metric may not be greater than 255 characters.")
+    .optional()
     .transform((value) => value || null),
   excerpt: z
     .string()
@@ -84,8 +86,8 @@ const projectFieldsSchema = z.object({
     .min(1, "The excerpt field is required.")
     .max(500, "The excerpt may not be greater than 500 characters."),
   featured: z.boolean().default(false),
-  tagSlugs: z.array(z.string().trim().min(1)).transform((values) => [...new Set(values)]),
-  metrics: rawMetricsSchema,
+  tagSlugs: z.array(z.string().trim().min(1)).transform((values) => [...new Set(values)]).default([]),
+  metrics: rawMetricsSchema.default([]),
   body: z
     .string()
     .trim()
