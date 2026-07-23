@@ -1,11 +1,11 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-import type { LegacyMetaPagination, PaginatedResponse, QueryParams } from "@/types/api";
+import type { PaginatedResponse, QueryParams } from "@/types/api";
 import type { ProjectWithRelations } from "@/types/project";
 
 async function getProjects(params: Required<QueryParams>) {
-  const response = await axios.get<PaginatedResponse<ProjectWithRelations, LegacyMetaPagination>>("/api/projects", {
+  const response = await axios.get<PaginatedResponse<ProjectWithRelations>>("/api/projects", {
     params: { ...params, search: params.search || undefined },
   });
   return response.data;

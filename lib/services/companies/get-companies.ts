@@ -2,14 +2,14 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import type { Company } from "@/prisma/generated/prisma/client";
-import type { LegacyMetaPagination, PaginatedResponse, QueryParams } from "@/types/api";
+import type { PaginatedResponse, QueryParams } from "@/types/api";
 
 async function getCompanies({
   page = 1,
   limit = 10,
   search = "",
-}: QueryParams): Promise<PaginatedResponse<Company, LegacyMetaPagination>> {
-  const response = await axios.get<PaginatedResponse<Company, LegacyMetaPagination>>("/api/companies", {
+}: QueryParams): Promise<PaginatedResponse<Company>> {
+  const response = await axios.get<PaginatedResponse<Company>>("/api/companies", {
     params: {
       page,
       limit,
