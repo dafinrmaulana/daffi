@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   title: "Work",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function WorkPage() {
   const projects = await getAllPublicProjects();
 

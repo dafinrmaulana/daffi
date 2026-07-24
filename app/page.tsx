@@ -10,6 +10,8 @@ import { getRecentPublicExperiences } from "@/lib/data/public-experiences"
 import { getFeaturedPublicProjects } from "@/lib/data/public-projects"
 import { getAllPublicSkills } from "@/lib/data/public-skills"
 
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   const [skills, projects, experiences] = await Promise.all([
     getAllPublicSkills(),

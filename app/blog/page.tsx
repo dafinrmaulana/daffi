@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Notes on frontend development, product interfaces, and building dependable digital experiences.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage() {
   const posts = await getAllPublicPosts();
 

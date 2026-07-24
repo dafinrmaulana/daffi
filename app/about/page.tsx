@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: "About",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
   const [experiences, skills] = await Promise.all([
     getAllPublicExperiences(),
