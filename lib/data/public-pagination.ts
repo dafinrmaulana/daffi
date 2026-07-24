@@ -3,18 +3,25 @@ import type { MetaPagination } from "@/types/api";
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
 const MAX_LIMIT = 100;
+const MAX_PAGE = 1_000_000;
 
-function toPositiveInteger(value: string | null, fallback: number) {
+function toPage(value: string | null) {
   const parsed = Number(value);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+  return Number.isSafeInteger(parsed) && parsed > 0 && parsed <= MAX_PAGE
+    ? parsed
+    : DEFAULT_PAGE;
+}
+
+function toLimit(value: string | null) {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed > 0
+    ? Math.min(parsed, MAX_LIMIT)
+    : DEFAULT_LIMIT;
 }
 
 export function getPublicPagination(searchParams: URLSearchParams) {
-  const page = toPositiveInteger(searchParams.get("page"), DEFAULT_PAGE);
-  const limit = Math.min(
-    MAX_LIMIT,
-    toPositiveInteger(searchParams.get("limit"), DEFAULT_LIMIT),
-  );
+  const page = toPage(searchParams.get("page"));
+  const limit = toLimit(searchParams.get("limit"));
 
   return { page, limit, skip: (page - 1) * limit };
 }

@@ -51,7 +51,18 @@ export default async function AboutPage() {
           )}
         </div>
       </Section>
-      <ExperienceSection experiences={experiences} />
+      {experiences.length > 0 ? (
+        <ExperienceSection experiences={experiences} />
+      ) : (
+        <Section>
+          <div className="border border-border p-8 sm:p-10">
+            <p className="font-serif text-3xl">No Experiences yet.</p>
+            <p className="mt-3 text-muted">
+              Work history will appear here once it is ready.
+            </p>
+          </div>
+        </Section>
+      )}
     </>
   );
 }
