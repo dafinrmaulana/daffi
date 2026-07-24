@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PostCard } from "@/components/blog/post-card";
 import { Section } from "@/components/layout/section";
 import { PageIntro } from "@/components/shared/page-intro";
-import { getPublishedPosts } from "@/lib/data/published-posts";
+import { getAllPublicPosts } from "@/lib/data/public-posts";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const posts = await getPublishedPosts();
+  const posts = await getAllPublicPosts();
 
   return (
     <Section>

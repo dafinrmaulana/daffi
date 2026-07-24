@@ -4,9 +4,9 @@ import { RichTextContent } from "@/components/shared/rich-text-content";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPostDate } from "@/lib/post";
-import type { PostWithRelations } from "@/types/post";
+import type { PublicPost } from "@/types/public-content";
 
-export function PostArticle({ post }: { post: PostWithRelations }) {
+export function PostArticle({ post }: { post: PublicPost }) {
   return (
     <article>
       <Button href="/blog" externalIcon={false} size="sm" variant="secondary">

@@ -4,9 +4,9 @@ import { cache } from "react";
 
 import { PostArticle } from "@/components/blog/post-article";
 import { Section } from "@/components/layout/section";
-import { getPublishedPost } from "@/lib/data/published-posts";
+import { getPublicPost } from "@/lib/data/public-posts";
 
-const getPost = cache((slug: string) => getPublishedPost(slug));
+const getPost = cache((slug: string) => getPublicPost(slug));
 
 export async function generateMetadata({
   params,

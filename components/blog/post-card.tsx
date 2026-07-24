@@ -2,9 +2,9 @@ import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { formatPostDate } from "@/lib/post"
-import type { PostWithRelations } from "@/types/post"
+import type { PublicPost } from "@/types/public-content"
 
-export function PostCard({ post }: { post: PostWithRelations }) {
+export function PostCard({ post }: { post: PublicPost }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
