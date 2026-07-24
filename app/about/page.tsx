@@ -5,13 +5,19 @@ import { Section } from "@/components/layout/section";
 import { ExperienceSection } from "@/components/shared/experience-section";
 import { PageIntro } from "@/components/shared/page-intro";
 import { Badge } from "@/components/ui/badge";
-import { skills } from "@/lib/constants/main-contents";
+import { getAllPublicExperiences } from "@/lib/data/public-experiences";
+import { getAllPublicSkills } from "@/lib/data/public-skills";
 
 export const metadata: Metadata = {
   title: "About",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [experiences, skills] = await Promise.all([
+    getAllPublicExperiences(),
+    getAllPublicSkills(),
+  ]);
+
   return (
     <>
       <Section>
@@ -30,14 +36,20 @@ export default function AboutPage() {
               experience is needed.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <Badge key={skill}>{skill}</Badge>
-            ))}
-          </div>
+          {skills.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill) => (
+                <Badge key={skill.slug}>{skill.name}</Badge>
+              ))}
+            </div>
+          ) : (
+            <div className="border border-border p-6 text-muted">
+              No Skills have been published yet.
+            </div>
+          )}
         </div>
       </Section>
-      <ExperienceSection />
+      <ExperienceSection experiences={experiences} />
     </>
   );
 }
